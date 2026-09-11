@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 680" width="100%" height="100%" style="background-color: #fafaf9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+  <defs>
+    <filter id="card-shadow" x="-5%" y="-5%" width="110%" height="115%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#1c1917" flood-opacity="0.06"/>
+    </filter>
+    <linearGradient id="primary-bar" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ea580c"/>
+      <stop offset="100%" stop-color="#c2410c"/>
+    </linearGradient>
+    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#78716c"/>
+    </marker>
+    <marker id="arrow-orange" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#ea580c"/>
+    </marker>
+  </defs>
+
+  <!-- Title & Header -->
+  <g transform="translate(48, 36)">
+    <text x="0" y="0" font-size="11" font-weight="700" fill="#ea580c" letter-spacing="1.5" font-family="monospace">REPAIRGRAPH // DEPLOYMENT ARCHITECTURE</text>
+    <text x="0" y="24" font-size="22" font-weight="800" fill="#1c1917" letter-spacing="-0.5">Production Architecture &amp; Git Deployment Pipeline</text>
+    <text x="0" y="44" font-size="12" fill="#78716c">Local Development ➔ GitHub (Source of Truth) ➔ Vercel Cloud Runtime ➔ Managed Cloud PostgreSQL</text>
+  </g>
+
+  <!-- ==================== STAGE 1: LOCAL DEVELOPER ENVIRONMENT ==================== -->
+  <g transform="translate(48, 105)">
+    <rect width="400" height="110" rx="3" fill="#ffffff" stroke="#e7e5e4" stroke-width="1.5" filter="url(#card-shadow)"/>
+    <rect width="400" height="4" rx="1" fill="#78716c"/>
+    
+    <text x="20" y="26" font-size="10" font-weight="700" fill="#a8a29e" letter-spacing="1" font-family="monospace">STAGE 1 // LOCAL DEVELOPMENT</text>
+    <text x="20" y="48" font-size="14" font-weight="700" fill="#1c1917">Local RepairGraph Workstation</text>
+    <text x="20" y="66" font-size="11" fill="#78716c">• Next.js 15 Dev Server (Turbopack)</text>
+    <text x="20" y="82" font-size="11" fill="#78716c">• Local PostgreSQL (localhost:5432) — Isolated Dev DB</text>
+    <text x="20" y="98" font-size="11" fill="#78716c">• 17 Automated Unit Tests + 13 Live Smoke Tests</text>
+
+    <g transform="translate(290, 20)">
+      <rect width="90" height="20" rx="2" fill="#f5f5f4" stroke="#d6d3d1"/>
+      <text x="45" y="14" font-size="9" font-weight="600" fill="#44403c" text-anchor="middle" font-family="monospace">DEV ISOLATED</text>
+    </g>
+  </g>
+
+  <!-- Pipeline Connector: Local to GitHub -->
+  <g transform="translate(460, 160)">
+    <line x1="0" y1="0" x2="36" y2="0" stroke="#ea580c" stroke-width="2" marker-end="url(#arrow-orange)"/>
+    <text x="18" y="-10" font-size="9" font-weight="600" fill="#ea580c" text-anchor="middle" font-family="monospace">git push</text>
+  </g>
+
+  <!-- ==================== STAGE 2: GITHUB REPOSITORY ==================== -->
+  <g transform="translate(512, 105)">
+    <rect width="400" height="110" rx="3" fill="#ffffff" stroke="#e7e5e4" stroke-width="1.5" filter="url(#card-shadow)"/>
+    <rect width="400" height="4" rx="1" fill="url(#primary-bar)"/>
+    
+    <text x="20" y="26" font-size="10" font-weight="700" fill="#ea580c" letter-spacing="1" font-family="monospace">STAGE 2 // CANONICAL SOURCE OF TRUTH</text>
+    <text x="20" y="48" font-size="14" font-weight="700" fill="#1c1917">GitHub Repository</text>
+    <text x="20" y="66" font-size="11" fill="#78716c">• Version Control &amp; Branch Protections</text>
+    <text x="20" y="82" font-size="11" fill="#78716c">• Prisma Schemas, Migrations &amp; API Specifications</text>
+    <text x="20" y="98" font-size="11" fill="#78716c">• CI/CD Trigger for Vercel Deployment Webhooks</text>
+
+    <g transform="translate(290, 20)">
+      <rect width="90" height="20" rx="2" fill="#fff7ed" stroke="#fed7aa"/>
+      <text x="45" y="14" font-size="9" font-weight="600" fill="#c2410c" text-anchor="middle" font-family="monospace">SOURCE OF TRUTH</text>
+    </g>
+  </g>
+
+  <!-- Pipeline Connector: GitHub to Vercel -->
+  <g transform="translate(712, 225)">
+    <line x1="0" y1="0" x2="0" y2="35" stroke="#ea580c" stroke-width="2" marker-end="url(#arrow-orange)"/>
+    <text x="12" y="22" font-size="9" font-weight="600" fill="#ea580c" font-family="monospace">Git Webhook</text>
+  </g>
+
+  <!-- ==================== STAGE 3: VERCEL CLOUD RUNTIME ==================== -->
+  <g transform="translate(48, 270)">
+    <rect width="864" height="180" rx="3" fill="#ffffff" stroke="#e7e5e4" stroke-width="1.5" filter="url(#card-shadow)"/>
+    <rect width="864" height="4" rx="1" fill="#1c1917"/>
+
+    <text x="24" y="26" font-size="10" font-weight="700" fill="#a8a29e" letter-spacing="1" font-family="monospace">STAGE 3 // PRODUCTION COMPUTE &amp; SECURITY RUNTIME (VERCEL)</text>
+    <text x="24" y="50" font-size="15" font-weight="700" fill="#1c1917">Next.js 15 Serverless App &amp; Edge Security Perimeter</text>
+    <text x="24" y="68" font-size="11" fill="#78716c">Automatic HTTPS/TLS 1.3 • Edge Caching • Deployed directly from GitHub branch</text>
+
+    <!-- Sub Module Cards -->
+    <g transform="translate(24, 82)">
+      <rect width="260" height="80" rx="2" fill="#fafaf9" stroke="#d6d3d1"/>
+      <text x="14" y="20" font-size="11" font-weight="700" fill="#1c1917">Security Headers &amp; Edge</text>
+      <text x="14" y="36" font-size="10" fill="#57534e">X-Content-Type-Options: nosniff</text>
+      <text x="14" y="50" font-size="10" fill="#57534e">X-Frame-Options: DENY</text>
+      <text x="14" y="64" font-size="10" fill="#57534e">HSTS: max-age=31536000</text>
+    </g>
+
+    <g transform="translate(300, 82)">
+      <rect width="264" height="80" rx="2" fill="#fafaf9" stroke="#d6d3d1"/>
+      <text x="14" y="20" font-size="11" font-weight="700" fill="#1c1917">Auth &amp; Session Perimeter</text>
+      <text x="14" y="36" font-size="10" fill="#57534e">HTTP-only cookie (rg_token)</text>
+      <text x="14" y="50" font-size="10" fill="#57534e">Raw JWT suppressed from browser</text>
+      <text x="14" y="64" font-size="10" fill="#57534e">Sliding window rate limit (429)</text>
+    </g>
+
+    <g transform="translate(580, 82)">
+      <rect width="260" height="80" rx="2" fill="#fafaf9" stroke="#d6d3d1"/>
+      <text x="14" y="20" font-size="11" font-weight="700" fill="#1c1917">Health &amp; Telemetry</text>
+      <text x="14" y="36" font-size="10" fill="#57534e">GET /api/health</text>
+      <text x="14" y="50" font-size="10" fill="#57534e">Active SELECT 1 database ping</text>
+      <text x="14" y="64" font-size="10" fill="#57534e">Real-time latency telemetry (ms)</text>
+    </g>
+
+    <g transform="translate(730, 20)">
+      <rect width="110" height="20" rx="2" fill="#ecfdf5" stroke="#a7f3d0"/>
+      <text x="55" y="14" font-size="9" font-weight="600" fill="#047857" text-anchor="middle" font-family="monospace">AUTO DEPLOYMENT</text>
+    </g>
+  </g>
+
+  <!-- Pipeline Connector: Vercel to Managed DB -->
+  <g transform="translate(480, 460)">
+    <line x1="0" y1="0" x2="0" y2="35" stroke="#78716c" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="12" y="22" font-size="9" font-weight="600" fill="#78716c" font-family="monospace">TLS Pooled Connection (PgBouncer)</text>
+  </g>
+
+  <!-- ==================== STAGE 4: MANAGED CLOUD DATABASE ==================== -->
+  <g transform="translate(48, 505)">
+    <rect width="864" height="120" rx="3" fill="#ffffff" stroke="#e7e5e4" stroke-width="1.5" filter="url(#card-shadow)"/>
+    <rect width="864" height="4" rx="1" fill="#047857"/>
+
+    <text x="24" y="26" font-size="10" font-weight="700" fill="#a8a29e" letter-spacing="1" font-family="monospace">STAGE 4 // INDEPENDENT MANAGED DATABASE (SEPARATE CLOUD PROVIDER)</text>
+    <text x="24" y="50" font-size="15" font-weight="700" fill="#1c1917">Managed Cloud PostgreSQL 16 (e.g., Neon / Supabase)</text>
+    <text x="24" y="68" font-size="11" fill="#78716c">• 11 Normalized Entities: User, Device, RepairRequest, Quote, RepairJob, RepairHistory, Review</text>
+    <text x="24" y="84" font-size="11" fill="#78716c">• Strict Separation: Development database (localhost) ≠ Production database (cloud-managed)</text>
+    <text x="24" y="100" font-size="10" fill="#a8a29e" font-family="monospace">Prisma ORM • Connection Pooling (DATABASE_URL) • Direct Migration Channel (DIRECT_URL)</text>
+
+    <g transform="translate(720, 20)">
+      <rect width="120" height="20" rx="2" fill="#f0fdf4" stroke="#bbf7d0"/>
+      <text x="60" y="14" font-size="9" font-weight="600" fill="#166534" text-anchor="middle" font-family="monospace">DEDICATED CLOUD DB</text>
+    </g>
+  </g>
+</svg>

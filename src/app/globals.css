@@ -1,26 +1,121 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Warm neutral canvas & surfaces */
+  --canvas: #FAFAF9;       /* Stone-50 warm paper background */
+  --surface: #FFFFFF;      /* Clean crisp white surface */
+  --surface-muted: #F5F5F4;/* Stone-100 subtle container */
+  --surface-subtle: #E7E5E4;/* Stone-200 divider and hairline border */
+  
+  /* Charcoal & graphite typography */
+  --text-primary: #1C1917;   /* Stone-900 primary heading & body */
+  --text-secondary: #57534E; /* Stone-600 secondary information */
+  --text-muted: #78716C;     /* Stone-500 captions and labels */
+  --text-faint: #A8A29E;     /* Stone-400 placeholder & faint markers */
+
+  /* Hair-thin borders */
+  --border-subtle: #E7E5E4;  /* Stone-200 */
+  --border-strong: #D6D3D1;  /* Stone-300 */
+  --border-focus: #1C1917;   /* Stone-900 focus ring */
+
+  /* Restrained industrial accent (Rust / Terracotta) */
+  --accent-rust: #C2410C;       /* Rust-700 primary intent */
+  --accent-rust-hover: #9A3412; /* Rust-800 hover */
+  --accent-rust-subtle: #FFF7ED;/* Rust-50 muted alert background */
+  --accent-rust-border: #FFEDD5;/* Rust-100 border */
+
+  /* Status neutrals & restrained indicators */
+  --status-healthy: #15803D;       /* Deep green */
+  --status-healthy-bg: #F0FDF4;
+  --status-healthy-border: #DCFCE7;
+  
+  --status-warning: #B45309;       /* Dark amber */
+  --status-warning-bg: #FFFBEB;
+  --status-warning-border: #FEF3C7;
+
+  --status-info: #0369A1;          /* Industrial blue */
+  --status-info-bg: #F0F9FF;
+  --status-info-border: #E0F2FE;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-surface-subtle: var(--surface-subtle);
+
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-text-faint: var(--text-faint);
+
+  --color-border-subtle: var(--border-subtle);
+  --color-border-strong: var(--border-strong);
+
+  --color-accent-rust: var(--accent-rust);
+  --color-accent-rust-hover: var(--accent-rust-hover);
+  --color-accent-rust-subtle: var(--accent-rust-subtle);
+  --color-accent-rust-border: var(--accent-rust-border);
+
+  --font-sans: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Base resets & typography */
+html {
+  background-color: var(--canvas);
+  color: var(--text-primary);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--canvas);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Technical numbers and monetary values */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Editorial hairline dividers */
+.hairline-b {
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.hairline-t {
+  border-top: 1px solid var(--border-subtle);
+}
+
+.hairline-r {
+  border-right: 1px solid var(--border-subtle);
+}
+
+.hairline-l {
+  border-left: 1px solid var(--border-subtle);
+}
+
+.hairline-all {
+  border: 1px solid var(--border-subtle);
+}
+
+/* Custom minimal scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--canvas);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
 }
