@@ -5,7 +5,6 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
 import { Button } from '@/components/ui/Button';
-import { Badge } from '@/components/ui/Badge';
 import { extractActionableErrors } from '@/lib/sanitizeError';
 import { UserCheck, ArrowRight, AlertCircle } from 'lucide-react';
 
@@ -76,6 +75,23 @@ function LoginForm() {
   const [phone, setPhone] = useState('');
   const [errors, setErrors] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSeeding, setIsSeeding] = useState(false);
+  const [seedFeedback, setSeedFeedback] = useState<string | null>(null);
+
+  const handleManualSeed = async () => {
+    setIsSeeding(true);
+    setSeedFeedback(null);
+    try {
+      const res = await fetch('/api/seed', { method: 'POST' });
+      if (!res.ok) throw new Error('Seeding failed');
+      setSeedFeedback('Data ready');
+      setTimeout(() => setSeedFeedback(null), 3500);
+    } catch {
+      setSeedFeedback('Seed error');
+    } finally {
+      setIsSeeding(false);
+    }
+  };
 
   // If already logged in, show status
   if (user) {
@@ -179,7 +195,15 @@ function LoginForm() {
           <span className="text-[10px] font-mono uppercase tracking-wider text-stone-500 font-semibold">
             One-Click Demo Personas
           </span>
-          <Badge variant="neutral">Seed Data</Badge>
+          <button
+            type="button"
+            onClick={handleManualSeed}
+            disabled={isSeeding || isSubmitting}
+            className="text-[10px] font-mono px-2 py-0.5 border border-stone-300 bg-white hover:bg-stone-200 text-stone-700 rounded-[2px] transition-colors cursor-pointer disabled:opacity-50"
+            title="Seed demo personas and sample hardware dataset"
+          >
+            {isSeeding ? 'Seeding...' : seedFeedback ? `✓ ${seedFeedback}` : 'Seed / Sync Data'}
+          </button>
         </div>
         <p className="text-[11px] text-stone-600">
           Instant session switch for demonstration and workflow evaluation:

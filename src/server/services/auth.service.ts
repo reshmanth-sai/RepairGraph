@@ -4,6 +4,7 @@ import { signToken, TokenPayload } from '../auth/jwt';
 import { AppError } from '../errors/AppError';
 import { RegisterInput, LoginInput } from '../validators/auth.validator';
 import { UserRole } from '@prisma/client';
+import { seedDemoData } from '../seed/demoSeed';
 
 export interface AuthResult {
   user: {
@@ -59,9 +60,19 @@ export async function registerUser(input: RegisterInput): Promise<AuthResult> {
 }
 
 export async function loginUser(input: LoginInput): Promise<AuthResult> {
-  const user = await prisma.user.findUnique({
-    where: { email: input.email },
+  const normalizedEmail = input.email.trim().toLowerCase();
+  let user = await prisma.user.findUnique({
+    where: { email: normalizedEmail },
   });
+
+  // If a demo account login is attempted and the user is missing (e.g. unseeded remote database on Vercel),
+  // automatically provision the demo dataset on-demand.
+  if (!user && normalizedEmail.endsWith('@repairgraph.internal')) {
+    await seedDemoData();
+    user = await prisma.user.findUnique({
+      where: { email: normalizedEmail },
+    });
+  }
 
   if (!user) {
     throw AppError.unauthenticated('Invalid email or password.');

@@ -1414,6 +1414,35 @@ async function runTests() {
     assert.ok(!extracted[0].includes('Prisma'));
   });
 
+  await test('Demo Provisioning: Admin and demo persona login succeeds with Password123!', async () => {
+    const { loginUser } = await import('../src/server/services/auth.service');
+    
+    // Test login as admin demo persona
+    const adminResult = await loginUser({
+      email: 'admin@repairgraph.internal',
+      password: 'Password123!',
+    });
+    assert.ok(adminResult.token, 'Admin login must return valid token');
+    assert.strictEqual(adminResult.user.email, 'admin@repairgraph.internal');
+    assert.strictEqual(adminResult.user.role, 'ADMIN');
+
+    // Test login as consumer demo persona
+    const consumerResult = await loginUser({
+      email: 'consumer@repairgraph.internal',
+      password: 'Password123!',
+    });
+    assert.ok(consumerResult.token, 'Consumer login must return valid token');
+    assert.strictEqual(consumerResult.user.role, 'USER');
+
+    // Test login as technician demo persona
+    const techResult = await loginUser({
+      email: 'technician@repairgraph.internal',
+      password: 'Password123!',
+    });
+    assert.ok(techResult.token, 'Technician login must return valid token');
+    assert.strictEqual(techResult.user.role, 'REPAIRER');
+  });
+
   console.log('\n----------------------------------------------------');
   console.log(`TOTAL TESTS: ${passed + failed} | PASSED: ${passed} | FAILED: ${failed}`);
   console.log('----------------------------------------------------');
