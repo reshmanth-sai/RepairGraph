@@ -11,5 +11,10 @@ export const updateRepairJobStatusSchema = z.object({
   notes: z.string().max(1500).optional().nullable(),
 });
 
+export const listRepairJobsQuerySchema = z.object({
+  status: z.nativeEnum(JobStatus).optional(),
+});
+
 export type CreateRepairJobInput = z.infer<typeof createRepairJobSchema>;
 export type UpdateRepairJobStatusInput = z.infer<typeof updateRepairJobStatusSchema>;
+export type ListRepairJobsQueryInput = z.infer<typeof listRepairJobsQuerySchema>;

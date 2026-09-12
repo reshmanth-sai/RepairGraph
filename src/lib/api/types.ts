@@ -104,7 +104,9 @@ export interface ApiRepairer {
   }>;
   _count?: {
     reviews: number;
+    repairJobs?: number;
   };
+  reviews?: ApiReview[];
 }
 
 export interface ApiQuote {

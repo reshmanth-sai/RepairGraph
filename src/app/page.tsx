@@ -8,15 +8,12 @@ import {
   repairRequestsApi,
   ApiDevice,
   ApiRepairRequest,
-  DeviceCategory,
-  DeviceCondition,
   JobStatus
 } from '@/lib/api';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Timeline, TimelineStep } from '@/components/ui/Timeline';
 import { AttentionBanner } from '@/components/ui/AttentionBanner';
-import { ScoreMeter } from '@/components/ui/ScoreMeter';
 import { StatusIndicator } from '@/components/ui/StatusIndicator';
 import {
   ArrowRight,
@@ -60,21 +57,7 @@ export default function DashboardPage() {
     loadDashboardData();
   }, [loadDashboardData]);
 
-  const calculateScore = (category: DeviceCategory, condition: DeviceCondition) => {
-    let base = 70;
-    if (category === 'LAPTOP') base = 76;
-    if (category === 'SMARTPHONE') base = 65;
-    if (category === 'TABLET') base = 58;
-    if (category === 'HEADPHONES') base = 54;
-    if (category === 'MONITOR') base = 82;
 
-    if (condition === 'EXCELLENT') base += 5;
-    if (condition === 'FAIR') base -= 8;
-    if (condition === 'DEGRADED') base -= 16;
-    if (condition === 'CRITICAL') base -= 26;
-
-    return Math.max(15, Math.min(95, base));
-  };
 
   const getWarrantyStatus = (warrantyExpiry?: string | null) => {
     if (!warrantyExpiry) return 'expired';
@@ -326,14 +309,15 @@ export default function DashboardPage() {
                     <tr className="border-b border-stone-200 text-[10px] font-mono uppercase tracking-wider text-stone-400">
                       <th className="py-2.5 pr-4 font-semibold">Device</th>
                       <th className="py-2.5 px-3 font-semibold">Condition</th>
-                      <th className="py-2.5 px-3 font-semibold">Repairability</th>
+                      <th className="py-2.5 px-3 font-semibold">Diagnostic Assessment</th>
                       <th className="py-2.5 px-3 font-semibold">Warranty</th>
                       <th className="py-2.5 pl-3 font-semibold text-right">Action</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-stone-100 text-xs">
                     {devices.slice(0, 4).map((device) => {
-                      const score = calculateScore(device.category, device.condition);
+                      const matchedRequest = requests.find((r) => r.deviceId === device.id);
+                      const recommendation = matchedRequest?.recommendation;
                       const warrantyStatus = getWarrantyStatus(device.warrantyExpiry);
 
                       return (
@@ -365,7 +349,34 @@ export default function DashboardPage() {
                           </td>
 
                           <td className="py-3 px-3 whitespace-nowrap">
-                            <ScoreMeter score={score} compact />
+                            {recommendation ? (
+                              <div className="flex items-center gap-1.5">
+                                <Badge
+                                  variant={
+                                    recommendation.recommendedAction === 'DIY'
+                                      ? 'success'
+                                      : recommendation.recommendedAction === 'REPAIR'
+                                      ? 'rust'
+                                      : recommendation.recommendedAction === 'RESELL'
+                                      ? 'warning'
+                                      : 'error'
+                                  }
+                                  size="sm"
+                                >
+                                  {recommendation.recommendedAction}
+                                </Badge>
+                                <span className="font-mono text-[11px] text-stone-600 font-medium">
+                                  {recommendation.repairabilityScore}
+                                  <span className="text-stone-400 font-normal">/100</span>
+                                </span>
+                              </div>
+                            ) : matchedRequest ? (
+                              <Badge variant="outline" size="sm">
+                                {matchedRequest.status}
+                              </Badge>
+                            ) : (
+                              <span className="font-mono text-stone-400 text-[11px]">Not assessed</span>
+                            )}
                           </td>
 
                           <td className="py-3 px-3 whitespace-nowrap">
@@ -391,7 +402,8 @@ export default function DashboardPage() {
               {/* Mobile Stacked View */}
               <div className="sm:hidden divide-y divide-stone-200">
                 {devices.slice(0, 3).map((device) => {
-                  const score = calculateScore(device.category, device.condition);
+                  const matchedRequest = requests.find((r) => r.deviceId === device.id);
+                  const recommendation = matchedRequest?.recommendation;
                   const warrantyStatus = getWarrantyStatus(device.warrantyExpiry);
 
                   return (
@@ -417,7 +429,33 @@ export default function DashboardPage() {
                       </div>
 
                       <div className="flex items-center justify-between text-xs pt-1">
-                        <ScoreMeter score={score} compact />
+                        {recommendation ? (
+                          <div className="flex items-center gap-1.5">
+                            <Badge
+                              variant={
+                                recommendation.recommendedAction === 'DIY'
+                                  ? 'success'
+                                  : recommendation.recommendedAction === 'REPAIR'
+                                  ? 'rust'
+                                  : recommendation.recommendedAction === 'RESELL'
+                                  ? 'warning'
+                                  : 'error'
+                              }
+                              size="sm"
+                            >
+                              {recommendation.recommendedAction}
+                            </Badge>
+                            <span className="font-mono text-[11px] text-stone-600">
+                              {recommendation.repairabilityScore}/100
+                            </span>
+                          </div>
+                        ) : matchedRequest ? (
+                          <Badge variant="outline" size="sm">
+                            {matchedRequest.status}
+                          </Badge>
+                        ) : (
+                          <span className="font-mono text-stone-400 text-[11px]">Not assessed</span>
+                        )}
                         {getWarrantyBadge(warrantyStatus)}
                         <Link
                           href={`/devices/${device.id}`}
@@ -507,7 +545,7 @@ export default function DashboardPage() {
 
                 <div>
                   <div className="text-[10px] font-mono uppercase tracking-wider text-stone-400 mb-3">
-                    Progress Progression
+                    Service Progression
                   </div>
                   <Timeline steps={buildMiniTimeline(displayJob.status)} />
                 </div>

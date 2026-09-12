@@ -1,7 +1,8 @@
 import { prisma } from '../db';
 import { AppError } from '../errors/AppError';
 import { UpdateRepairJobStatusInput } from '../validators/repairJob.validator';
-import { UserRole, JobStatus, RequestStatus, VerificationStatus } from '@prisma/client';
+import { UserRole, JobStatus, RequestStatus, VerificationStatus, Prisma } from '@prisma/client';
+import { PaginationParams } from '../utils/pagination';
 
 export async function createRepairJobFromQuote(quoteId: string, userId: string, role: UserRole) {
   const quote = await prisma.quote.findUnique({
@@ -122,6 +123,28 @@ export async function updateRepairJobStatus(
     throw AppError.forbidden('Only the assigned repairer can update the repair job progress.');
   }
 
+  // Terminal state immutability
+  if (job.status === JobStatus.COMPLETED || job.status === JobStatus.CANCELLED) {
+    throw AppError.badRequest(`Cannot modify a ${job.status.toLowerCase()} repair job.`);
+  }
+
+  // State machine transition validation
+  const ALLOWED_JOB_TRANSITIONS: Record<JobStatus, JobStatus[]> = {
+    [JobStatus.ACCEPTED]: [JobStatus.DIAGNOSING, JobStatus.REPAIRING, JobStatus.CANCELLED],
+    [JobStatus.DIAGNOSING]: [JobStatus.WAITING_FOR_PART, JobStatus.REPAIRING, JobStatus.CANCELLED],
+    [JobStatus.WAITING_FOR_PART]: [JobStatus.REPAIRING, JobStatus.CANCELLED],
+    [JobStatus.REPAIRING]: [JobStatus.TESTING, JobStatus.COMPLETED, JobStatus.CANCELLED],
+    [JobStatus.TESTING]: [JobStatus.COMPLETED, JobStatus.REPAIRING, JobStatus.CANCELLED],
+    [JobStatus.COMPLETED]: [],
+    [JobStatus.CANCELLED]: [],
+  };
+
+  if (input.status !== job.status && !ALLOWED_JOB_TRANSITIONS[job.status].includes(input.status)) {
+    throw AppError.badRequest(
+      `Invalid transition: cannot advance repair job from ${job.status} to ${input.status}.`
+    );
+  }
+
   return prisma.$transaction(async (tx) => {
     const isNowCompleted = input.status === JobStatus.COMPLETED;
     const completedAt = isNowCompleted ? new Date() : undefined;
@@ -173,4 +196,86 @@ export async function updateRepairJobStatus(
 
     return updatedJob;
   });
+}
+
+export async function listRepairJobs(
+  userId: string,
+  role: UserRole,
+  pagination?: PaginationParams,
+  status?: JobStatus
+) {
+  const page = pagination?.page ?? 1;
+  const limit = pagination?.limit ?? 20;
+  const skip = pagination?.skip ?? (page - 1) * limit;
+
+  let where: Prisma.RepairJobWhereInput = {};
+
+  if (role === UserRole.USER) {
+    where = {
+      repairRequest: {
+        userId,
+      },
+    };
+  } else if (role === UserRole.REPAIRER) {
+    const repairer = await prisma.repairer.findUnique({
+      where: { userId },
+    });
+    if (!repairer) {
+      throw AppError.forbidden('You must have an active Repairer profile to view repair jobs.');
+    }
+    where = {
+      repairerId: repairer.id,
+    };
+  } else if (role === UserRole.ADMIN) {
+    where = {};
+  } else {
+    throw AppError.forbidden('Access denied.');
+  }
+
+  if (status) {
+    if (!Object.values(JobStatus).includes(status)) {
+      throw AppError.badRequest(
+        `Invalid job status: ${status}. Must be one of ${Object.values(JobStatus).join(', ')}`
+      );
+    }
+    where.status = status;
+  }
+
+  const [total, jobs] = await Promise.all([
+    prisma.repairJob.count({ where }),
+    prisma.repairJob.findMany({
+      where,
+      skip,
+      take: limit,
+      orderBy: { createdAt: 'desc' },
+      include: {
+        repairRequest: {
+          include: {
+            device: true,
+            user: {
+              select: { id: true, name: true, email: true, phone: true },
+            },
+          },
+        },
+        repairer: {
+          include: {
+            user: {
+              select: { id: true, name: true, email: true, phone: true },
+            },
+          },
+        },
+        quote: true,
+        repairHistory: true,
+        review: true,
+      },
+    }),
+  ]);
+
+  return {
+    jobs,
+    total,
+    page,
+    limit,
+    totalPages: Math.ceil(total / limit) || 1,
+  };
 }

@@ -4,7 +4,8 @@ import React, { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
-import { devicesApi, repairRequestsApi, ApiDevice, UrgencyLevel } from '@/lib/api';
+import { devicesApi, repairRequestsApi, ApiDevice, UrgencyLevel, ApiRepairRequest } from '@/lib/api';
+import { sanitizeErrorMessage } from '@/lib/sanitizeError';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { Button } from '@/components/ui/Button';
 import {
@@ -13,11 +14,15 @@ import {
   AlertCircle,
   ArrowRight,
   Plus,
+  Building2,
 } from 'lucide-react';
 
 function ReportProblemContent() {
   const searchParams = useSearchParams();
   const preSelectedId = searchParams.get('deviceId');
+  const preferredRepairerId = searchParams.get('preferredRepairer');
+  const preferredRepairerName = searchParams.get('repairerName');
+  const displaySpecialist = preferredRepairerName || (preferredRepairerId ? `Specialist #${preferredRepairerId.slice(-6)}` : null);
 
   const { user, isLoading: authLoading } = useAuth();
   const [devices, setDevices] = useState<ApiDevice[]>([]);
@@ -28,7 +33,7 @@ function ReportProblemContent() {
   const [description, setDescription] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [createdRequestId, setCreatedRequestId] = useState<string | null>(null);
+  const [createdRequest, setCreatedRequest] = useState<ApiRepairRequest | null>(null);
 
   useEffect(() => {
     async function loadDevices() {
@@ -75,9 +80,14 @@ function ReportProblemContent() {
         urgency,
       });
 
-      setCreatedRequestId(created.id);
+      setCreatedRequest(created);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to submit repair request.');
+      setError(
+        sanitizeErrorMessage(
+          err,
+          "We couldn't complete the repair assessment. Please verify your details and try again."
+        )
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -106,7 +116,13 @@ function ReportProblemContent() {
           </p>
         </div>
         <div className="pt-2">
-          <Link href="/login">
+          <Link
+            href={
+              preSelectedId
+                ? `/login?redirect=${encodeURIComponent(`/report?deviceId=${preSelectedId}`)}`
+                : '/login?redirect=/report'
+            }
+          >
             <Button variant="primary">Sign In to Continue</Button>
           </Link>
         </div>
@@ -148,41 +164,113 @@ function ReportProblemContent() {
         ]}
       />
 
-      {/* Success State */}
-      {createdRequestId ? (
-        <div className="border border-emerald-300 bg-emerald-50/40 p-6 rounded-[2px] space-y-4 animate-in fade-in duration-200">
+      {/* Preferred Specialist Contextual Notice */}
+      {displaySpecialist && !createdRequest && (
+        <div className="p-4 bg-stone-50 border border-stone-300 rounded-[2px] space-y-1.5 animate-in fade-in duration-150">
+          <div className="flex items-center gap-2 text-stone-900 font-mono text-xs font-bold uppercase tracking-wider">
+            <Building2 className="w-4 h-4 text-orange-600 shrink-0" />
+            <span>Preferred Specialist: {displaySpecialist}</span>
+          </div>
+          <p className="text-xs text-stone-600 leading-relaxed">
+            Your repair request will remain available through the specialist registry. This preference does not exclusively
+            assign the request to this workshop.
+          </p>
+        </div>
+      )}
+
+      {/* Success State with Diagnostic Preview */}
+      {createdRequest ? (
+        <div
+          role="status"
+          aria-live="polite"
+          className="border border-stone-300 bg-stone-50/70 p-6 sm:p-8 rounded-[2px] space-y-6 animate-in fade-in duration-200"
+        >
           <div className="flex items-start gap-3">
             <CheckCircle2 className="w-5 h-5 text-emerald-700 shrink-0 mt-0.5" />
             <div className="space-y-1">
-              <h2 className="text-base font-bold text-emerald-950 tracking-tight">
-                Repair Request Successfully Logged
+              <div className="text-[11px] font-mono uppercase tracking-wider text-emerald-800 font-semibold">
+                Repair assessment ready
+              </div>
+              <h2 className="text-lg sm:text-xl font-bold text-stone-900 tracking-tight">
+                Diagnostic Evaluation & Repair Request Logged
               </h2>
-              <p className="text-xs text-emerald-800 leading-relaxed">
-                Your repair ticket has been registered in the database under reference{' '}
-                <span className="font-mono font-bold text-emerald-950">
-                  REF: {createdRequestId}
+              <p className="text-xs text-stone-600 leading-relaxed">
+                Your repair ticket has been evaluated and registered under reference{' '}
+                <span className="font-mono font-bold text-stone-900">
+                  REF: {createdRequest.id}
                 </span>
-                . It is now set to status <strong className="font-mono">REQUESTED</strong> and is visible to verified repair technicians for quotes.
+                . Technical signals have been triaged and this record is now visible in the specialist network for competitive quotes.
               </p>
             </div>
           </div>
 
-          <div className="p-3 bg-white/80 border border-emerald-200 rounded-[2px] text-xs text-stone-700 space-y-1 font-mono">
-            <div><strong>Device:</strong> {selectedDevice?.brand} {selectedDevice?.model} (SN: {selectedDevice?.serialNumber})</div>
-            <div><strong>Urgency:</strong> {urgency}</div>
-            <div><strong>Status:</strong> REQUESTED (Awaiting Diagnostic Review & Quotes)</div>
+          {/* Concise Diagnostic Preview Card */}
+          <div className="bg-white border border-stone-200 rounded-[2px] p-4 sm:p-5 space-y-4 shadow-sm">
+            <div className="flex items-center justify-between border-b border-stone-200 pb-3">
+              <div>
+                <span className="text-[10px] font-mono uppercase tracking-wider text-stone-400">Target Device</span>
+                <div className="text-xs font-bold text-stone-900">
+                  {createdRequest.device?.brand || selectedDevice?.brand} {createdRequest.device?.model || selectedDevice?.model}
+                </div>
+              </div>
+              {createdRequest.recommendation && (
+                <div className="text-right">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-stone-400">Recommendation</span>
+                  <div>
+                    <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded-[2px] inline-block border ${
+                      createdRequest.recommendation.recommendedAction === 'REPAIR' ? 'bg-emerald-50 text-emerald-800 border-emerald-300' :
+                      createdRequest.recommendation.recommendedAction === 'DIY' ? 'bg-blue-50 text-blue-800 border-blue-300' :
+                      createdRequest.recommendation.recommendedAction === 'RESELL' ? 'bg-amber-50 text-amber-800 border-amber-300' :
+                      createdRequest.recommendation.recommendedAction === 'RECYCLE' ? 'bg-stone-100 text-stone-800 border-stone-300' :
+                      'bg-red-50 text-red-800 border-red-300'
+                    }`}>
+                      {createdRequest.recommendation.recommendedAction}
+                    </span>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+              <div className="p-3 bg-stone-50 rounded-[2px] border border-stone-100">
+                <div className="text-[10px] font-mono uppercase text-stone-400">Likely Issue</div>
+                <div className="text-xs font-semibold text-stone-900 mt-0.5 line-clamp-2">
+                  {createdRequest.diagnosis?.possibleIssue || 'Hardware fault analyzed'}
+                </div>
+              </div>
+              <div className="p-3 bg-stone-50 rounded-[2px] border border-stone-100">
+                <div className="text-[10px] font-mono uppercase text-stone-400">Confidence</div>
+                <div className="text-xs font-mono font-bold text-stone-900 mt-0.5">
+                  {Math.round((createdRequest.diagnosis?.confidence ?? 0.8) * 100)}%
+                </div>
+              </div>
+              <div className="p-3 bg-stone-50 rounded-[2px] border border-stone-100">
+                <div className="text-[10px] font-mono uppercase text-stone-400">Estimated Repair</div>
+                <div className="text-xs font-mono font-semibold text-stone-900 mt-0.5">
+                  {createdRequest.recommendation?.estimatedCostMin !== undefined
+                    ? `₹${createdRequest.recommendation.estimatedCostMin.toLocaleString('en-IN')} – ₹${createdRequest.recommendation.estimatedCostMax.toLocaleString('en-IN')}`
+                    : 'Awaiting Quote'}
+                </div>
+              </div>
+            </div>
+
+            {createdRequest.recommendation?.reasoning && (
+              <p className="text-xs text-stone-600 leading-relaxed pt-1 border-t border-stone-100">
+                <strong className="text-stone-800">Triage Summary:</strong> {createdRequest.recommendation.reasoning}
+              </p>
+            )}
           </div>
 
           <div className="flex flex-wrap items-center gap-3 pt-2">
             <Link href="/repairs">
               <Button variant="primary" icon={<ArrowRight className="w-3.5 h-3.5" />}>
-                View in Repairs Dashboard
+                View Full Assessment
               </Button>
             </Link>
             <Button
               variant="secondary"
               onClick={() => {
-                setCreatedRequestId(null);
+                setCreatedRequest(null);
                 setDescription('');
               }}
             >
@@ -194,9 +282,19 @@ function ReportProblemContent() {
         /* Form */
         <form onSubmit={handleSubmit} className="space-y-8">
           {error && (
-            <div className="p-3 bg-red-50 border border-red-200 rounded-[2px] flex items-center gap-2 text-xs text-red-800">
-              <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
-              <span>{error}</span>
+            <div role="alert" aria-live="assertive" className="p-3 bg-red-50 border border-red-200 rounded-[2px] flex items-center justify-between text-xs text-red-800">
+              <div className="flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
+                <span>{error}</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setError(null)}
+                className="min-h-[44px] px-2 text-xs font-mono font-semibold underline text-red-700 hover:text-red-900 ml-3"
+                aria-label="Dismiss error notification"
+              >
+                Dismiss
+              </button>
             </div>
           )}
 
@@ -209,11 +307,11 @@ function ReportProblemContent() {
               id="device-select"
               value={selectedDeviceId}
               onChange={(e) => setSelectedDeviceId(e.target.value)}
-              className="w-full text-xs sm:text-sm p-3 bg-white border border-stone-300 rounded-[2px] focus:outline-none focus:border-stone-900 focus:ring-1 focus:ring-stone-900 text-stone-900 font-medium"
+              className="w-full min-h-[44px] text-xs sm:text-sm p-3 bg-white border border-stone-300 rounded-[2px] focus:outline-none focus:border-stone-900 focus:ring-1 focus:ring-stone-900 text-stone-900 font-medium"
             >
               {devices.map((d) => (
                 <option key={d.id} value={d.id}>
-                  {d.brand} {d.model} (SN: {d.serialNumber} • Category: {d.category})
+                  {d.brand} {d.model} ({d.category}) — SN: {d.serialNumber}
                 </option>
               ))}
             </select>
@@ -224,67 +322,113 @@ function ReportProblemContent() {
 
           {/* 2. Urgency Level */}
           <div className="space-y-2">
-            <label className="block text-xs font-bold uppercase tracking-wider text-stone-700 font-mono">
+            <label id="urgency-label" className="block text-xs font-bold uppercase tracking-wider text-stone-700 font-mono">
               2. Urgency Level
             </label>
-            <div className="grid grid-cols-3 gap-3">
+            <div role="radiogroup" aria-labelledby="urgency-label" className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {(
                 [
                   { id: 'LOW', label: 'Low', desc: 'Non-critical / intermittent' },
                   { id: 'MEDIUM', label: 'Medium', desc: 'Affects daily workflow' },
                   { id: 'HIGH', label: 'High', desc: 'Critical / device inoperable' },
                 ] as const
-              ).map((u) => (
-                <button
-                  key={u.id}
-                  type="button"
-                  onClick={() => setUrgency(u.id)}
-                  className={`p-3 border rounded-[2px] text-left transition-colors ${
-                    urgency === u.id
-                      ? 'border-stone-900 bg-stone-100/70'
-                      : 'border-stone-300 bg-white hover:border-stone-400'
-                  }`}
-                >
-                  <div className="text-xs font-bold text-stone-900">{u.label}</div>
-                  <div className="text-[10px] text-stone-500 mt-0.5">{u.desc}</div>
-                </button>
-              ))}
+              ).map((u, idx) => {
+                const levels: UrgencyLevel[] = ['LOW', 'MEDIUM', 'HIGH'];
+                return (
+                  <button
+                    key={u.id}
+                    id={`urgency-opt-${u.id}`}
+                    type="button"
+                    role="radio"
+                    tabIndex={urgency === u.id ? 0 : -1}
+                    aria-checked={urgency === u.id}
+                    onClick={() => setUrgency(u.id)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                        e.preventDefault();
+                        const next = levels[(idx + 1) % levels.length];
+                        setUrgency(next);
+                        document.getElementById(`urgency-opt-${next}`)?.focus();
+                      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                        e.preventDefault();
+                        const prev = levels[(idx - 1 + levels.length) % levels.length];
+                        setUrgency(prev);
+                        document.getElementById(`urgency-opt-${prev}`)?.focus();
+                      }
+                    }}
+                    className={`min-h-[44px] p-3 border rounded-[2px] text-left transition-colors touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-400 ${
+                      urgency === u.id
+                        ? 'border-stone-900 bg-stone-100/70 font-semibold ring-1 ring-stone-900'
+                        : 'border-stone-300 bg-white hover:border-stone-400'
+                    }`}
+                  >
+                    <div className="text-xs font-bold text-stone-900">{u.label}</div>
+                    <div className="text-[10px] text-stone-500 mt-0.5">{u.desc}</div>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
-          {/* 3. What is wrong? */}
+          {/* 3. What is wrong? Natural-language with Structured Guidance */}
           <div className="space-y-2">
-            <label htmlFor="symptoms-input" className="block text-xs font-bold uppercase tracking-wider text-stone-700 font-mono">
-              3. Describe Observed Symptoms
-            </label>
+            <div className="flex items-center justify-between">
+              <label htmlFor="symptoms-input" className="block text-xs font-bold uppercase tracking-wider text-stone-700 font-mono">
+                3. Describe Observed Symptoms
+              </label>
+              <span className="text-[11px] font-mono text-stone-500">Natural-language triage</span>
+            </div>
             <textarea
               id="symptoms-input"
               rows={5}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Detail symptoms, error sounds, thermal behavior, crash conditions, or visible defects..."
+              placeholder="Describe what occurred, whether the device powers on, any liquid or impact, thermal behavior, or visible damage..."
               required
               className="w-full text-xs sm:text-sm p-3 bg-white border border-stone-300 rounded-[2px] focus:outline-none focus:border-stone-900 focus:ring-1 focus:ring-stone-900 leading-relaxed font-sans text-stone-900"
             />
-            <p className="text-[11px] text-stone-500">
-              Minimum 10 characters. Technical specifics help verified repairers submit accurate quotes.
-            </p>
+
+            {/* Contextual Structured Guidance */}
+            <div className="p-3 bg-stone-50 border border-stone-200 rounded-[2px] text-xs text-stone-600 space-y-1.5">
+              <div className="font-bold text-stone-800 text-[11px] uppercase tracking-wider font-mono">
+                Helpful Details to Include
+              </div>
+              <ul className="list-disc list-inside space-y-0.5 text-stone-600 text-[11px] leading-relaxed">
+                <li><strong>Trigger & Timeline:</strong> When did it start? What happened immediately before?</li>
+                <li><strong>Power & Boot:</strong> Does the device power on, cycle, or show charging response?</li>
+                <li><strong>Display & Input:</strong> Does the screen illuminate, flicker, touch respond, or stay black?</li>
+                <li><strong>Hazards:</strong> Any liquid exposure, unusual heat, electrical odor, or battery swelling?</li>
+              </ul>
+            </div>
           </div>
 
-          {/* 4. Action */}
-          <div className="pt-2 border-t border-stone-200 flex items-center justify-between">
-            <Link href="/devices">
-              <Button type="button" variant="secondary">
-                Cancel
+          {/* 4. Action & Progress */}
+          <div className="space-y-3 pt-2 border-t border-stone-200">
+            {isSubmitting && (
+              <div
+                role="status"
+                aria-live="polite"
+                className="p-3 bg-stone-50 border border-stone-200 rounded-[2px] text-xs text-stone-600 flex items-center gap-2 font-mono animate-pulse"
+              >
+                <span className="inline-block w-2 h-2 rounded-full bg-orange-600"></span>
+                <span>Analyzing reported symptoms • Evaluating repairability • Assessing repair economics • Preparing recommendation</span>
+              </div>
+            )}
+
+            <div className="flex items-center justify-between">
+              <Link href="/devices">
+                <Button type="button" variant="secondary">
+                  Cancel
+                </Button>
+              </Link>
+              <Button
+                type="submit"
+                variant="primary"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Analyzing Symptoms & Scoring…' : 'Submit Repair Request'}
               </Button>
-            </Link>
-            <Button
-              type="submit"
-              variant="primary"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? 'Logging Request…' : 'Submit Repair Request'}
-            </Button>
+            </div>
           </div>
         </form>
       )}
@@ -299,3 +443,4 @@ export default function ReportProblemPage() {
     </Suspense>
   );
 }
+

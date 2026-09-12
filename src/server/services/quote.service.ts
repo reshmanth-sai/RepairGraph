@@ -37,6 +37,19 @@ export async function createQuote(
     throw AppError.badRequest('You cannot submit a quote for your own repair request.');
   }
 
+  // Prevent duplicate active quotes from the same repairer for this request
+  const existingQuote = await prisma.quote.findFirst({
+    where: {
+      repairRequestId,
+      repairerId: repairer.id,
+      status: { in: [QuoteStatus.PENDING, QuoteStatus.ACCEPTED] },
+    },
+  });
+
+  if (existingQuote) {
+    throw AppError.conflict('You have already submitted an active quote for this repair request.');
+  }
+
   return prisma.quote.create({
     data: {
       repairRequestId,

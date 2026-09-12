@@ -21,7 +21,11 @@ export function StatusIndicator({ status, label, className = '' }: StatusIndicat
   const current = configs[status] || configs.idle;
 
   return (
-    <div className={`inline-flex items-center gap-2 ${className}`}>
+    <div
+      role="status"
+      aria-label={label || current.label}
+      className={`inline-flex items-center gap-2 ${className}`}
+    >
       <span className="relative flex h-2 w-2">
         {status === 'in_progress' && (
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75" />

@@ -25,13 +25,13 @@ export function Footer() {
             <div className="font-mono text-[11px] uppercase tracking-wider text-stone-900 font-semibold">
               Policy & Frameworks
             </div>
-            <ul className="space-y-1.5 text-xs text-stone-500">
+            <ul className="space-y-1 text-xs text-stone-500">
               <li>
                 <a
                   href="https://righttorepairindia.gov.in/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-stone-900 underline underline-offset-2"
+                  className="py-1 inline-block hover:text-stone-900 underline underline-offset-2 touch-manipulation focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-stone-400 rounded-[2px]"
                 >
                   Right to Repair India Portal
                 </a>
@@ -41,7 +41,7 @@ export function Footer() {
                   href="https://commission.europa.eu/law/law-topic/consumer-protection-law/directive-repair-goods_en"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-stone-900 underline underline-offset-2"
+                  className="py-1 inline-block hover:text-stone-900 underline underline-offset-2 touch-manipulation focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-stone-400 rounded-[2px]"
                 >
                   EU Repair of Goods Directive
                 </a>
@@ -51,7 +51,7 @@ export function Footer() {
                   href="https://ewastemonitor.info/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-stone-900 underline underline-offset-2"
+                  className="py-1 inline-block hover:text-stone-900 underline underline-offset-2 touch-manipulation focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-stone-400 rounded-[2px]"
                 >
                   Global E-Waste Monitor (UNITAR)
                 </a>
@@ -63,28 +63,35 @@ export function Footer() {
             <div className="font-mono text-[11px] uppercase tracking-wider text-stone-900 font-semibold">
               Navigation
             </div>
-            <ul className="space-y-1.5 text-xs text-stone-500">
-              <li>
-                <Link href="/devices" className="hover:text-stone-900">
-                  Hardware Registry
-                </Link>
-              </li>
-              <li>
-                <Link href="/repairs" className="hover:text-stone-900">
-                  Active Repairs
-                </Link>
-              </li>
-              <li>
-                <Link href="/passport" className="hover:text-stone-900">
-                  Repair Passport
-                </Link>
-              </li>
-              <li>
-                <Link href="/report" className="hover:text-stone-900">
-                  Report a Problem
-                </Link>
-              </li>
-            </ul>
+            <nav aria-label="Footer Navigation">
+              <ul className="space-y-1 text-xs text-stone-500">
+                <li>
+                  <Link href="/devices" className="py-1 inline-block hover:text-stone-900 transition-colors touch-manipulation focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-stone-400 rounded-[2px]">
+                    Devices
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/report" className="py-1 inline-block hover:text-stone-900 transition-colors touch-manipulation focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-stone-400 rounded-[2px]">
+                    Diagnose / Report
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/repairs" className="py-1 inline-block hover:text-stone-900 transition-colors touch-manipulation focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-stone-400 rounded-[2px]">
+                    Repairs
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/passport" className="py-1 inline-block hover:text-stone-900 transition-colors touch-manipulation focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-stone-400 rounded-[2px]">
+                    Passport
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/repairers" className="py-1 inline-block hover:text-stone-900 transition-colors touch-manipulation focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-stone-400 rounded-[2px]">
+                    Specialists
+                  </Link>
+                </li>
+              </ul>
+            </nav>
           </div>
         </div>
 

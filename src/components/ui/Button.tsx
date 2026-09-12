@@ -16,7 +16,7 @@ export function Button({
   disabled,
   ...props
 }: ButtonProps) {
-  const baseStyles = 'inline-flex items-center justify-center font-medium transition-colors select-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-stone-900 focus-visible:ring-offset-1 disabled:opacity-50 disabled:pointer-events-none text-xs tracking-tight';
+  const baseStyles = 'inline-flex items-center justify-center font-medium transition-colors select-none touch-manipulation focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-stone-900 focus-visible:ring-offset-1 disabled:opacity-50 disabled:pointer-events-none text-xs tracking-tight';
 
   const variantStyles = {
     primary: 'bg-stone-900 text-stone-50 hover:bg-stone-800 active:bg-stone-950 border border-stone-900',
@@ -27,9 +27,9 @@ export function Button({
   };
 
   const sizeStyles = {
-    sm: 'h-7 px-2.5 gap-1.5 rounded-[2px] text-xs',
-    md: 'h-8.5 px-3 gap-1.5 rounded-[2px] text-xs',
-    lg: 'h-9.5 px-4 gap-2 rounded-[2px] text-xs sm:text-sm'
+    sm: 'h-8 sm:h-7 px-2.5 gap-1.5 rounded-[2px] text-xs',
+    md: 'h-9 sm:h-8.5 px-3 gap-1.5 rounded-[2px] text-xs',
+    lg: 'min-h-[44px] sm:h-9.5 px-4 gap-2 rounded-[2px] text-xs sm:text-sm'
   };
 
   return (

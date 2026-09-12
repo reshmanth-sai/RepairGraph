@@ -115,7 +115,7 @@ $$\text{Final Repairability Score } S_{\text{repair}} = \max\left(10, \min\left(
 ## 3. Quick Start & Local Setup
 
 ### Prerequisites
-- Node.js 20+ (LTS)
+- Node.js 24+ (LTS)
 - npm or yarn
 - Local or managed PostgreSQL instance
 
@@ -163,8 +163,11 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 RepairGraph includes a comprehensive automated test suite verifying data models, business rules, authorization boundaries, rate limiting, and full repair lifecycle state machines:
 
 ```bash
-# Run 17 automated business rule & API tests
+# Run automated engine, business rule, and integration tests
 npm test
+
+# Run deterministic diagnostic engine unit tests
+npx tsx tests/engine.test.ts
 
 # Run ESLint validation
 npm run lint
@@ -175,7 +178,47 @@ npm run build
 
 ---
 
-## 5. API Reference Summary
+## 5. Production Deployment Runbook
+
+### Prerequisites
+- **Node.js**: `24+` (LTS)
+- **npm**: `11+`
+- **Database**: Managed PostgreSQL 16+ (e.g. Neon, Supabase, Cloud SQL)
+- **Target Platform**: Vercel Serverless (Recommended) or Google Cloud Run
+
+### 1. Environment Variables Checklist
+Configure the following in your production environment settings (never commit secret values):
+```env
+DATABASE_URL="postgresql://[user]:[password]@[host]:[port]/[database]?sslmode=require"
+JWT_SECRET="<generate-high-entropy-string-at-least-32-chars-long>"
+NODE_ENV="production"
+PORT=3000
+NEXT_PUBLIC_APP_URL="https://your-production-domain.com"
+```
+
+### 2. Deployment Execution Sequence
+```bash
+# 1. Install production dependencies
+npm ci
+
+# 2. Deploy database migrations to production PostgreSQL
+npx prisma migrate deploy
+
+# 3. Generate Prisma client & compile Next.js production build
+npm run build
+
+# 4. Start production web server
+npm start
+```
+
+### 3. Post-Deployment Verification
+1. **Health Ping**: Verify `GET https://<production-domain>/api/health` returns HTTP 200 with `"status": "ok"` and `"database": "connected"`.
+2. **Smoke Test Safety**: The integration suite `scripts/smoke-test.ts` includes authenticated tests that require the sample consumer account. For an unseeded production instance, verify health and public routes directly.
+3. **Demo Personas**: Demo accounts (`consumer@repairgraph.internal`, `technician@repairgraph.internal`, `admin@repairgraph.internal`) are only created when `npx prisma db seed` is explicitly executed. Production remains clean by default.
+
+---
+
+## 6. API Reference Summary
 
 All API routes are served under `/api` and return standardized JSON payloads:
 
@@ -222,7 +265,7 @@ All API routes are served under `/api` and return standardized JSON payloads:
 
 ---
 
-## 6. Regulatory Alignment
+## 7. Regulatory Alignment
 
 RepairGraph's data structures and provenance tracking are modeled to support:
 - **India Right to Repair Portal (Department of Consumer Affairs)**: Standardizing diagnostic manuals, genuine parts transparency, and authorized/independent repairer certification.

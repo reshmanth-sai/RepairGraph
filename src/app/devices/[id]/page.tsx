@@ -1,12 +1,14 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { devicesApi, ApiDeviceDetail, DeviceCategory, DeviceCondition } from '@/lib/api';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
+import { useFocusTrap } from '@/lib/useFocusTrap';
+import { sanitizeErrorMessage } from '@/lib/sanitizeError';
 import {
   Wrench,
   ShieldCheck,
@@ -26,6 +28,8 @@ export default function DeviceDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const previousFocusRef = useRef<HTMLElement | null>(null);
+
   // Edit Modal State
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editCategory, setEditCategory] = useState<DeviceCategory>('LAPTOP');
@@ -37,6 +41,21 @@ export default function DeviceDetailPage() {
   const [editCondition, setEditCondition] = useState<DeviceCondition>('GOOD');
   const [editSubmitting, setEditSubmitting] = useState(false);
   const [editError, setEditError] = useState<string | null>(null);
+
+  const closeEditModal = () => {
+    setIsEditModalOpen(false);
+  };
+
+  const editModalTrapRef = useFocusTrap({
+    isOpen: isEditModalOpen,
+    onClose: closeEditModal,
+    disableFocusTrap: editSubmitting,
+  });
+
+  const openEditModal = () => {
+    previousFocusRef.current = document.activeElement as HTMLElement;
+    setIsEditModalOpen(true);
+  };
 
   const loadDevice = useCallback(async () => {
     if (!deviceId) return;
@@ -80,9 +99,9 @@ export default function DeviceDetailPage() {
       });
 
       await loadDevice();
-      setIsEditModalOpen(false);
+      closeEditModal();
     } catch (err: unknown) {
-      setEditError(err instanceof Error ? err.message : 'Failed to update device record.');
+      setEditError(sanitizeErrorMessage(err, 'Failed to update device record.'));
     } finally {
       setEditSubmitting(false);
     }
@@ -154,26 +173,12 @@ export default function DeviceDetailPage() {
     }
   };
 
-  // Base repairability factors
-  const isLaptop = device.category === 'LAPTOP';
-  const isPhone = device.category === 'SMARTPHONE';
-  const overallScore = isLaptop ? 78 : isPhone ? 64 : 68;
-
-  const factors = isLaptop
-    ? [
-        { name: 'Disassembly & Fasteners', score: 18, maxScore: 20, weight: 0.2, benchmark: 'Standard Phillips #0 / Torx T5', notes: 'No proprietary adhesive seams on base enclosure' },
-        { name: 'Parts Availability', score: 17, maxScore: 20, weight: 0.2, benchmark: 'OEM FRU Catalog Available', notes: 'Fans, batteries, keyboards widely stocked' },
-        { name: 'Component Modularity', score: 16, maxScore: 20, weight: 0.2, benchmark: 'Independent daughterboards', notes: 'Modular thermal module, daughterboard I/O' },
-        { name: 'Repair Documentation', score: 18, maxScore: 20, weight: 0.2, benchmark: 'Public Hardware Service Manual', notes: 'Step-by-step schematics and torque specs' },
-        { name: 'Software Pairing Locks', score: 9, maxScore: 20, weight: 0.2, benchmark: 'No serialization pairing', notes: 'Unrestricted third-party module calibration' },
-      ]
-    : [
-        { name: 'Enclosure Adhesive', score: 12, maxScore: 20, weight: 0.2, benchmark: 'Heat-activated perimeter tape', notes: 'Requires hot plate / isopropanol release' },
-        { name: 'Display Separation', score: 13, maxScore: 20, weight: 0.2, benchmark: 'Modular ribbon connectors', notes: 'Direct suction lift without sub-frame risk' },
-        { name: 'Battery Pull Tabs', score: 15, maxScore: 20, weight: 0.2, benchmark: 'Stretch-release adhesive strips', notes: 'Pre-installed stretch release tabs present' },
-        { name: 'Component Modularity', score: 11, maxScore: 20, weight: 0.2, benchmark: 'Micro-soldered USB-C port', notes: 'Sub-board replacement requires board preheater' },
-        { name: 'Diagnostic Calibration', score: 13, maxScore: 20, weight: 0.2, benchmark: 'On-device calibration supported', notes: 'Sensor calibration accessible via fastboot' },
-      ];
+  // Extract real persisted diagnostic recommendation from device history
+  const latestRequestWithDiag = (device.repairRequests || []).find(
+    (r) => r.recommendation || r.diagnosis
+  );
+  const realRecommendation = latestRequestWithDiag?.recommendation;
+  const realDiagnosis = latestRequestWithDiag?.diagnosis;
 
   const purchasePrice = device.purchasePrice || 0;
   const currentValue = device.currentValue || 0;
@@ -203,18 +208,18 @@ export default function DeviceDetailPage() {
             <Button
               variant="secondary"
               icon={<Edit3 className="w-3.5 h-3.5" />}
-              onClick={() => setIsEditModalOpen(true)}
+              onClick={openEditModal}
             >
               Edit Hardware
             </Button>
-            <Link href="/passport">
+            <Link href={`/passport?deviceId=${device.id}`}>
               <Button variant="secondary" icon={<ShieldCheck className="w-3.5 h-3.5" />}>
                 Repair Passport
               </Button>
             </Link>
             <Link href={`/report?deviceId=${device.id}`}>
               <Button variant="primary" icon={<Wrench className="w-3.5 h-3.5" />}>
-                Report Issue
+                Diagnose / Report Problem
               </Button>
             </Link>
           </div>
@@ -353,48 +358,156 @@ export default function DeviceDetailPage() {
           <div className="text-[10px] font-mono uppercase tracking-wider text-stone-400">
             Repairability Index
           </div>
-          <div className="font-mono text-lg font-bold text-stone-900">
-            {overallScore} <span className="text-xs text-stone-400 font-normal">/100</span>
-          </div>
-          <div className="text-[11px] text-stone-500">
-            High repairability tier
-          </div>
+          {realRecommendation ? (
+            <>
+              <div className="font-mono text-lg font-bold text-stone-900">
+                {realRecommendation.repairabilityScore}{' '}
+                <span className="text-xs text-stone-400 font-normal">/100</span>
+              </div>
+              <div className="text-[11px] text-stone-500 font-mono">
+                Verdict: {realRecommendation.recommendedAction}
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="font-mono text-base font-semibold text-stone-500">
+                Not assessed
+              </div>
+              <div className="text-[11px] text-stone-400">
+                No diagnostic history
+              </div>
+            </>
+          )}
         </div>
       </section>
 
-      {/* 4. Repairability Index Benchmark Section */}
+      {/* 4. Diagnostic Evaluation & Lifecycle Assessment */}
       <section className="space-y-4">
-        <div className="border-b border-stone-200 pb-2">
-          <h3 className="text-sm font-bold text-stone-900 tracking-tight">
-            Repairability Index & Factor Breakdown
-          </h3>
-          <p className="text-xs text-stone-500">
-            Evaluated using RepairGraph&apos;s 7-factor scoring methodology informed by general repairability principles.
-          </p>
+        <div className="border-b border-stone-200 pb-2 flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
+          <div>
+            <h3 className="text-sm font-bold text-stone-900 tracking-tight">
+              Diagnostic Evaluation & Repairability Assessment
+            </h3>
+            <p className="text-xs text-stone-500">
+              Technical feasibility, component serviceability, and fair-market economics evaluated by RepairGraph.
+            </p>
+          </div>
+          {realRecommendation && (
+            <Link href="/repairs" className="text-xs font-semibold text-stone-700 hover:text-stone-900 underline underline-offset-2">
+              View in Repairs Dashboard →
+            </Link>
+          )}
         </div>
 
-        <div className="space-y-3">
-          {factors.map((factor, i) => (
-            <div key={i} className="p-3 bg-white border border-stone-200 rounded-[2px] space-y-1.5 text-xs">
-              <div className="flex items-center justify-between">
-                <span className="font-bold text-stone-800">{factor.name}</span>
-                <span className="font-mono text-stone-700 font-semibold tabular-nums">
-                  {factor.score}/{factor.maxScore}
+        {realRecommendation ? (
+          <div className="p-5 bg-white border border-stone-200 rounded-[2px] space-y-4 shadow-2xs">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-stone-100 pb-3">
+              <div className="space-y-0.5">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-stone-400">
+                  Recommended Lifecycle Action
                 </span>
+                <div className="flex items-center gap-2 pt-0.5">
+                  <Badge
+                    variant={
+                      realRecommendation.recommendedAction === 'DIY'
+                        ? 'success'
+                        : realRecommendation.recommendedAction === 'REPAIR'
+                        ? 'rust'
+                        : realRecommendation.recommendedAction === 'RESELL'
+                        ? 'warning'
+                        : 'error'
+                    }
+                    size="md"
+                  >
+                    {realRecommendation.recommendedAction}
+                  </Badge>
+                  {realDiagnosis && (
+                    <span className="text-xs font-bold text-stone-900">
+                      {realDiagnosis.possibleIssue}
+                    </span>
+                  )}
+                </div>
               </div>
-              <div className="w-full bg-stone-100 h-1 rounded-[1px] overflow-hidden">
-                <div
-                  className="bg-stone-900 h-full rounded-[1px]"
-                  style={{ width: `${(factor.score / factor.maxScore) * 100}%` }}
-                />
-              </div>
-              <div className="flex items-center justify-between text-[11px] text-stone-500 pt-0.5">
-                <span>Benchmark: {factor.benchmark}</span>
-                <span className="text-stone-400">{factor.notes}</span>
+
+              <div className="flex items-center gap-4 text-right">
+                <div>
+                  <div className="text-[10px] font-mono uppercase text-stone-400">Repairability</div>
+                  <div className="font-mono text-base font-bold text-stone-900">
+                    {realRecommendation.repairabilityScore}
+                    <span className="text-xs text-stone-400 font-normal">/100</span>
+                  </div>
+                </div>
+                <div className="border-l border-stone-200 pl-4">
+                  <div className="text-[10px] font-mono uppercase text-stone-400">Economic Score</div>
+                  <div className="font-mono text-base font-bold text-stone-900">
+                    {realRecommendation.economicScore}
+                    <span className="text-xs text-stone-400 font-normal">/100</span>
+                  </div>
+                </div>
               </div>
             </div>
-          ))}
-        </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs pt-1">
+              <div className="p-3 bg-stone-50 border border-stone-200 rounded-[2px] space-y-1">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-stone-400 block">
+                  Fair-Market Repair Benchmark
+                </span>
+                <div className="font-mono text-sm font-bold text-stone-900">
+                  ₹{realRecommendation.estimatedCostMin.toLocaleString('en-IN')} – ₹{realRecommendation.estimatedCostMax.toLocaleString('en-IN')}
+                </div>
+                <p className="text-[11px] text-stone-500">
+                  Derived from regional service matrix and component replacement costs.
+                </p>
+              </div>
+
+              {realDiagnosis && (
+                <div className="p-3 bg-stone-50 border border-stone-200 rounded-[2px] space-y-1">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-stone-400 block">
+                    Diagnostic Confidence & Category
+                  </span>
+                  <div className="font-mono text-sm font-bold text-stone-900">
+                    {realDiagnosis.confidence}% Confidence
+                  </div>
+                  <p className="text-[11px] text-stone-500">
+                    Fault Class: {realDiagnosis.issueCategory}
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {realRecommendation.reasoning && (
+              <div className="p-3.5 bg-stone-50/60 border border-stone-200 rounded-[2px] space-y-1.5 text-xs">
+                <span className="font-mono text-[10px] uppercase font-bold text-stone-600 block">
+                  Assessment Reasoning
+                </span>
+                <p className="text-stone-700 leading-relaxed text-[11px]">
+                  {realRecommendation.reasoning}
+                </p>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="p-8 border border-dashed border-stone-200 rounded-[2px] text-center space-y-3 bg-stone-50/40">
+            <div className="w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center mx-auto text-stone-400">
+              <Wrench className="w-4 h-4" />
+            </div>
+            <div className="space-y-1 max-w-md mx-auto">
+              <div className="text-xs font-bold text-stone-800">
+                No Diagnostic History Logged
+              </div>
+              <p className="text-[11px] text-stone-500 leading-relaxed">
+                This hardware unit has not undergone a RepairGraph diagnostic evaluation yet. Submit symptoms to generate an audit-proof repairability score, component feasibility assessment, and fair-market cost analysis.
+              </p>
+            </div>
+            <div className="pt-1">
+              <Link href={`/report?deviceId=${device.id}`}>
+                <Button variant="primary" icon={<Wrench className="w-3.5 h-3.5" />}>
+                  Diagnose Hardware Problem
+                </Button>
+              </Link>
+            </div>
+          </div>
+        )}
       </section>
 
       {/* 5. Verified Service History & Maintenance Ledger */}
@@ -483,28 +596,39 @@ export default function DeviceDetailPage() {
 
       {/* Edit Hardware Modal Dialog */}
       {isEditModalOpen && (
-        <div className="fixed inset-0 z-50 bg-stone-900/40 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white border border-stone-300 rounded-[3px] shadow-xl max-w-lg w-full p-6 space-y-5">
-            <div className="flex items-center justify-between border-b border-stone-200 pb-3">
+        <div
+          ref={editModalTrapRef}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="edit-hardware-detail-title"
+          className="fixed inset-0 z-50 bg-stone-900/40 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150"
+          onClick={() => !editSubmitting && closeEditModal()}
+        >
+          <div
+            className="bg-white border border-stone-300 rounded-[3px] shadow-xl max-w-lg w-full p-5 sm:p-6 space-y-5"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-start justify-between border-b border-stone-200 pb-3">
               <div>
-                <h3 className="text-base font-bold text-stone-900 tracking-tight">
+                <h3 id="edit-hardware-detail-title" className="text-base font-bold text-stone-900 tracking-tight">
                   Edit Hardware Record
                 </h3>
-                <p className="text-[11px] text-stone-500 font-mono">
+                <p className="text-[11px] text-stone-500 font-mono break-all">
                   UNIT ID: {device.id.slice(0, 12)}… • {device.brand} {device.model}
                 </p>
               </div>
               <button
                 type="button"
-                onClick={() => setIsEditModalOpen(false)}
-                className="p-1 text-stone-400 hover:text-stone-700"
+                onClick={closeEditModal}
+                className="min-w-[44px] min-h-[44px] -mr-2 -mt-2 flex items-center justify-center text-stone-400 hover:text-stone-700 rounded-[2px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-400"
+                aria-label="Close modal"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             {editError && (
-              <div className="p-3 bg-red-50 border border-red-200 rounded-[2px] text-xs text-red-800">
+              <div role="alert" aria-live="assertive" className="p-3 bg-red-50 border border-red-200 rounded-[2px] text-xs text-red-800">
                 {editError}
               </div>
             )}
@@ -627,7 +751,7 @@ export default function DeviceDetailPage() {
                 <Button
                   type="button"
                   variant="secondary"
-                  onClick={() => setIsEditModalOpen(false)}
+                  onClick={closeEditModal}
                 >
                   Cancel
                 </Button>

@@ -12,6 +12,7 @@ import {
   DeviceCategory,
   DeviceCondition,
   UrgencyLevel,
+  JobStatus,
 } from './types';
 
 export * from './types';
@@ -141,6 +142,14 @@ export const quotesApi = {
 };
 
 export const repairJobsApi = {
+  list: (params?: { page?: number; limit?: number; status?: JobStatus | string }) => {
+    const searchParams = new URLSearchParams();
+    if (params?.page) searchParams.set('page', params.page.toString());
+    if (params?.limit) searchParams.set('limit', params.limit.toString());
+    if (params?.status) searchParams.set('status', params.status);
+    return apiClient<ApiRepairJob[]>(`/api/repair-jobs?${searchParams.toString()}`);
+  },
+
   create: (quoteId: string) =>
     apiClient<ApiRepairJob>('/api/repair-jobs', {
       method: 'POST',
@@ -174,6 +183,7 @@ export const repairersApi = {
     const searchParams = new URLSearchParams();
     if (params?.page) searchParams.set('page', params.page.toString());
     if (params?.limit) searchParams.set('limit', params.limit.toString());
+    if (params?.verificationStatus) searchParams.set('verificationStatus', params.verificationStatus);
     return apiClient<ApiRepairer[]>(`/api/repairers?${searchParams.toString()}`);
   },
 

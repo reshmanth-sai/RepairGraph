@@ -1,13 +1,14 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
 import { devicesApi, ApiDevice, DeviceCategory, DeviceCondition } from '@/lib/api';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
-import { ScoreMeter } from '@/components/ui/ScoreMeter';
+import { useFocusTrap } from '@/lib/useFocusTrap';
+import { sanitizeErrorMessage } from '@/lib/sanitizeError';
 import {
   Laptop,
   Smartphone,
@@ -29,6 +30,8 @@ export default function DevicesPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState<'all' | 'attention' | 'in_repair' | 'under_warranty'>('all');
+
+  const previousFocusRef = useRef<HTMLElement | null>(null);
 
   // Add Device Modal State
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -53,6 +56,31 @@ export default function DevicesPage() {
   const [editCondition, setEditCondition] = useState<DeviceCondition>('GOOD');
   const [editSubmitting, setEditSubmitting] = useState(false);
   const [editError, setEditError] = useState<string | null>(null);
+
+  const closeAddModal = () => {
+    setIsAddModalOpen(false);
+  };
+
+  const closeEditModal = () => {
+    setEditingDevice(null);
+  };
+
+  const addModalTrapRef = useFocusTrap({
+    isOpen: isAddModalOpen,
+    onClose: closeAddModal,
+    disableFocusTrap: formSubmitting,
+  });
+
+  const editModalTrapRef = useFocusTrap({
+    isOpen: !!editingDevice,
+    onClose: closeEditModal,
+    disableFocusTrap: editSubmitting,
+  });
+
+  const openAddModal = () => {
+    previousFocusRef.current = document.activeElement as HTMLElement;
+    setIsAddModalOpen(true);
+  };
 
   const fetchDevices = useCallback(async () => {
     setIsLoading(true);
@@ -95,15 +123,17 @@ export default function DevicesPage() {
       setFormPurchasePrice('');
       setFormCurrentValue('');
       setIsAddModalOpen(false);
+      previousFocusRef.current?.focus();
       await fetchDevices();
     } catch (err: unknown) {
-      setFormError(err instanceof Error ? err.message : 'Failed to register device.');
+      setFormError(sanitizeErrorMessage(err, 'Failed to register device.'));
     } finally {
       setFormSubmitting(false);
     }
   };
 
   const openEditModal = (device: ApiDevice) => {
+    previousFocusRef.current = document.activeElement as HTMLElement;
     setEditingDevice(device);
     setEditCategory(device.category);
     setEditBrand(device.brand);
@@ -134,9 +164,10 @@ export default function DevicesPage() {
       });
 
       setEditingDevice(null);
+      previousFocusRef.current?.focus();
       await fetchDevices();
     } catch (err: unknown) {
-      setEditError(err instanceof Error ? err.message : 'Failed to update device record.');
+      setEditError(sanitizeErrorMessage(err, 'Failed to update device record.'));
     } finally {
       setEditSubmitting(false);
     }
@@ -155,21 +186,7 @@ export default function DevicesPage() {
     }
   };
 
-  const calculateScore = (category: DeviceCategory, condition: DeviceCondition) => {
-    let base = 70;
-    if (category === 'LAPTOP') base = 76;
-    if (category === 'SMARTPHONE') base = 65;
-    if (category === 'TABLET') base = 58;
-    if (category === 'HEADPHONES') base = 54;
-    if (category === 'MONITOR') base = 82;
 
-    if (condition === 'EXCELLENT') base += 5;
-    if (condition === 'FAIR') base -= 8;
-    if (condition === 'DEGRADED') base -= 16;
-    if (condition === 'CRITICAL') base -= 26;
-
-    return Math.max(15, Math.min(95, base));
-  };
 
   const getWarrantyStatus = (warrantyExpiry?: string | null) => {
     if (!warrantyExpiry) return 'expired';
@@ -253,13 +270,9 @@ export default function DevicesPage() {
     }
   };
 
-  const avgRepairability =
-    devices.length > 0
-      ? Math.round(
-          devices.reduce((acc, d) => acc + calculateScore(d.category, d.condition), 0) /
-            devices.length
-        )
-      : 0;
+  const assessedUnitsCount = devices.filter(
+    (d) => (d.repairRequests || []).length > 0
+  ).length;
 
   const totalFleetValue = devices.reduce((acc, d) => acc + (d.currentValue || 0), 0);
 
@@ -282,7 +295,7 @@ export default function DevicesPage() {
             <Button
               variant="primary"
               icon={<Plus className="w-3.5 h-3.5" />}
-              onClick={() => setIsAddModalOpen(true)}
+              onClick={openAddModal}
             >
               Add Device
             </Button>
@@ -304,11 +317,13 @@ export default function DevicesPage() {
 
         <div className="space-y-0.5 sm:border-l sm:border-stone-200 sm:pl-6">
           <div className="text-[11px] font-mono uppercase tracking-wider text-stone-400">
-            Average Repairability
+            Assessed Units
           </div>
           <div className="text-xl font-bold font-mono text-stone-900 tabular-nums">
-            {isLoading ? '…' : avgRepairability}
-            <span className="text-xs font-mono font-normal text-stone-400 ml-0.5">/100</span>
+            {isLoading ? '…' : assessedUnitsCount}
+            <span className="text-xs font-mono font-normal text-stone-400 ml-1">
+              / {devices.length} evaluated
+            </span>
           </div>
         </div>
 
@@ -396,7 +411,7 @@ export default function DevicesPage() {
             <Button
               variant="primary"
               icon={<Plus className="w-3.5 h-3.5" />}
-              onClick={() => setIsAddModalOpen(true)}
+              onClick={openAddModal}
             >
               Add First Device
             </Button>
@@ -412,7 +427,7 @@ export default function DevicesPage() {
               <tr className="border-b border-stone-200 text-[10px] font-mono uppercase tracking-wider text-stone-400">
                 <th className="py-2.5 pr-4 font-semibold">Hardware</th>
                 <th className="py-2.5 px-3 font-semibold">Condition</th>
-                <th className="py-2.5 px-3 font-semibold">Repairability</th>
+                <th className="py-2.5 px-3 font-semibold">Diagnostic Assessment</th>
                 <th className="py-2.5 px-3 font-semibold">Warranty</th>
                 <th className="py-2.5 px-3 font-semibold">Market Value</th>
                 <th className="py-2.5 px-3 font-semibold">Status / Issue</th>
@@ -421,7 +436,6 @@ export default function DevicesPage() {
             </thead>
             <tbody className="divide-y divide-stone-100 text-xs">
               {filteredDevices.map((device) => {
-                const score = calculateScore(device.category, device.condition);
                 const warrantyStatus = getWarrantyStatus(device.warrantyExpiry);
                 const latestRequest = (device.repairRequests || [])[0];
 
@@ -460,7 +474,24 @@ export default function DevicesPage() {
                     </td>
 
                     <td className="py-3.5 px-3 whitespace-nowrap">
-                      <ScoreMeter score={score} compact />
+                      {latestRequest ? (
+                        <div className="flex items-center gap-1.5">
+                          <span
+                            className={`w-1.5 h-1.5 rounded-full shrink-0 ${
+                              latestRequest.status === 'COMPLETED'
+                                ? 'bg-emerald-600'
+                                : latestRequest.status === 'CANCELLED'
+                                ? 'bg-stone-400'
+                                : 'bg-amber-600'
+                            }`}
+                          />
+                          <span className="font-mono text-xs font-semibold text-stone-800">
+                            {latestRequest.status}
+                          </span>
+                        </div>
+                      ) : (
+                        <span className="font-mono text-stone-400 text-[11px]">No diagnostic yet</span>
+                      )}
                     </td>
 
                     <td className="py-3.5 px-3 whitespace-nowrap">
@@ -496,7 +527,14 @@ export default function DevicesPage() {
                     </td>
 
                     <td className="py-3.5 pl-3 text-right whitespace-nowrap">
-                      <div className="inline-flex items-center gap-1">
+                      <div className="inline-flex items-center gap-1.5">
+                        <Link
+                          href={`/passport?deviceId=${device.id}`}
+                          className="inline-flex items-center text-[11px] font-mono text-stone-600 hover:text-stone-950 bg-stone-50 hover:bg-stone-100 border border-stone-200 px-1.5 py-0.5 rounded-[2px] transition-colors"
+                          title="View device passport"
+                        >
+                          Passport
+                        </Link>
                         <Link
                           href={`/devices/${device.id}`}
                           className="inline-flex items-center gap-1 text-xs font-medium text-stone-600 hover:text-stone-950 p-1"
@@ -536,8 +574,8 @@ export default function DevicesPage() {
       {!isLoading && filteredDevices.length > 0 && (
         <div className="sm:hidden divide-y divide-stone-200">
           {filteredDevices.map((device) => {
-            const score = calculateScore(device.category, device.condition);
             const warrantyStatus = getWarrantyStatus(device.warrantyExpiry);
+            const latestRequest = (device.repairRequests || [])[0];
 
             return (
               <div key={device.id} className="py-3.5 space-y-2 text-xs">
@@ -562,9 +600,32 @@ export default function DevicesPage() {
                 </div>
 
                 <div className="flex items-center justify-between text-[11px] pt-1 border-t border-stone-100">
-                  <ScoreMeter score={score} compact />
+                  {latestRequest ? (
+                    <div className="flex items-center gap-1.5">
+                      <span
+                        className={`w-1.5 h-1.5 rounded-full shrink-0 ${
+                          latestRequest.status === 'COMPLETED'
+                            ? 'bg-emerald-600'
+                            : latestRequest.status === 'CANCELLED'
+                            ? 'bg-stone-400'
+                            : 'bg-amber-600'
+                        }`}
+                      />
+                      <span className="font-mono text-[11px] font-semibold text-stone-800">
+                        {latestRequest.status}
+                      </span>
+                    </div>
+                  ) : (
+                    <span className="font-mono text-stone-400 text-[11px]">No diagnostic yet</span>
+                  )}
                   {getWarrantyBadge(warrantyStatus)}
                   <div className="flex items-center gap-2">
+                    <Link
+                      href={`/passport?deviceId=${device.id}`}
+                      className="text-stone-600 hover:text-stone-900 font-mono text-[11px]"
+                    >
+                      Passport
+                    </Link>
                     <button
                       type="button"
                       onClick={() => openEditModal(device)}
@@ -588,11 +649,21 @@ export default function DevicesPage() {
 
       {/* Add Device Modal Dialog */}
       {isAddModalOpen && (
-        <div className="fixed inset-0 z-50 bg-stone-900/40 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white border border-stone-300 rounded-[3px] shadow-xl max-w-lg w-full p-6 space-y-5">
-            <div className="flex items-center justify-between border-b border-stone-200 pb-3">
+        <div
+          ref={addModalTrapRef}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="register-hardware-title"
+          className="fixed inset-0 z-50 bg-stone-900/40 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150"
+          onClick={() => !formSubmitting && closeAddModal()}
+        >
+          <div
+            className="bg-white border border-stone-300 rounded-[3px] shadow-xl max-w-lg w-full p-5 sm:p-6 space-y-5"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-start justify-between border-b border-stone-200 pb-3">
               <div>
-                <h3 className="text-base font-bold text-stone-900 tracking-tight">
+                <h3 id="register-hardware-title" className="text-base font-bold text-stone-900 tracking-tight">
                   Register New Hardware
                 </h3>
                 <p className="text-[11px] text-stone-500">
@@ -601,15 +672,16 @@ export default function DevicesPage() {
               </div>
               <button
                 type="button"
-                onClick={() => setIsAddModalOpen(false)}
-                className="p-1 text-stone-400 hover:text-stone-700"
+                onClick={closeAddModal}
+                className="min-w-[44px] min-h-[44px] -mr-2 -mt-2 flex items-center justify-center text-stone-400 hover:text-stone-700 rounded-[2px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-400"
+                aria-label="Close modal"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             {formError && (
-              <div className="p-3 bg-red-50 border border-red-200 rounded-[2px] text-xs text-red-800">
+              <div role="alert" aria-live="assertive" className="p-3 bg-red-50 border border-red-200 rounded-[2px] text-xs text-red-800">
                 {formError}
               </div>
             )}
@@ -736,7 +808,7 @@ export default function DevicesPage() {
                 <Button
                   type="button"
                   variant="secondary"
-                  onClick={() => setIsAddModalOpen(false)}
+                  onClick={closeAddModal}
                 >
                   Cancel
                 </Button>
@@ -755,28 +827,39 @@ export default function DevicesPage() {
 
       {/* Edit Device Modal Dialog */}
       {editingDevice && (
-        <div className="fixed inset-0 z-50 bg-stone-900/40 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white border border-stone-300 rounded-[3px] shadow-xl max-w-lg w-full p-6 space-y-5">
-            <div className="flex items-center justify-between border-b border-stone-200 pb-3">
+        <div
+          ref={editModalTrapRef}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="edit-hardware-title"
+          className="fixed inset-0 z-50 bg-stone-900/40 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150"
+          onClick={() => !editSubmitting && closeEditModal()}
+        >
+          <div
+            className="bg-white border border-stone-300 rounded-[3px] shadow-xl max-w-lg w-full p-5 sm:p-6 space-y-5"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-start justify-between border-b border-stone-200 pb-3">
               <div>
-                <h3 className="text-base font-bold text-stone-900 tracking-tight">
+                <h3 id="edit-hardware-title" className="text-base font-bold text-stone-900 tracking-tight">
                   Edit Hardware Record
                 </h3>
-                <p className="text-[11px] text-stone-500 font-mono">
+                <p className="text-[11px] text-stone-500 font-mono break-all">
                   UNIT ID: {editingDevice.id.slice(0, 12)}… • {editingDevice.brand} {editingDevice.model}
                 </p>
               </div>
               <button
                 type="button"
-                onClick={() => setEditingDevice(null)}
-                className="p-1 text-stone-400 hover:text-stone-700"
+                onClick={closeEditModal}
+                className="min-w-[44px] min-h-[44px] -mr-2 -mt-2 flex items-center justify-center text-stone-400 hover:text-stone-700 rounded-[2px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-400"
+                aria-label="Close modal"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             {editError && (
-              <div className="p-3 bg-red-50 border border-red-200 rounded-[2px] text-xs text-red-800">
+              <div role="alert" aria-live="assertive" className="p-3 bg-red-50 border border-red-200 rounded-[2px] text-xs text-red-800">
                 {editError}
               </div>
             )}
@@ -899,7 +982,7 @@ export default function DevicesPage() {
                 <Button
                   type="button"
                   variant="secondary"
-                  onClick={() => setEditingDevice(null)}
+                  onClick={closeEditModal}
                 >
                   Cancel
                 </Button>
