@@ -20,19 +20,25 @@ export function useFocusTrap<T extends HTMLElement = HTMLDivElement>({
 }: UseFocusTrapOptions) {
   const containerRef = useRef<T | null>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
+
+  const wasOpenRef = useRef(false);
 
   useEffect(() => {
-    if (!isOpen) return;
-
-    // Save previous active element to restore when closing
-    if (typeof document !== 'undefined') {
-      previousFocusRef.current = document.activeElement as HTMLElement;
+    if (!isOpen) {
+      if (wasOpenRef.current) {
+        // Modal just closed: restore focus to previous trigger element
+        previousFocusRef.current?.focus();
+        wasOpenRef.current = false;
+      }
+      return;
     }
 
     const container = containerRef.current;
     if (!container) return;
 
-    // Query focusable elements within container
+    // Helper to query focusable elements within container
     const getFocusableElements = (): HTMLElement[] => {
       const selector = [
         'a[href]',
@@ -46,17 +52,30 @@ export function useFocusTrap<T extends HTMLElement = HTMLDivElement>({
       return elements.filter((el) => el.offsetParent !== null || el.offsetWidth > 0 || el.offsetHeight > 0);
     };
 
-    // Move initial focus into the dialog
-    const focusable = getFocusableElements();
-    if (initialFocusRef?.current) {
-      initialFocusRef.current.focus();
-    } else if (focusable.length > 0) {
-      focusable[0].focus();
-    } else {
-      if (!container.hasAttribute('tabindex')) {
-        container.setAttribute('tabindex', '-1');
+    // If modal just opened (transition from closed to open)
+    if (!wasOpenRef.current) {
+      wasOpenRef.current = true;
+      if (typeof document !== 'undefined') {
+        const currentActive = document.activeElement as HTMLElement;
+        if (!container.contains(currentActive)) {
+          previousFocusRef.current = currentActive;
+        }
       }
-      container.focus();
+
+      // Move focus into the dialog upon opening if focus is outside
+      if (typeof document !== 'undefined' && !container.contains(document.activeElement)) {
+        const focusable = getFocusableElements();
+        if (initialFocusRef?.current) {
+          initialFocusRef.current.focus();
+        } else if (focusable.length > 0) {
+          focusable[0].focus();
+        } else {
+          if (!container.hasAttribute('tabindex')) {
+            container.setAttribute('tabindex', '-1');
+          }
+          container.focus();
+        }
+      }
     }
 
     if (disableFocusTrap) return;
@@ -64,7 +83,7 @@ export function useFocusTrap<T extends HTMLElement = HTMLDivElement>({
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         e.preventDefault();
-        onClose?.();
+        onCloseRef.current?.();
         return;
       }
 
@@ -79,13 +98,13 @@ export function useFocusTrap<T extends HTMLElement = HTMLDivElement>({
         const lastElement = focusableElements[focusableElements.length - 1];
 
         if (e.shiftKey) {
-          // Shift + Tab: if on first element, wrap to last
+          // Shift + Tab: if on first element or outside, wrap to last
           if (document.activeElement === firstElement || !container.contains(document.activeElement)) {
             e.preventDefault();
             lastElement.focus();
           }
         } else {
-          // Tab: if on last element, wrap to first
+          // Tab: if on last element or outside, wrap to first
           if (document.activeElement === lastElement || !container.contains(document.activeElement)) {
             e.preventDefault();
             firstElement.focus();
@@ -97,9 +116,18 @@ export function useFocusTrap<T extends HTMLElement = HTMLDivElement>({
     window.addEventListener('keydown', handleKeyDown);
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
-      previousFocusRef.current?.focus();
     };
-  }, [isOpen, onClose, initialFocusRef, disableFocusTrap]);
+  }, [isOpen, disableFocusTrap, initialFocusRef]);
+
+  // Clean up focus when component unmounts while modal is open
+  useEffect(() => {
+    return () => {
+      if (wasOpenRef.current) {
+        previousFocusRef.current?.focus();
+      }
+    };
+  }, []);
 
   return containerRef;
 }
+
