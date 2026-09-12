@@ -22,6 +22,8 @@ import {
   MapPin,
   AlertCircle,
   Star,
+  Cpu,
+  RefreshCw,
 } from 'lucide-react';
 
 export default function RepairsPage() {
@@ -32,6 +34,7 @@ export default function RepairsPage() {
   const [quotes, setQuotes] = useState<ApiQuote[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isActionLoading, setIsActionLoading] = useState(false);
+  const [isDiagnosing, setIsDiagnosing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // Review Form State
@@ -43,6 +46,19 @@ export default function RepairsPage() {
   const [quoteCost, setQuoteCost] = useState('');
   const [quoteDays, setQuoteDays] = useState('2');
   const [quoteNotes, setQuoteNotes] = useState('');
+
+  const handleReevaluate = async () => {
+    if (!selectedRequestId) return;
+    setIsDiagnosing(true);
+    try {
+      const updated = await repairRequestsApi.diagnose(selectedRequestId);
+      setSelectedRequest(updated);
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : 'Failed to re-evaluate diagnostics.');
+    } finally {
+      setIsDiagnosing(false);
+    }
+  };
 
   const loadRequests = useCallback(async () => {
     setIsLoading(true);
@@ -327,6 +343,184 @@ export default function RepairsPage() {
               />
             </div>
           </div>
+
+          {/* Diagnostic Intelligence & Deterministic Decision Engine */}
+          {(selectedRequest.diagnosis || selectedRequest.recommendation) && (
+            <div className="border border-stone-200 bg-white rounded-[2px] overflow-hidden shadow-xs">
+              <div className="bg-stone-900 text-white px-5 py-3 flex flex-wrap items-center justify-between gap-3">
+                <div className="flex items-center gap-2.5">
+                  <Cpu className="w-4 h-4 text-orange-400 shrink-0" />
+                  <span className="font-mono text-xs font-bold uppercase tracking-wider">
+                    Diagnostic Intelligence & Decision Engine
+                  </span>
+                  <span className="text-stone-400 font-mono text-[11px]">• Two-Tier Architecture</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleReevaluate}
+                  disabled={isDiagnosing}
+                  className="flex items-center gap-1.5 text-[11px] font-mono text-stone-300 hover:text-white transition-colors cursor-pointer disabled:opacity-50"
+                  title="Trigger deterministic re-evaluation"
+                >
+                  <RefreshCw className={`w-3 h-3 ${isDiagnosing ? 'animate-spin' : ''}`} />
+                  <span>{isDiagnosing ? 'Re-evaluating…' : 'Re-run Diagnosis'}</span>
+                </button>
+              </div>
+
+              <div className="p-5 space-y-5">
+                {/* Two-Column Overview */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                  {/* Left (Tier 1): Rule-Based Symptom Analysis (5 cols) */}
+                  <div className="lg:col-span-5 space-y-4 border-b lg:border-b-0 lg:border-r border-stone-100 pb-5 lg:pb-0 lg:pr-6">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-mono uppercase font-bold text-stone-400 tracking-wider">
+                        Tier 1 // Heuristic Diagnostic Signals
+                      </span>
+                      {selectedRequest.diagnosis && (
+                        <span className="font-mono text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-[2px] border border-emerald-200">
+                          {selectedRequest.diagnosis.confidence}% Confidence
+                        </span>
+                      )}
+                    </div>
+
+                    {selectedRequest.diagnosis ? (
+                      <div className="space-y-3 text-xs">
+                        <div>
+                          <span className="text-stone-400 font-mono text-[10px] uppercase block">
+                            Identified Component & Issue
+                          </span>
+                          <div className="font-bold text-stone-900 text-sm mt-0.5">
+                            {selectedRequest.diagnosis.possibleIssue}
+                          </div>
+                          <div className="text-stone-500 text-[11px] font-mono mt-0.5">
+                            Category: {selectedRequest.diagnosis.issueCategory}
+                          </div>
+                        </div>
+
+                        {selectedRequest.diagnosis.evidence && selectedRequest.diagnosis.evidence.length > 0 && (
+                          <div className="space-y-1.5 pt-1">
+                            <span className="text-stone-400 font-mono text-[10px] uppercase block">
+                              Extracted Symptom Evidence
+                            </span>
+                            <ul className="space-y-1">
+                              {selectedRequest.diagnosis.evidence.map((ev, i) => {
+                                const isWarning = ev.includes('WARNING') || ev.includes('swollen') || ev.includes('liquid');
+                                return (
+                                  <li
+                                    key={i}
+                                    className={`text-[11px] flex items-start gap-1.5 p-1.5 rounded-[2px] ${
+                                      isWarning
+                                        ? 'bg-red-50 text-red-800 border border-red-200 font-medium'
+                                        : 'bg-stone-50 text-stone-700'
+                                    }`}
+                                  >
+                                    <span className="font-mono text-stone-400 shrink-0">•</span>
+                                    <span>{ev}</span>
+                                  </li>
+                                );
+                              })}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <p className="text-xs text-stone-400 italic">No diagnostic signals extracted yet.</p>
+                    )}
+                  </div>
+
+                  {/* Right (Tier 2): Deterministic Decision & Economics (7 cols) */}
+                  <div className="lg:col-span-7 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-mono uppercase font-bold text-stone-400 tracking-wider">
+                        Tier 2 // Lifecycle Decision & Economics
+                      </span>
+                      {selectedRequest.recommendation && (
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-[11px] font-mono text-stone-500">Verdict:</span>
+                          <Badge
+                            variant={
+                              selectedRequest.recommendation.recommendedAction === 'DIY'
+                                ? 'success'
+                                : selectedRequest.recommendation.recommendedAction === 'REPAIR'
+                                ? 'rust'
+                                : selectedRequest.recommendation.recommendedAction === 'RESELL'
+                                ? 'warning'
+                                : 'error'
+                            }
+                            size="sm"
+                          >
+                            {selectedRequest.recommendation.recommendedAction}
+                          </Badge>
+                        </div>
+                      )}
+                    </div>
+
+                    {selectedRequest.recommendation ? (
+                      <div className="space-y-4">
+                        {/* Score Bars & Cost Matrix */}
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                          <div className="p-3 bg-stone-50 border border-stone-200 rounded-[2px] space-y-1">
+                            <div className="flex items-center justify-between text-[11px]">
+                              <span className="font-mono text-stone-500 text-[10px] uppercase">Repairability</span>
+                              <span className="font-mono font-bold text-stone-900">
+                                {selectedRequest.recommendation.repairabilityScore}
+                                <span className="text-stone-400 font-normal text-[10px]">/100</span>
+                              </span>
+                            </div>
+                            <div className="w-full bg-stone-200 h-1.5 rounded-[1px] overflow-hidden">
+                              <div
+                                className="bg-orange-700 h-full rounded-[1px]"
+                                style={{ width: `${selectedRequest.recommendation.repairabilityScore}%` }}
+                              />
+                            </div>
+                          </div>
+
+                          <div className="p-3 bg-stone-50 border border-stone-200 rounded-[2px] space-y-1">
+                            <div className="flex items-center justify-between text-[11px]">
+                              <span className="font-mono text-stone-500 text-[10px] uppercase">Economic Score</span>
+                              <span className="font-mono font-bold text-stone-900">
+                                {selectedRequest.recommendation.economicScore}
+                                <span className="text-stone-400 font-normal text-[10px]">/100</span>
+                              </span>
+                            </div>
+                            <div className="w-full bg-stone-200 h-1.5 rounded-[1px] overflow-hidden">
+                              <div
+                                className="bg-emerald-700 h-full rounded-[1px]"
+                                style={{ width: `${selectedRequest.recommendation.economicScore}%` }}
+                              />
+                            </div>
+                          </div>
+
+                          <div className="p-3 bg-stone-50 border border-stone-200 rounded-[2px] space-y-0.5">
+                            <span className="font-mono text-stone-500 text-[10px] uppercase block">Est. Repair Cost</span>
+                            <div className="font-mono font-bold text-stone-900 text-sm tabular-nums">
+                              ₹{selectedRequest.recommendation.estimatedCostMin.toLocaleString('en-IN')} – ₹{selectedRequest.recommendation.estimatedCostMax.toLocaleString('en-IN')}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Explainable Rationale */}
+                        <div className="p-3.5 bg-stone-50/60 border border-stone-200 rounded-[2px] space-y-2 text-xs">
+                          <span className="font-mono text-[10px] uppercase font-bold text-stone-600 block">
+                            Audit-Proof Reasoning & Policy Rationale
+                          </span>
+                          <div className="space-y-2 text-stone-700 leading-relaxed text-[11px]">
+                            {selectedRequest.recommendation.reasoning.split('\n\n').map((paragraph, idx) => (
+                              <p key={idx} className="border-l-2 border-orange-700/40 pl-2.5">
+                                {paragraph}
+                              </p>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <p className="text-xs text-stone-400 italic">No lifecycle recommendation generated yet.</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* PHASE A: Open Request awaiting quotes */}
           {selectedRequest.status === 'REQUESTED' && (

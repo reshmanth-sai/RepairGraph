@@ -3,6 +3,7 @@ import { AppError } from '../errors/AppError';
 import { CreateRepairRequestInput, UpdateRepairRequestInput } from '../validators/repairRequest.validator';
 import { PaginationParams } from '../utils/pagination';
 import { UserRole, RequestStatus } from '@prisma/client';
+import { diagnoseAndRecommend } from '../engine';
 
 export async function createRepairRequest(userId: string, input: CreateRepairRequestInput) {
   // 1. Verify the device exists and belongs to the user
@@ -18,6 +19,10 @@ export async function createRepairRequest(userId: string, input: CreateRepairReq
     throw AppError.forbidden('You can only create repair requests for devices you own.');
   }
 
+  // 2. Execute Two-Tier Diagnostic & Decision Engine
+  const evaluation = diagnoseAndRecommend(device, input.description);
+
+  // 3. Atomically create RepairRequest with attached Diagnosis & Recommendation
   return prisma.repairRequest.create({
     data: {
       deviceId: input.deviceId,
@@ -25,17 +30,78 @@ export async function createRepairRequest(userId: string, input: CreateRepairReq
       description: input.description,
       urgency: input.urgency,
       status: RequestStatus.REQUESTED,
-    },
-    include: {
-      device: {
-        select: {
-          brand: true,
-          model: true,
-          category: true,
-          serialNumber: true,
+      diagnosis: {
+        create: {
+          issueCategory: evaluation.signals.issueCategory,
+          possibleIssue: evaluation.signals.possibleIssue,
+          confidence: evaluation.signals.confidence,
+          evidence: evaluation.signals.evidence,
+        },
+      },
+      recommendation: {
+        create: {
+          repairabilityScore: evaluation.repairabilityScore,
+          economicScore: evaluation.economicScore,
+          recommendedAction: evaluation.recommendedAction,
+          estimatedCostMin: evaluation.estimatedCostMin,
+          estimatedCostMax: evaluation.estimatedCostMax,
+          reasoning: evaluation.reasoning,
         },
       },
     },
+    include: {
+      device: true,
+      diagnosis: true,
+      recommendation: true,
+    },
+  });
+}
+
+export async function evaluateRepairRequest(id: string, userId: string, role: UserRole) {
+  const request = await getRepairRequestById(id, userId, role);
+
+  const evaluation = diagnoseAndRecommend(request.device, request.description);
+
+  return prisma.$transaction(async (tx) => {
+    const diagnosis = await tx.diagnosis.upsert({
+      where: { repairRequestId: id },
+      create: {
+        repairRequestId: id,
+        issueCategory: evaluation.signals.issueCategory,
+        possibleIssue: evaluation.signals.possibleIssue,
+        confidence: evaluation.signals.confidence,
+        evidence: evaluation.signals.evidence,
+      },
+      update: {
+        issueCategory: evaluation.signals.issueCategory,
+        possibleIssue: evaluation.signals.possibleIssue,
+        confidence: evaluation.signals.confidence,
+        evidence: evaluation.signals.evidence,
+      },
+    });
+
+    const recommendation = await tx.repairRecommendation.upsert({
+      where: { repairRequestId: id },
+      create: {
+        repairRequestId: id,
+        repairabilityScore: evaluation.repairabilityScore,
+        economicScore: evaluation.economicScore,
+        recommendedAction: evaluation.recommendedAction,
+        estimatedCostMin: evaluation.estimatedCostMin,
+        estimatedCostMax: evaluation.estimatedCostMax,
+        reasoning: evaluation.reasoning,
+      },
+      update: {
+        repairabilityScore: evaluation.repairabilityScore,
+        economicScore: evaluation.economicScore,
+        recommendedAction: evaluation.recommendedAction,
+        estimatedCostMin: evaluation.estimatedCostMin,
+        estimatedCostMax: evaluation.estimatedCostMax,
+        reasoning: evaluation.reasoning,
+      },
+    });
+
+    return { ...request, diagnosis, recommendation };
   });
 }
 

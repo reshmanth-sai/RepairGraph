@@ -39,6 +39,79 @@ For full architectural details, see [CLOUD_ARCHITECTURE.md](CLOUD_ARCHITECTURE.m
 
 ---
 
+## 3. Diagnostic Intelligence & Deterministic Decision Engine
+
+RepairGraph implements a **Two-Tier Hybrid Architecture** designed specifically for auditability, regulatory compliance, and viva defensibility. It avoids unconstrained black-box LLMs for financial and scoring decisions:
+
+```text
+User Free-Text Symptoms & Device Metadata
+                 │
+                 ▼
+┌─────────────────────────────────────────────────────────────┐
+│ TIER 1: Deterministic Rule-Based Symptom Extraction         │
+│ • Heuristic word-boundary token parser (\b)                 │
+│ • Failure mode classification (Display, Battery, Board, etc.)│
+│ • Safety hazard detection (swollen cells, liquid ingress)   │
+│                 ↓                                           │
+│ Structured Diagnostic Signals (Category, Confidence, Flags) │
+└──────────────────────────────┬──────────────────────────────┘
+                               │
+                               ▼
+┌─────────────────────────────────────────────────────────────┐
+│ TIER 2: Deterministic Decision Engine (Rules & Formulas)    │
+│ • 7-Factor Repairability Score Model (Sum: 100 pts)         │
+│ • Brand-scaled component parts & labor cost matrix          │
+│ • Repair Cost Ratio (RCR = C_repair / V_current)            │
+│ • Statutory Lifecycle Matrix (E-Waste Rules, 2022)          │
+│                 ↓                                           │
+│ Action: REPAIR | DIY | REPLACE | RESELL | RECYCLE           │
+│ Multi-paragraph explainability (Economics, Feasibility, CO2)│
+└─────────────────────────────────────────────────────────────┘
+```
+
+### The 7-Factor Repairability Score Model ($25 + 20 + 15 + 15 + 10 + 10 + 5 = 100$)
+
+The baseline design repairability score ($S_{\text{baseline}} \in [0, 100]$) uses an original RepairGraph weighting model informed by general repairability principles, evaluating seven engineering dimensions:
+
+1. **Physical Disassembly & Fasteners (25 points / 25%)**: Standard Phillips/Torx captive screws vs. ultrasonic welding, Pentalobe/tri-point screws, or perimeter adhesive seams.
+2. **Spare Parts Availability (20 points / 20%)**: Commercial availability of genuine OEM and aftermarket replacement modules in the domestic supply chain.
+3. **Documentation & Repair Manuals (15 points / 15%)**: Public availability of official Hardware Maintenance Manuals (HMM), circuit schematics, and torque specifications.
+4. **Hardware Modularity (15 points / 15%)**: Independent daughterboards, socketed SO-DIMM/M.2 slots, and modular fans vs. fully soldered unified memory and NAND storage.
+5. **Software Locks & Parts Pairing (10 points / 10%)**: Absence of cryptographic serialization pairing barriers; availability of public on-device calibration utilities.
+6. **Device Age & Lifecycle Support (10 points / 10%)**: Remaining useful lifespan and active security/parts support window: $\max(0, \min(10, \text{round}(10 - 1.5 \times \text{ageYears})))$.
+7. **Local Service Ecosystem & Tools (5 points / 5%)**: Density of certified independent repair workshops and standard tool accessibility across Indian metropolitan hubs.
+
+**Incident Risk Deductions**:
+When evaluating an active repair incident, acute hazards apply explicit deductions from the baseline:
+- Liquid ingress risk: $-20$ pts
+- Core logic-board fault: $-15$ pts
+- Power failure / PMIC short: $-10$ pts
+- Critical hardware severity: $-10$ pts
+
+$$\text{Final Repairability Score } S_{\text{repair}} = \max\left(10, \min\left(98, S_{\text{baseline}} - C_{\text{penalties}}\right)\right)$$
+
+### Economic Repair-vs-Replace Model
+
+1. **Repair Cost Ratio ($RCR$)**:
+   $$RCR = \frac{C_{\text{repair}}}{\text{Current Fair Market Value } (V_{\text{current}})}$$
+2. **Economic Score ($S_{\text{econ}} \in [0, 100]$)**:
+   $$S_{\text{econ}} = \max\left(0, \min\left(100, \text{round}\left((1 - RCR) \times 100\right)\right)\right)$$
+
+### Lifecycle Decision Matrix
+- **`DIY`**: $RCR \le 0.28$ **AND** $S_{\text{repair}} \ge 72$ **AND** component is user-swappable (e.g. Framework modular battery).
+- **`REPAIR`**: $RCR \le 0.52$ **AND** $S_{\text{repair}} \ge 42$. Professional repair preserves value and prevents premature replacement.
+- **`RESELL`**: $0.50 < RCR \le 0.75$ with operational subsystems. Trade-in or salvage recovery offers higher utility.
+- **`REPLACE`**: $RCR > 0.75$ **OR** Device Age $\ge 6$ years **OR** $S_{\text{repair}} < 35$. Capital is better deployed to modern hardware.
+- **`RECYCLE`**: Catastrophic liquid damage + power failure **OR** $RCR > 0.92$. Channels device to authorized recyclers under **India's E-Waste (Management) Rules, 2022**.
+
+### Viva Defense: Why a Deterministic Rule Engine Rather Than an AI/ML Model?
+1. **No Generative-Model Hallucination**: There is no generative-model hallucination in the scoring and decision layer; results are deterministic and reproducible.
+2. **Deterministic & Reproducible**: Identical symptom inputs and device contexts produce consistent, verifiable diagnostic signals and scores without stochastic variance.
+3. **Sub-Millisecond Performance**: Executes in $< 1$ ms on serverless and edge runtimes without external API latency, network dependencies, or per-token operational costs.
+4. **Transparent Audit Trail**: Every score point, economic threshold, and lifecycle recommendation is traceable to explicit rule matrices and cost benchmarks rather than an opaque black box.
+
+---
+
 ## 3. Quick Start & Local Setup
 
 ### Prerequisites

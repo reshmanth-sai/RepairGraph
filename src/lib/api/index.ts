@@ -123,6 +123,11 @@ export const repairRequestsApi = {
       method: 'POST',
       body: JSON.stringify(data),
     }),
+
+  diagnose: (id: string) =>
+    apiClient<ApiRepairRequest>(`/api/repair-requests/${id}/diagnose`, {
+      method: 'POST',
+    }),
 };
 
 // ----------------------------------------------------

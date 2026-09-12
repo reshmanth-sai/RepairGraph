@@ -7,7 +7,9 @@
     "build": "prisma generate && next build --turbopack",
     "start": "next start",
     "lint": "eslint",
-    "test": "tsx tests/api.test.ts",
+    "test": "tsx tests/engine.test.ts && tsx tests/api.test.ts",
+    "test:engine": "tsx tests/engine.test.ts",
+    "test:api": "tsx tests/api.test.ts",
     "smoke": "tsx scripts/smoke-test.ts"
   },
   "prisma": {

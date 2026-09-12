@@ -201,6 +201,12 @@ async function runTests() {
     assert.ok(request.id);
     assert.strictEqual(request.userId, customerUser.id);
     assert.strictEqual(request.status, 'REQUESTED');
+    assert.ok(request.diagnosis, 'Diagnosis was generated automatically by engine');
+    assert.strictEqual(request.diagnosis.issueCategory, 'Display & Touch Digitizer');
+    assert.ok(request.recommendation, 'Recommendation was generated automatically by engine');
+    assert.ok(request.recommendation.repairabilityScore > 0);
+    assert.ok(request.recommendation.economicScore > 0);
+    assert.ok(request.recommendation.reasoning.length > 0);
     testRequest = { id: request.id };
   });
 
@@ -375,4 +381,5 @@ runTests()
   })
   .finally(async () => {
     await prisma.$disconnect();
+    process.exit(0);
   });

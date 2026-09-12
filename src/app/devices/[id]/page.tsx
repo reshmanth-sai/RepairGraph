@@ -369,7 +369,7 @@ export default function DeviceDetailPage() {
             Repairability Index & Factor Breakdown
           </h3>
           <p className="text-xs text-stone-500">
-            Evaluated against European EN 45554 / India Right to Repair repairability benchmark methodology.
+            Evaluated using RepairGraph&apos;s 7-factor scoring methodology informed by general repairability principles.
           </p>
         </div>
 
