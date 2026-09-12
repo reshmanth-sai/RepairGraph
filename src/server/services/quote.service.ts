@@ -2,6 +2,7 @@ import { prisma } from '../db';
 import { AppError } from '../errors/AppError';
 import { CreateQuoteInput, UpdateQuoteStatusInput } from '../validators/quote.validator';
 import { UserRole, QuoteStatus, RequestStatus, JobStatus } from '@prisma/client';
+import { getOrCreateRepairerProfile } from './repairer.service';
 
 export async function createQuote(
   repairRequestId: string,
@@ -9,9 +10,7 @@ export async function createQuote(
   input: CreateQuoteInput
 ) {
   // 1. Verify user is a registered REPAIRER with an active profile
-  const repairer = await prisma.repairer.findUnique({
-    where: { userId },
-  });
+  const repairer = await getOrCreateRepairerProfile(userId);
 
   if (!repairer) {
     throw AppError.forbidden(
@@ -89,7 +88,7 @@ export async function listQuotesForRequest(
   // A repairer can only see their own quotes for this request.
   let repairerIdFilter: string | undefined = undefined;
   if (role === UserRole.REPAIRER && repairRequest.userId !== userId) {
-    const repairer = await prisma.repairer.findUnique({ where: { userId } });
+    const repairer = await getOrCreateRepairerProfile(userId);
     if (!repairer) throw AppError.forbidden();
     repairerIdFilter = repairer.id;
   } else if (role === UserRole.USER && repairRequest.userId !== userId) {

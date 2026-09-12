@@ -42,6 +42,35 @@ export async function createRepairerProfile(userId: string, input: CreateRepaire
   });
 }
 
+/**
+ * Returns existing repairer profile or provisions a default verified profile
+ * for users with REPAIRER or ADMIN role. Returns null if user lacks repairer permissions.
+ */
+export async function getOrCreateRepairerProfile(userId: string) {
+  const existing = await prisma.repairer.findUnique({
+    where: { userId },
+    include: { specializations: true },
+  });
+  if (existing) return existing;
+
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user || (user.role !== UserRole.REPAIRER && user.role !== UserRole.ADMIN)) {
+    return null;
+  }
+
+  return prisma.repairer.create({
+    data: {
+      userId,
+      businessName: user.name ? `${user.name}'s Repair Workshop` : 'Independent Repair Lab',
+      description: 'Verified independent hardware diagnostics and repair facility.',
+      address: 'Primary Service Facility',
+      verificationStatus: VerificationStatus.VERIFIED,
+    },
+    include: { specializations: true },
+  });
+}
+
+
 export async function listRepairers(
   pagination: PaginationParams,
   verificationStatus?: string

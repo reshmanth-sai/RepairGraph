@@ -3,6 +3,7 @@ import { AppError } from '../errors/AppError';
 import { UpdateRepairJobStatusInput } from '../validators/repairJob.validator';
 import { UserRole, JobStatus, RequestStatus, VerificationStatus, Prisma } from '@prisma/client';
 import { PaginationParams } from '../utils/pagination';
+import { getOrCreateRepairerProfile } from './repairer.service';
 
 export async function createRepairJobFromQuote(quoteId: string, userId: string, role: UserRole) {
   const quote = await prisma.quote.findUnique({
@@ -217,9 +218,7 @@ export async function listRepairJobs(
       },
     };
   } else if (role === UserRole.REPAIRER) {
-    const repairer = await prisma.repairer.findUnique({
-      where: { userId },
-    });
+    const repairer = await getOrCreateRepairerProfile(userId);
     if (!repairer) {
       throw AppError.forbidden('You must have an active Repairer profile to view repair jobs.');
     }
