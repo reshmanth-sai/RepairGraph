@@ -162,13 +162,13 @@ def build_full_html():
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>RepairGraph — Final Project Report</title>
+<title>RepairGraph — Cloud Infrastructure & Architecture Project Report (BACSE344)</title>
 <style>
   @page {
     size: A4;
     margin: 20mm 20mm 20mm 20mm;
     @top-right {
-      content: "RepairGraph • 25BCE1112";
+      content: "RepairGraph • BACSE344 (C1 Slot) • Dr. P. Anandan • VIT Chennai";
       font-family: Arial, sans-serif;
       font-size: 8pt;
       color: #94a3b8;
@@ -193,15 +193,25 @@ def build_full_html():
 
   .cover-block {
     text-align: center;
-    padding-top: 30px;
-    margin-bottom: 30px;
+    padding-top: 24px;
+    margin-bottom: 24px;
   }
   .cover-inst {
+    font-family: Arial, sans-serif;
     font-size: 11pt;
     font-weight: bold;
-    color: #64748b;
-    letter-spacing: 1px;
-    margin-bottom: 20px;
+    color: #475569;
+    letter-spacing: 0.8px;
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+  .cover-course {
+    font-family: Arial, sans-serif;
+    font-size: 11.5pt;
+    font-weight: bold;
+    color: #0284c7;
+    margin-bottom: 24px;
+    letter-spacing: 0.5px;
   }
   .cover-title {
     font-family: Arial, sans-serif;
@@ -213,17 +223,17 @@ def build_full_html():
   }
   .cover-sub {
     font-family: Arial, sans-serif;
-    font-size: 13pt;
+    font-size: 12.5pt;
     font-weight: bold;
     color: #ea580c;
-    margin-bottom: 35px;
+    margin-bottom: 24px;
     line-height: 1.4;
   }
   .cover-desc {
     font-size: 10.5pt;
     color: #334155;
     line-height: 1.6;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
   }
 
   .page-break {
@@ -371,13 +381,15 @@ def build_full_html():
                     in_ul = True
                 html_out.append(f"<li>{txt}</li>")
             else:
-                if is_first_cover and "A CAPSTONE PROJECT REPORT" in txt:
-                    html_out.append(f"<div class='cover-block'><div class='cover-inst'>{txt}</div>")
+                if is_first_cover and ("VELLORE INSTITUTE OF TECHNOLOGY" in txt or "CLOUD DIGITAL ASSIGNMENT" in txt):
+                    html_out.append(f"<div class='cover-block'><div class='cover-inst'>{txt.replace(chr(10), '<br>')}</div>")
+                elif is_first_cover and "BACSE344:" in txt:
+                    html_out.append(f"<div class='cover-course'>{txt.replace(chr(10), '<br>')}</div>")
                 elif is_first_cover and "REPAIRGRAPH" in txt:
                     html_out.append(f"<div class='cover-title'>{txt}</div>")
-                elif is_first_cover and "AI-Assisted Device Repairability" in txt:
+                elif is_first_cover and ("Cloud-Native Hardware Diagnostics" in txt or "Competitive Lifecycle Marketplace" in txt):
                     html_out.append(f"<div class='cover-sub'>{txt.replace(chr(10), '<br>')}</div>")
-                elif is_first_cover and "Submitted in partial fulfillment" in txt:
+                elif is_first_cover and ("Digital Assignment (DA) Evaluation" in txt or "Cloud Infrastructure and Architecture" in txt):
                     html_out.append(f"<div class='cover-desc'>{txt.replace(chr(10), '<br>')}</div></div>")
                     is_first_cover = False
                 else:

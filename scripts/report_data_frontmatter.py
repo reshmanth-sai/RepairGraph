@@ -7,20 +7,32 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 
 def build_frontmatter(doc, add_p, add_heading_1, add_heading_2, format_table):
     # =========================================================================
-    # TITLE PAGE
+    # =========================================================================
+    # TITLE PAGE — VIT CHENNAI CLOUD DA PROJECT
     # =========================================================================
     p_pre = doc.add_paragraph()
-    p_pre.paragraph_format.space_before = Pt(36)
-    p_pre.paragraph_format.space_after = Pt(8)
+    p_pre.paragraph_format.space_before = Pt(28)
+    p_pre.paragraph_format.space_after = Pt(6)
     p_pre.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    r_inst = p_pre.add_run("A CAPSTONE PROJECT REPORT ON")
+    r_inst = p_pre.add_run("VELLORE INSTITUTE OF TECHNOLOGY (VIT), CHENNAI\nSchool of Computer Science and Engineering\nCLOUD DIGITAL ASSIGNMENT (DA) PROJECT REPORT")
     r_inst.font.name = 'Arial'
-    r_inst.font.size = Pt(11)
-    r_inst.font.color.rgb = RGBColor(0x64, 0x74, 0x8B)
+    r_inst.font.size = Pt(11.5)
+    r_inst.font.bold = True
+    r_inst.font.color.rgb = RGBColor(0x47, 0x55, 0x69)
+
+    p_course = doc.add_paragraph()
+    p_course.paragraph_format.space_before = Pt(4)
+    p_course.paragraph_format.space_after = Pt(16)
+    p_course.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    r_course = p_course.add_run("BACSE344: CLOUD INFRASTRUCTURE AND ARCHITECTURE (C1 SLOT)")
+    r_course.font.name = 'Arial'
+    r_course.font.size = Pt(12)
+    r_course.font.bold = True
+    r_course.font.color.rgb = RGBColor(0x02, 0x84, 0xC7)
 
     p_title = doc.add_paragraph()
-    p_title.paragraph_format.space_before = Pt(12)
-    p_title.paragraph_format.space_after = Pt(12)
+    p_title.paragraph_format.space_before = Pt(8)
+    p_title.paragraph_format.space_after = Pt(10)
     p_title.alignment = WD_ALIGN_PARAGRAPH.CENTER
     r_title = p_title.add_run("REPAIRGRAPH")
     r_title.font.name = 'Arial'
@@ -30,33 +42,33 @@ def build_frontmatter(doc, add_p, add_heading_1, add_heading_2, format_table):
 
     p_sub = doc.add_paragraph()
     p_sub.paragraph_format.space_before = Pt(0)
-    p_sub.paragraph_format.space_after = Pt(36)
+    p_sub.paragraph_format.space_after = Pt(20)
     p_sub.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    r_sub = p_sub.add_run("AI-Assisted Device Repairability Assessment, Economic Decision Support &\nCompetitive Repair Marketplace Platform")
+    r_sub = p_sub.add_run("Cloud-Native Hardware Diagnostics, Repairability Assessment & Competitive Lifecycle Marketplace\nDeployed on Vercel Serverless Platform & Managed Neon PostgreSQL")
     r_sub.font.name = 'Arial'
-    r_sub.font.size = Pt(14)
+    r_sub.font.size = Pt(12.5)
     r_sub.font.bold = True
     r_sub.font.color.rgb = RGBColor(0xEA, 0x58, 0x0C)
 
     p_desc = doc.add_paragraph()
-    p_desc.paragraph_format.space_before = Pt(12)
-    p_desc.paragraph_format.space_after = Pt(48)
+    p_desc.paragraph_format.space_before = Pt(6)
+    p_desc.paragraph_format.space_after = Pt(28)
     p_desc.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    r_desc = p_desc.add_run("Submitted in partial fulfillment of the requirements for the award of the degree of\nBACHELOR OF TECHNOLOGY\nin\nCOMPUTER SCIENCE AND ENGINEERING")
+    r_desc = p_desc.add_run("A Cloud Computing Project Report submitted for the Digital Assignment (DA) Evaluation in\nBACSE344: Cloud Infrastructure and Architecture\nVIT Chennai")
     r_desc.font.name = 'Arial'
-    r_desc.font.size = Pt(11)
+    r_desc.font.size = Pt(10.5)
     r_desc.font.color.rgb = RGBColor(0x33, 0x41, 0x55)
 
-    # Student & Guide Table
+    # Student & Course Evaluation Table
     tbl = doc.add_table(rows=5, cols=2)
     format_table(tbl, col_widths=[3.1, 3.1])
     
     rows_data = [
-        ("Submitted By:", "Under the Guidance of:"),
-        ("NAIDU RESHMANTH SAI", "[Faculty Guide Name / Title]"),
-        ("Register No: 25BCE1112", "[Designation / Department]"),
-        ("Department of Computer Science and Engineering", "[Institution / University Name]"),
-        ("Academic Year: 2025–2026", "Production URL: https://repairgraph.vercel.app")
+        ("Submitted By:", "Course & Faculty Details:"),
+        ("NAIDU RESHMANTH SAI", "Faculty: Dr. P. Anandan"),
+        ("Register No: 25BCE1112", "Course: Cloud Infrastructure and Architecture"),
+        ("Slot: C1 Slot | B.Tech CSE", "Course Code: BACSE344 (C1 Slot)"),
+        ("Institution: VIT Chennai", "Submission Date: 12-09-2026\nProduction: https://repairgraph.vercel.app")
     ]
     for i, (col1, col2) in enumerate(rows_data):
         cell1 = tbl.cell(i, 0)
@@ -69,75 +81,6 @@ def build_frontmatter(doc, add_p, add_heading_1, add_heading_2, format_table):
         elif i == 1:
             cell1.paragraphs[0].runs[0].font.bold = True
             cell1.paragraphs[0].runs[0].font.color.rgb = RGBColor(0x0F, 0x17, 0x2A)
-
-    doc.add_page_break()
-
-    # =========================================================================
-    # CERTIFICATE
-    # =========================================================================
-    add_heading_1(doc, "CERTIFICATE OF ORIGINAL WORK")
-    add_p(doc, 
-          "This is to certify that the project report titled \"REPAIRGRAPH: AI-Assisted Device Repairability Assessment, "
-          "Economic Decision Support & Competitive Repair Marketplace Platform\" submitted by NAIDU RESHMANTH SAI "
-          "(Register Number: 25BCE1112) in partial fulfillment of the requirements for the award of the degree of "
-          "Bachelor of Technology in Computer Science and Engineering during the academic year 2025–2026 is an authentic "
-          "record of original work carried out under my supervision.")
-    
-    add_p(doc, 
-          "To the best of our knowledge and verified evaluation, the results, algorithms, architectures, and findings "
-          "presented in this report have been independently implemented, automatedly tested across 82 validation test cases, "
-          "and functionally validated in production cloud deployment. This work has not formed the basis for the award "
-          "of any other degree, diploma, or fellowship elsewhere.", space_after=36)
-
-    tbl_cert = doc.add_table(rows=2, cols=2)
-    format_table(tbl_cert, col_widths=[3.1, 3.1])
-    tbl_cert.cell(0, 0).paragraphs[0].text = "[Signature of Project Guide]\n[Guide Name & Designation]\nDepartment of Computer Science and Engineering"
-    tbl_cert.cell(0, 1).paragraphs[0].text = "[Signature of Head of Department]\n[HOD Name & Designation]\nDepartment of Computer Science and Engineering"
-    tbl_cert.cell(1, 0).paragraphs[0].text = "Date: ____________________\nPlace: ____________________"
-    tbl_cert.cell(1, 1).paragraphs[0].text = "Internal / External Examiner:\nSignature: ____________________"
-
-    doc.add_page_break()
-
-    # =========================================================================
-    # DECLARATION
-    # =========================================================================
-    add_heading_1(doc, "CANDIDATE DECLARATION")
-    add_p(doc, 
-          "I, NAIDU RESHMANTH SAI (Register Number: 25BCE1112), hereby declare that the capstone project report titled "
-          "\"REPAIRGRAPH: AI-Assisted Device Repairability Assessment, Economic Decision Support & Competitive Repair "
-          "Marketplace Platform\" is an authentic presentation of work carried out by me under academic supervision.")
-    
-    add_p(doc, 
-          "I confirm that all software code, full-stack Next.js architecture, Prisma relational models, deterministic "
-          "decision formulas, test suites, and production cloud infrastructure on Vercel and Neon PostgreSQL described in "
-          "this report represent true, implemented, and verified engineering work. The external libraries, official "
-          "specifications, and statutory frameworks (including India's Right to Repair Portal and the E-Waste Management "
-          "Rules, 2022) have been appropriately referenced.", space_after=36)
-
-    tbl_decl = doc.add_table(rows=2, cols=1)
-    format_table(tbl_decl, col_widths=[6.2])
-    tbl_decl.cell(0, 0).paragraphs[0].text = "NAIDU RESHMANTH SAI\nRegister Number: 25BCE1112\nDepartment of Computer Science and Engineering"
-    tbl_decl.cell(1, 0).paragraphs[0].text = "Date: ____________________\nPlace: ____________________"
-
-    doc.add_page_break()
-
-    # =========================================================================
-    # ACKNOWLEDGEMENT
-    # =========================================================================
-    add_heading_1(doc, "ACKNOWLEDGEMENT")
-    add_p(doc, 
-          "I express my sincere gratitude to my Project Guide and Faculty Advisor for their continuous guidance, technical "
-          "insights, and encouragement throughout the ideation, system design, implementation, and cloud validation of "
-          "RepairGraph.")
-    
-    add_p(doc, 
-          "I extend my appreciation to the Head of the Department and faculty members of the Department of Computer "
-          "Science and Engineering for providing the academic infrastructure, computing facilities, and rigorous evaluation "
-          "milestones that helped elevate this project into a production-grade software system.")
-    
-    add_p(doc, 
-          "Finally, I thank my family and colleagues whose moral support and constructive discussions provided ongoing "
-          "motivation during the development, testing, and deployment phases of this capstone endeavor.")
 
     doc.add_page_break()
 
@@ -192,12 +135,9 @@ def build_frontmatter(doc, add_p, add_heading_1, add_heading_2, format_table):
     add_heading_1(doc, "TABLE OF CONTENTS")
     
     toc_data = [
-        ("Certificate of Original Work", "ii"),
-        ("Candidate Declaration", "iii"),
-        ("Acknowledgement", "iv"),
-        ("Abstract", "v"),
-        ("List of Figures", "viii"),
-        ("List of Tables", "ix"),
+        ("Abstract", "i"),
+        ("List of Figures", "iii"),
+        ("List of Tables", "iv"),
         ("Chapter 1: Introduction", "1"),
         ("    1.1 Background & Industry Landscape", "1"),
         ("    1.2 Problem Context: The Right to Repair & E-Waste Crisis", "2"),
@@ -309,33 +249,43 @@ def build_frontmatter(doc, add_p, add_heading_1, add_heading_2, format_table):
         ("    14.5 Production Deployment Runbook", "91"),
         ("    14.6 Health Telemetry Endpoint (/api/health)", "92"),
         ("    14.7 Free-Tier Cost Analysis", "93"),
-        ("Chapter 15: Results and Discussion", "94"),
-        ("    15.1 Qualitative Diagnostic Evaluation", "94"),
-        ("    15.2 Marketplace Efficiency Observations", "95"),
-        ("    15.3 Regulatory Alignment & E-Waste Impact", "96"),
-        ("Chapter 16: Limitations", "97"),
-        ("    16.1 In-Memory Rate Limiting", "97"),
-        ("    16.2 Academic Demonstration Workload Scope", "97"),
-        ("    16.3 Synchronous Decision Evaluation", "98"),
-        ("    16.4 Provider-Native Telemetry Reliance", "98"),
-        ("    16.5 Non-Destructive Production Testing Boundary", "98"),
-        ("    16.6 Informational Specialist Context", "99"),
-        ("Chapter 17: Future Enhancements", "100"),
-        ("    17.1 Distributed Rate Limiting (Redis)", "100"),
-        ("    17.2 Asynchronous Background Queue (BullMQ)", "100"),
-        ("    17.3 Enterprise APM & Distributed Tracing", "101"),
-        ("    17.4 Vector Embeddings for OEM Schematics", "101"),
-        ("    17.5 Dedicated Mobile Application", "101"),
-        ("Chapter 18: Conclusion", "102"),
-        ("    18.1 Summary of Engineering Achievements", "102"),
-        ("    18.2 Practical Impact & Academic Defense Summary", "103"),
-        ("References", "104"),
-        ("Appendices", "106"),
-        ("    Appendix A: Complete REST API Endpoint Inventory", "106"),
-        ("    Appendix B: Relational Data Model Specifications", "109"),
-        ("    Appendix C: Diagnostic Engine Formulas & Matrix Weights", "112"),
-        ("    Appendix D: Automated Test Suite Inventory (82 Tests)", "114"),
-        ("    Appendix E: Production Deployment Configuration Summary", "118")
+        ("    14.8 Live Vercel Production Deployment Evidence", "94"),
+        ("    14.9 Live Neon Serverless PostgreSQL Database Verification", "95"),
+        ("    14.10 Live Platform User Interface Gallery & Operational Walkthrough", "96"),
+        ("        14.10.1 Overview & System Telemetry Dashboard", "96"),
+        ("        14.10.2 Identity Authentication & Multi-Persona Evaluator Switcher", "97"),
+        ("        14.10.3 Competitive Repair Marketplace & Ticket Lifecycle Tracking", "97"),
+        ("        14.10.4 Deterministic Diagnostic Intake & 7-Factor Scoring Suite", "98"),
+        ("        14.10.5 Registered Hardware Inventory & Lifecycle Catalog", "98"),
+        ("        14.10.6 Digital Product Passport & Standardized Maintenance Ledger", "99"),
+        ("        14.10.7 Verified Technician Workbench & Sequential Milestone Stepper", "99"),
+        ("Chapter 15: Results and Discussion", "100"),
+        ("    15.1 Qualitative Diagnostic Evaluation", "100"),
+        ("    15.2 Marketplace Efficiency Observations", "101"),
+        ("    15.3 Regulatory Alignment & E-Waste Impact", "102"),
+        ("Chapter 16: Limitations", "103"),
+        ("    16.1 In-Memory Rate Limiting", "103"),
+        ("    16.2 Academic Demonstration Workload Scope", "103"),
+        ("    16.3 Synchronous Decision Evaluation", "104"),
+        ("    16.4 Provider-Native Telemetry Reliance", "104"),
+        ("    16.5 Non-Destructive Production Testing Boundary", "104"),
+        ("    16.6 Informational Specialist Context", "105"),
+        ("Chapter 17: Future Enhancements", "106"),
+        ("    17.1 Distributed Rate Limiting (Redis)", "106"),
+        ("    17.2 Asynchronous Background Queue (BullMQ)", "106"),
+        ("    17.3 Enterprise APM & Distributed Tracing", "107"),
+        ("    17.4 Vector Embeddings for OEM Schematics", "107"),
+        ("    17.5 Dedicated Mobile Application", "107"),
+        ("Chapter 18: Conclusion", "108"),
+        ("    18.1 Summary of Engineering Achievements", "108"),
+        ("    18.2 Practical Impact & Academic Defense Summary", "109"),
+        ("References", "110"),
+        ("Appendices", "112"),
+        ("    Appendix A: Complete REST API Endpoint Inventory", "112"),
+        ("    Appendix B: Relational Data Model Specifications", "115"),
+        ("    Appendix C: Diagnostic Engine Formulas & Matrix Weights", "118"),
+        ("    Appendix D: Automated Test Suite Inventory (82 Tests)", "120"),
+        ("    Appendix E: Production Deployment Configuration Summary", "124")
     ]
     
     tbl_toc = doc.add_table(rows=len(toc_data), cols=2)
@@ -362,7 +312,16 @@ def build_frontmatter(doc, add_p, add_heading_1, add_heading_2, format_table):
         ("Figure 3", "Deterministic Diagnostic & Decision Engine Flow", "56"),
         ("Figure 4", "Relational Database Schema & Entity Relationships (11 Models)", "58"),
         ("Figure 5", "Competitive Repair Marketplace & Lifecycle Workflow", "76"),
-        ("Figure 6", "Production Cloud Deployment & Network Security Topology", "87")
+        ("Figure 6", "Production Cloud Deployment & Network Security Topology", "87"),
+        ("Figure 7", "Vercel Cloud Production Deployment Dashboard & Build Telemetry (Deployment GXaQwF4dR)", "94"),
+        ("Figure 8", "Neon Cloud PostgreSQL Console & Normalized Relational Tables (Public Schema)", "95"),
+        ("Figure 9", "RepairGraph Production Overview & Telemetry Dashboard (https://repairgraph.vercel.app)", "96"),
+        ("Figure 10", "Identity Authentication & Multi-Persona Evaluator Switcher (/login)", "97"),
+        ("Figure 11", "Competitive Repair Marketplace & Ticket Lifecycle Tracking (/repairs)", "97"),
+        ("Figure 12", "Deterministic Diagnostic Intake & 7-Factor Repairability Evaluation (/report)", "98"),
+        ("Figure 13", "Hardware Inventory Catalog & Lifecycle Valuation Management (/devices)", "98"),
+        ("Figure 14", "Digital Product Passport & Standardized Maintenance Ledger (/passport)", "99"),
+        ("Figure 15", "Verified Technician Workbench & Sequential Milestone Stepper (/repairer)", "99")
     ]
     tbl_fig = doc.add_table(rows=len(figures), cols=3)
     format_table(tbl_fig, col_widths=[1.2, 4.2, 0.8])

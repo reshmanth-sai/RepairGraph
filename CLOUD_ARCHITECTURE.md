@@ -474,6 +474,52 @@ The complete user lifecycle was validated against the live production deployment
    └── Registered device, diagnosis, and passport data retrieved intact from Neon PostgreSQL
 ```
 
+### 10.5 Live Vercel Production Deployment Evidence
+
+![Figure 7: Vercel Cloud Production Deployment Dashboard](docs/report_assets/figure7_vercel_deployment.png)
+
+- **Deployment Identifier**: `GXaQwF4dR` (Environment: `Production (Current)`)
+- **Status**: `Ready (Latest)` (Build Duration: 37 seconds)
+- **Assigned Domains**:
+  - `https://repairgraph.vercel.app` (Canonical Production)
+  - `https://repairgraph-git-main-reshmanth.vercel.app` (Branch Deployment)
+  - `https://repairgraph-lbj16d3nb-reshmanth.vercel.app` (Deployment Alias)
+- **Source Commit**: `a403979` (`fix: auto-provision repairer profile when technician accesses workbench or submits quotes`)
+- **Build Infrastructure**: Basic 2 vCPU / 8 GB Memory with Turbopack compilation.
+
+### 10.6 Live Neon Serverless PostgreSQL Database Verification
+
+![Figure 8: Neon Cloud PostgreSQL Console](docs/report_assets/figure8_neon_database.png)
+
+- **Console & Cluster**: Neon Managed Serverless PostgreSQL (Project: `repairgraph` Admin, Study Free tier)
+- **Branch & Schema**: Branch `main`, Schema `public`
+- **Verified Relational Tables**: `_prisma_migrations`, `Device`, `Diagnosis`, `Quote`, `Repairer`, `RepairerSpecialization`, `RepairHistory`, `RepairJob`, `RepairRecommendation`, `RepairRequest`, `Review`, `User`
+- **Role-Based Accounts & Data**: 9 live user records with role-based segregation (`USER`, `REPAIRER`, `ADMIN`) and bcrypt-hashed credentials (`$2b$10$...`).
+- **Connection Modes**: Pooled PgBouncer on port 6543 (`DATABASE_URL`) and direct port 5432 (`DIRECT_URL`).
+
+### 10.7 Live Platform User Interface Gallery (Chrome DevTools Captures)
+
+#### Overview & Telemetry Dashboard
+![Figure 9: Overview Dashboard](docs/report_assets/figure9_ui_overview.png)
+
+#### Authentication & Multi-Persona Session Switcher
+![Figure 10: Authentication & Demo Personas](docs/report_assets/figure10_ui_login.png)
+
+#### Two-Sided Competitive Repair Marketplace
+![Figure 11: Repair Marketplace & Tickets](docs/report_assets/figure11_ui_repairs_marketplace.png)
+
+#### Deterministic Diagnostic Intake & 7-Factor Scoring Suite
+![Figure 12: Diagnostic Intake](docs/report_assets/figure12_ui_diagnostic_report.png)
+
+#### Hardware Device Inventory & Valuation Catalog
+![Figure 13: Devices Catalog](docs/report_assets/figure13_ui_devices_catalog.png)
+
+#### Standardized Digital Product Passport
+![Figure 14: Digital Repair Passport](docs/report_assets/figure14_ui_repair_passport.png)
+
+#### Verified Technician Workbench & Milestone Stepper
+![Figure 15: Technician Workbench](docs/report_assets/figure15_ui_technician_workbench.png)
+
 ---
 
 ## 11. Testing & Quality Assurance Documentation

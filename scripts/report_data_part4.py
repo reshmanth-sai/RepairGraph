@@ -21,7 +21,7 @@ def build_part4(doc, add_p, add_bullet, add_heading_1, add_heading_2, add_headin
 
     add_heading_2(doc, "16.2 Academic Demonstration Workload Scope")
     add_p(doc, 
-          "RepairGraph is currently provisioned and calibrated for capstone demonstration, academic evaluation, and small fleet triage, "
+          "RepairGraph is currently provisioned and calibrated for cloud DA project demonstration, academic evaluation, and small fleet triage, "
           "rather than hyperscale enterprise workloads processing millions of concurrent requests.")
 
     add_heading_2(doc, "16.3 Synchronous Decision Evaluation")
@@ -97,7 +97,7 @@ def build_part4(doc, add_p, add_bullet, add_heading_1, add_heading_2, add_headin
     add_p(doc, 
           "RepairGraph provides consumers, technicians, and fleet administrators with an objective, evidence-based alternative to quoting "
           "guesswork and premature hardware disposal. The platform stands fully verified, documented, and production-ready for academic "
-          "evaluation and capstone defense.")
+          "evaluation and cloud project defense.")
 
     # =========================================================================
     # REFERENCES

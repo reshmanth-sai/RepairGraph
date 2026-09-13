@@ -235,7 +235,7 @@ def build_docx_report():
     header = section.header
     hp = header.paragraphs[0]
     hp.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-    hr = hp.add_run("RepairGraph — Academic Capstone Project Report | 25BCE1112")
+    hr = hp.add_run("RepairGraph — Cloud Infrastructure and Architecture (BACSE344) | Dr. P. Anandan | VIT Chennai")
     hr.font.name = 'Arial'
     hr.font.size = Pt(8.5)
     hr.font.color.rgb = RGBColor(0x94, 0xA3, 0xB8)
@@ -282,3 +282,9 @@ if __name__ == '__main__':
     
     docx_file = build_docx_report()
     print("DOCX generation complete.")
+    
+    # Automatically build matching HTML and PDF reports
+    print("\nGenerating synchronized HTML and PDF reports...")
+    subprocess.run([sys.executable, 'scripts/generate_full_pdf.py'], check=True)
+    print("✓ All documentation formats (DOCX, HTML, PDF) built successfully.")
+
