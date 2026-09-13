@@ -150,7 +150,7 @@ function RepairersContent() {
         title="Repair Specialist Registry"
         subtitle="Discover verified independent laboratories, micro-soldering technicians, and authorized component repair specialists."
         breadcrumbs={[
-          { label: 'Overview', href: '/' },
+          { label: 'Overview', href: '/overview' },
           { label: 'Specialists' }
         ]}
         meta={

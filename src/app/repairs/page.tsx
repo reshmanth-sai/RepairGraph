@@ -278,7 +278,7 @@ export default function RepairsPage() {
         title="Repair Tracking"
         subtitle="Active repair jobs, state-machine telemetry, technician quotes, and verified lifecycle status."
         breadcrumbs={[
-          { label: 'Overview', href: '/' },
+          { label: 'Overview', href: '/overview' },
           { label: 'Repairs' }
         ]}
         actions={

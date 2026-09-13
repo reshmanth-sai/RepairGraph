@@ -1,0 +1,2196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>RepairGraph — Final Project Report</title>
+<style>
+  @page {
+    size: A4;
+    margin: 20mm 20mm 20mm 20mm;
+    @top-right {
+      content: "RepairGraph • 25BCE1112";
+      font-family: Arial, sans-serif;
+      font-size: 8pt;
+      color: #94a3b8;
+    }
+    @bottom-right {
+      content: "https://repairgraph.vercel.app | Page " counter(page);
+      font-family: Arial, sans-serif;
+      font-size: 8pt;
+      color: #94a3b8;
+    }
+  }
+
+  body {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 11pt;
+    line-height: 1.5;
+    color: #1e293b;
+    background-color: #ffffff;
+    margin: 0;
+    padding: 0;
+  }
+
+  .cover-block {
+    text-align: center;
+    padding-top: 30px;
+    margin-bottom: 30px;
+  }
+  .cover-inst {
+    font-size: 11pt;
+    font-weight: bold;
+    color: #64748b;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+  }
+  .cover-title {
+    font-family: Arial, sans-serif;
+    font-size: 28pt;
+    font-weight: bold;
+    color: #0f172a;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+  }
+  .cover-sub {
+    font-family: Arial, sans-serif;
+    font-size: 13pt;
+    font-weight: bold;
+    color: #ea580c;
+    margin-bottom: 35px;
+    line-height: 1.4;
+  }
+  .cover-desc {
+    font-size: 10.5pt;
+    color: #334155;
+    line-height: 1.6;
+    margin-bottom: 40px;
+  }
+
+  .page-break {
+    page-break-after: always;
+  }
+
+  h1 {
+    font-family: Arial, sans-serif;
+    font-size: 15pt;
+    font-weight: bold;
+    color: #0f172a;
+    border-bottom: 1.5px solid #cbd5e1;
+    padding-bottom: 4px;
+    margin-top: 24px;
+    margin-bottom: 10px;
+    page-break-after: avoid;
+  }
+  h2 {
+    font-family: Arial, sans-serif;
+    font-size: 12.5pt;
+    font-weight: bold;
+    color: #1e293b;
+    margin-top: 18px;
+    margin-bottom: 6px;
+    page-break-after: avoid;
+  }
+  h3 {
+    font-family: Arial, sans-serif;
+    font-size: 11pt;
+    font-weight: bold;
+    color: #334155;
+    margin-top: 12px;
+    margin-bottom: 4px;
+    page-break-after: avoid;
+  }
+
+  p {
+    margin-top: 0;
+    margin-bottom: 8px;
+    text-align: justify;
+  }
+
+  ul {
+    margin-top: 2px;
+    margin-bottom: 10px;
+    padding-left: 22px;
+  }
+  li {
+    margin-bottom: 4px;
+    text-align: justify;
+  }
+
+  .callout {
+    background-color: #fff7ed;
+    border-left: 4px solid #ea580c;
+    padding: 8px 12px;
+    margin: 10px 0;
+    font-size: 9.5pt;
+    color: #431407;
+  }
+  .callout-title {
+    font-weight: bold;
+    color: #ea580c;
+    margin-bottom: 2px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 9pt;
+    page-break-inside: avoid;
+  }
+  th {
+    background-color: #f1f5f9;
+    color: #0f172a;
+    font-weight: bold;
+    text-align: left;
+    padding: 5px 8px;
+    border: 1px solid #cbd5e1;
+  }
+  td {
+    padding: 5px 8px;
+    border: 1px solid #cbd5e1;
+    vertical-align: top;
+  }
+  tr:nth-child(even) td {
+    background-color: #f8fafc;
+  }
+
+  .figure-box {
+    text-align: center;
+    margin: 16px 0;
+    page-break-inside: avoid;
+  }
+  .figure-box img {
+    max-width: 95%;
+    height: auto;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+  }
+  .figure-cap {
+    font-family: Arial, sans-serif;
+    font-size: 9pt;
+    font-weight: bold;
+    font-style: italic;
+    color: #475569;
+    margin-top: 5px;
+  }
+</style>
+</head>
+<body>
+<div class='cover-block'><div class='cover-inst'>A CAPSTONE PROJECT REPORT ON</div>
+<div class='cover-title'><strong>REPAIRGRAPH</strong></div>
+<div class='cover-sub'><strong>AI-Assisted Device Repairability Assessment, Economic Decision Support &<br>Competitive Repair Marketplace Platform</strong></div>
+<div class='cover-desc'>Submitted in partial fulfillment of the requirements for the award of the degree of<br>BACHELOR OF TECHNOLOGY<br>in<br>COMPUTER SCIENCE AND ENGINEERING</div></div>
+<table>
+<tr>
+<th>Submitted By:</th>
+<th>Under the Guidance of:</th>
+</tr>
+<tr>
+<td>NAIDU RESHMANTH SAI</td>
+<td>[Faculty Guide Name / Title]</td>
+</tr>
+<tr>
+<td>Register No: 25BCE1112</td>
+<td>[Designation / Department]</td>
+</tr>
+<tr>
+<td>Department of Computer Science and Engineering</td>
+<td>[Institution / University Name]</td>
+</tr>
+<tr>
+<td>Academic Year: 2025–2026</td>
+<td>Production URL: https://repairgraph.vercel.app</td>
+</tr>
+</table>
+<div class='page-break'></div>
+<h1><strong>CERTIFICATE OF ORIGINAL WORK</strong></h1>
+<p>This is to certify that the project report titled "REPAIRGRAPH: AI-Assisted Device Repairability Assessment, Economic Decision Support & Competitive Repair Marketplace Platform" submitted by NAIDU RESHMANTH SAI (Register Number: 25BCE1112) in partial fulfillment of the requirements for the award of the degree of Bachelor of Technology in Computer Science and Engineering during the academic year 2025–2026 is an authentic record of original work carried out under my supervision.</p>
+<p>To the best of our knowledge and verified evaluation, the results, algorithms, architectures, and findings presented in this report have been independently implemented, automatedly tested across 82 validation test cases, and functionally validated in production cloud deployment. This work has not formed the basis for the award of any other degree, diploma, or fellowship elsewhere.</p>
+<table>
+<tr>
+<th>[Signature of Project Guide]<br>[Guide Name & Designation]<br>Department of Computer Science and Engineering</th>
+<th>[Signature of Head of Department]<br>[HOD Name & Designation]<br>Department of Computer Science and Engineering</th>
+</tr>
+<tr>
+<td>Date: ____________________<br>Place: ____________________</td>
+<td>Internal / External Examiner:<br>Signature: ____________________</td>
+</tr>
+</table>
+<div class='page-break'></div>
+<h1><strong>CANDIDATE DECLARATION</strong></h1>
+<p>I, NAIDU RESHMANTH SAI (Register Number: 25BCE1112), hereby declare that the capstone project report titled "REPAIRGRAPH: AI-Assisted Device Repairability Assessment, Economic Decision Support & Competitive Repair Marketplace Platform" is an authentic presentation of work carried out by me under academic supervision.</p>
+<p>I confirm that all software code, full-stack Next.js architecture, Prisma relational models, deterministic decision formulas, test suites, and production cloud infrastructure on Vercel and Neon PostgreSQL described in this report represent true, implemented, and verified engineering work. The external libraries, official specifications, and statutory frameworks (including India's Right to Repair Portal and the E-Waste Management Rules, 2022) have been appropriately referenced.</p>
+<table>
+<tr>
+<th>NAIDU RESHMANTH SAI<br>Register Number: 25BCE1112<br>Department of Computer Science and Engineering</th>
+</tr>
+<tr>
+<td>Date: ____________________<br>Place: ____________________</td>
+</tr>
+</table>
+<div class='page-break'></div>
+<h1><strong>ACKNOWLEDGEMENT</strong></h1>
+<p>I express my sincere gratitude to my Project Guide and Faculty Advisor for their continuous guidance, technical insights, and encouragement throughout the ideation, system design, implementation, and cloud validation of RepairGraph.</p>
+<p>I extend my appreciation to the Head of the Department and faculty members of the Department of Computer Science and Engineering for providing the academic infrastructure, computing facilities, and rigorous evaluation milestones that helped elevate this project into a production-grade software system.</p>
+<p>Finally, I thank my family and colleagues whose moral support and constructive discussions provided ongoing motivation during the development, testing, and deployment phases of this capstone endeavor.</p>
+<div class='page-break'></div>
+<h1><strong>ABSTRACT</strong></h1>
+<p>The modern consumer electronics ecosystem suffers from structural market inefficiencies, opaque repair pricing, artificial hardware locking, and premature device retirement that directly drives escalating global electronic waste. While statutory initiatives such as India's Right to Repair Portal (Department of Consumer Affairs) and the E-Waste (Management) Rules, 2022 mandate fair access to repair and extended producer responsibility, consumers and enterprise fleet managers lack an objective, evidence-based platform to triage hardware failures and evaluate the economic viability of repair versus replacement.</p>
+<p>This report presents RepairGraph, a production-grade, cloud-native hardware diagnostics, repairability evaluation, competitive quote marketplace, and standardized device service passport platform. Built as a unified full-stack Next.js 15 application deployed on Vercel Serverless Runtime (Node.js 24.x) and backed by managed Neon Serverless PostgreSQL via Prisma ORM, RepairGraph integrates a two-tier hybrid intelligence architecture.</p>
+<p>Rather than relying on unconstrained, hallucination-prone large language models for financial and statutory decisions, RepairGraph implements a fully deterministic rule engine. Tier 1 performs heuristic word-boundary symptom parsing and hazard classification across eight hardware subsystems. Tier 2 evaluates an original 7-Factor Repairability Score Model (Disassembly, Parts Availability, Documentation, Modularity, Software Pairing, Age/Lifecycle, and Local Service Ecosystem summing to 100 points), brand-scaled component replacement matrices, and a Repair Cost Ratio (RCR) model. The engine outputs actionable verdicts: REPAIR, DIY, RESELL, REPLACE, or RECYCLE, accompanied by transparent, audit-ready reasoning citing manufacturing carbon offsets and statutory e-waste divert estimates.</p>
+<p>Furthermore, RepairGraph provides a verified two-sided marketplace where verified independent repair workshops submit competitive bids against consumer tickets. Upon job acceptance and completion, the platform immutably records standardized maintenance milestones into a physical device Repair Passport tied to hardware serial numbers.</p>
+<p>The system's engineering rigor is substantiated by 82 automated test cases (35 deterministic engine unit tests + 47 business rule and security integration tests, 100% passing), clean ESLint validation, strict zero-leak error sanitization, and live end-to-end acceptance validation on its production deployment at https://repairgraph.vercel.app.</p>
+<p><strong>Keywords: </strong>Keywords: Hardware Diagnostics, Right to Repair, E-Waste Management, Deterministic Decision Engine, Repairability Scoring, Cloud Computing, Next.js, Vercel Serverless, Neon PostgreSQL, Prisma ORM.</p>
+<div class='page-break'></div>
+<h1><strong>TABLE OF CONTENTS</strong></h1>
+<table>
+<tr>
+<th>Certificate of Original Work</th>
+<th>ii</th>
+</tr>
+<tr>
+<td>Candidate Declaration</td>
+<td>iii</td>
+</tr>
+<tr>
+<td>Acknowledgement</td>
+<td>iv</td>
+</tr>
+<tr>
+<td>Abstract</td>
+<td>v</td>
+</tr>
+<tr>
+<td>List of Figures</td>
+<td>viii</td>
+</tr>
+<tr>
+<td>List of Tables</td>
+<td>ix</td>
+</tr>
+<tr>
+<td>Chapter 1: Introduction</td>
+<td>1</td>
+</tr>
+<tr>
+<td>    1.1 Background & Industry Landscape</td>
+<td>1</td>
+</tr>
+<tr>
+<td>    1.2 Problem Context: The Right to Repair & E-Waste Crisis</td>
+<td>2</td>
+</tr>
+<tr>
+<td>    1.3 Motivation</td>
+<td>3</td>
+</tr>
+<tr>
+<td>    1.4 Problem Statement</td>
+<td>4</td>
+</tr>
+<tr>
+<td>    1.5 Objectives of the Platform</td>
+<td>4</td>
+</tr>
+<tr>
+<td>    1.6 Scope of the Project</td>
+<td>5</td>
+</tr>
+<tr>
+<td>    1.7 Key Engineering Contributions</td>
+<td>6</td>
+</tr>
+<tr>
+<td>Chapter 2: Existing System and Proposed System</td>
+<td>7</td>
+</tr>
+<tr>
+<td>    2.1 Existing Repair Approaches</td>
+<td>7</td>
+</tr>
+<tr>
+<td>    2.2 Limitations of the Current Landscape</td>
+<td>8</td>
+</tr>
+<tr>
+<td>    2.3 Proposed RepairGraph System</td>
+<td>9</td>
+</tr>
+<tr>
+<td>    2.4 Distinct Advantages of RepairGraph</td>
+<td>10</td>
+</tr>
+<tr>
+<td>    2.5 Comparative Analysis Matrix</td>
+<td>11</td>
+</tr>
+<tr>
+<td>Chapter 3: Requirements Analysis</td>
+<td>12</td>
+</tr>
+<tr>
+<td>    3.1 Functional Requirements</td>
+<td>12</td>
+</tr>
+<tr>
+<td>    3.2 Non-Functional Requirements</td>
+<td>13</td>
+</tr>
+<tr>
+<td>    3.3 Hardware Requirements</td>
+<td>14</td>
+</tr>
+<tr>
+<td>    3.4 Software Requirements</td>
+<td>15</td>
+</tr>
+<tr>
+<td>    3.5 User Roles & Permissions Matrix</td>
+<td>16</td>
+</tr>
+<tr>
+<td>    3.6 System Constraints & Invariants</td>
+<td>17</td>
+</tr>
+<tr>
+<td>Chapter 4: System Architecture</td>
+<td>18</td>
+</tr>
+<tr>
+<td>    4.1 Overall Architectural Topology</td>
+<td>18</td>
+</tr>
+<tr>
+<td>    4.2 Client Layer (React 19 & Tailwind CSS v4)</td>
+<td>19</td>
+</tr>
+<tr>
+<td>    4.3 Application & Service Layer</td>
+<td>20</td>
+</tr>
+<tr>
+<td>    4.4 API & Routing Layer</td>
+<td>21</td>
+</tr>
+<tr>
+<td>    4.5 Authentication & Session Management</td>
+<td>22</td>
+</tr>
+<tr>
+<td>    4.6 Deterministic Decision Engine</td>
+<td>22</td>
+</tr>
+<tr>
+<td>    4.7 Persistence Layer (Prisma ORM)</td>
+<td>23</td>
+</tr>
+<tr>
+<td>    4.8 Cloud Deployment Architecture</td>
+<td>24</td>
+</tr>
+<tr>
+<td>    4.9 End-to-End Data & Control Flow</td>
+<td>25</td>
+</tr>
+<tr>
+<td>Chapter 5: Technology Stack</td>
+<td>26</td>
+</tr>
+<tr>
+<td>    5.1 Framework & Runtime Selection</td>
+<td>26</td>
+</tr>
+<tr>
+<td>    5.2 Frontend & UI Libraries</td>
+<td>27</td>
+</tr>
+<tr>
+<td>    5.3 Backend & Validation Technologies</td>
+<td>27</td>
+</tr>
+<tr>
+<td>    5.4 Database & Persistence Stack</td>
+<td>28</td>
+</tr>
+<tr>
+<td>    5.5 Cloud Infrastructure Providers</td>
+<td>29</td>
+</tr>
+<tr>
+<td>    5.6 Technology Stack Inventory Table</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Chapter 6: Functional Modules</td>
+<td>31</td>
+</tr>
+<tr>
+<td>    6.1 User Authentication & Session Control</td>
+<td>31</td>
+</tr>
+<tr>
+<td>    6.2 Hardware Device Catalog & Valuation</td>
+<td>32</td>
+</tr>
+<tr>
+<td>    6.3 Problem Reporting & Triage Initiation</td>
+<td>33</td>
+</tr>
+<tr>
+<td>    6.4 Heuristic Symptom Extraction</td>
+<td>34</td>
+</tr>
+<tr>
+<td>    6.5 Diagnostic Signal Synthesis</td>
+<td>34</td>
+</tr>
+<tr>
+<td>    6.6 7-Factor Repairability Evaluation</td>
+<td>35</td>
+</tr>
+<tr>
+<td>    6.7 Fair-Market Economic Analysis</td>
+<td>36</td>
+</tr>
+<tr>
+<td>    6.8 Statutory Decision & Explanation Generation</td>
+<td>37</td>
+</tr>
+<tr>
+<td>    6.9 Verified Repairer Directory & Geolocation</td>
+<td>38</td>
+</tr>
+<tr>
+<td>    6.10 Competitive Quote Marketplace</td>
+<td>39</td>
+</tr>
+<tr>
+<td>    6.11 Quote Lifecycle & Acceptance State Machine</td>
+<td>40</td>
+</tr>
+<tr>
+<td>    6.12 Repair Job Execution Stepper</td>
+<td>41</td>
+</tr>
+<tr>
+<td>    6.13 Standardized Repair Passport Ledger</td>
+<td>42</td>
+</tr>
+<tr>
+<td>    6.14 Post-Service Reviews & Rating Synthesis</td>
+<td>43</td>
+</tr>
+<tr>
+<td>    6.15 Administrative & Seed Controls</td>
+<td>44</td>
+</tr>
+<tr>
+<td>Chapter 7: RepairGraph Decision Engine</td>
+<td>45</td>
+</tr>
+<tr>
+<td>    7.1 Deterministic Architecture vs. Black-Box AI</td>
+<td>45</td>
+</tr>
+<tr>
+<td>    7.2 Token-Boundary Symptom Parsing</td>
+<td>46</td>
+</tr>
+<tr>
+<td>    7.3 Subsystem Classification & Hazard Detection</td>
+<td>47</td>
+</tr>
+<tr>
+<td>    7.4 Diagnostic Confidence Formulation</td>
+<td>48</td>
+</tr>
+<tr>
+<td>    7.5 7-Factor Baseline Repairability Score Model</td>
+<td>49</td>
+</tr>
+<tr>
+<td>    7.6 Incident-Specific Deduction Penalties</td>
+<td>51</td>
+</tr>
+<tr>
+<td>    7.7 Device Depreciation & Valuation Formulation</td>
+<td>52</td>
+</tr>
+<tr>
+<td>    7.8 Component Replacement Cost Benchmarks</td>
+<td>53</td>
+</tr>
+<tr>
+<td>    7.9 Repair Cost Ratio (RCR) Calculation</td>
+<td>54</td>
+</tr>
+<tr>
+<td>    7.10 Value-Preservation Economic Score</td>
+<td>54</td>
+</tr>
+<tr>
+<td>    7.11 Statutory Lifecycle Decision Matrix</td>
+<td>55</td>
+</tr>
+<tr>
+<td>    7.12 Automated Explainability Audit Trail</td>
+<td>56</td>
+</tr>
+<tr>
+<td>Chapter 8: Database Design</td>
+<td>57</td>
+</tr>
+<tr>
+<td>    8.1 Relational Design Philosophy</td>
+<td>57</td>
+</tr>
+<tr>
+<td>    8.2 Entity Relationship Diagram (11 Models)</td>
+<td>58</td>
+</tr>
+<tr>
+<td>    8.3 Relational Entity Specifications</td>
+<td>59</td>
+</tr>
+<tr>
+<td>    8.4 Custom Enums (9 Enums)</td>
+<td>61</td>
+</tr>
+<tr>
+<td>    8.5 Relational Invariants & Integrity Constraints</td>
+<td>62</td>
+</tr>
+<tr>
+<td>    8.6 Prisma Schema & Migration Baseline</td>
+<td>63</td>
+</tr>
+<tr>
+<td>    8.7 Cloud Serverless Pooling with Neon</td>
+<td>64</td>
+</tr>
+<tr>
+<td>Chapter 9: REST API Design</td>
+<td>65</td>
+</tr>
+<tr>
+<td>    9.1 RESTful Conventions & Error Payloads</td>
+<td>65</td>
+</tr>
+<tr>
+<td>    9.2 API Resource Namespaces</td>
+<td>66</td>
+</tr>
+<tr>
+<td>    9.3 HTTP Method Operations Catalog</td>
+<td>67</td>
+</tr>
+<tr>
+<td>    9.4 Input Validation with Zod</td>
+<td>69</td>
+</tr>
+<tr>
+<td>    9.5 IDOR Protection & Ownership Verification</td>
+<td>70</td>
+</tr>
+<tr>
+<td>Chapter 10: Authentication and Security</td>
+<td>71</td>
+</tr>
+<tr>
+<td>    10.1 Password Cryptography (bcrypt)</td>
+<td>71</td>
+</tr>
+<tr>
+<td>    10.2 JWT Session Tokens & Cookie Security</td>
+<td>71</td>
+</tr>
+<tr>
+<td>    10.3 Token Suppression Strategy</td>
+<td>72</td>
+</tr>
+<tr>
+<td>    10.4 In-Memory Sliding-Window Rate Limiting</td>
+<td>73</td>
+</tr>
+<tr>
+<td>    10.5 HTTP Defense-in-Depth Security Headers</td>
+<td>74</td>
+</tr>
+<tr>
+<td>    10.6 Error Sanitization & Leak Suppression</td>
+<td>75</td>
+</tr>
+<tr>
+<td>    10.7 Zero-Secret Version Control Policy</td>
+<td>75</td>
+</tr>
+<tr>
+<td>Chapter 11: User Workflow</td>
+<td>76</td>
+</tr>
+<tr>
+<td>    11.1 Primary Consumer Repair Journey</td>
+<td>76</td>
+</tr>
+<tr>
+<td>    11.2 Technician Quoting & Workbench Stepper</td>
+<td>77</td>
+</tr>
+<tr>
+<td>    11.3 Alternative Lifecycle Paths (DIY, Resell, Replace, Recycle)</td>
+<td>78</td>
+</tr>
+<tr>
+<td>Chapter 12: Implementation Architecture</td>
+<td>79</td>
+</tr>
+<tr>
+<td>    12.1 Project Directory Organization</td>
+<td>79</td>
+</tr>
+<tr>
+<td>    12.2 Layered Backend Architecture</td>
+<td>80</td>
+</tr>
+<tr>
+<td>    12.3 Database Singleton Pattern</td>
+<td>81</td>
+</tr>
+<tr>
+<td>Chapter 13: Testing and Validation</td>
+<td>82</td>
+</tr>
+<tr>
+<td>    13.1 Comprehensive Testing Strategy</td>
+<td>82</td>
+</tr>
+<tr>
+<td>    13.2 Unit Testing: Diagnostic & Decision Engine (35/35)</td>
+<td>83</td>
+</tr>
+<tr>
+<td>    13.3 Integration Testing: Backend & Security (47/47)</td>
+<td>84</td>
+</tr>
+<tr>
+<td>    13.4 Total Automated Test Audit (82/82 Passing)</td>
+<td>85</td>
+</tr>
+<tr>
+<td>    13.5 Production End-to-End Acceptance Validation</td>
+<td>86</td>
+</tr>
+<tr>
+<td>Chapter 14: Cloud Deployment</td>
+<td>87</td>
+</tr>
+<tr>
+<td>    14.1 Production Cloud Architecture</td>
+<td>87</td>
+</tr>
+<tr>
+<td>    14.2 Vercel Serverless Runtime (Node.js 24.x)</td>
+<td>88</td>
+</tr>
+<tr>
+<td>    14.3 Managed Neon Serverless PostgreSQL</td>
+<td>89</td>
+</tr>
+<tr>
+<td>    14.4 Environment Configuration & Secrets</td>
+<td>90</td>
+</tr>
+<tr>
+<td>    14.5 Production Deployment Runbook</td>
+<td>91</td>
+</tr>
+<tr>
+<td>    14.6 Health Telemetry Endpoint (/api/health)</td>
+<td>92</td>
+</tr>
+<tr>
+<td>    14.7 Free-Tier Cost Analysis</td>
+<td>93</td>
+</tr>
+<tr>
+<td>Chapter 15: Results and Discussion</td>
+<td>94</td>
+</tr>
+<tr>
+<td>    15.1 Qualitative Diagnostic Evaluation</td>
+<td>94</td>
+</tr>
+<tr>
+<td>    15.2 Marketplace Efficiency Observations</td>
+<td>95</td>
+</tr>
+<tr>
+<td>    15.3 Regulatory Alignment & E-Waste Impact</td>
+<td>96</td>
+</tr>
+<tr>
+<td>Chapter 16: Limitations</td>
+<td>97</td>
+</tr>
+<tr>
+<td>    16.1 In-Memory Rate Limiting</td>
+<td>97</td>
+</tr>
+<tr>
+<td>    16.2 Academic Demonstration Workload Scope</td>
+<td>97</td>
+</tr>
+<tr>
+<td>    16.3 Synchronous Decision Evaluation</td>
+<td>98</td>
+</tr>
+<tr>
+<td>    16.4 Provider-Native Telemetry Reliance</td>
+<td>98</td>
+</tr>
+<tr>
+<td>    16.5 Non-Destructive Production Testing Boundary</td>
+<td>98</td>
+</tr>
+<tr>
+<td>    16.6 Informational Specialist Context</td>
+<td>99</td>
+</tr>
+<tr>
+<td>Chapter 17: Future Enhancements</td>
+<td>100</td>
+</tr>
+<tr>
+<td>    17.1 Distributed Rate Limiting (Redis)</td>
+<td>100</td>
+</tr>
+<tr>
+<td>    17.2 Asynchronous Background Queue (BullMQ)</td>
+<td>100</td>
+</tr>
+<tr>
+<td>    17.3 Enterprise APM & Distributed Tracing</td>
+<td>101</td>
+</tr>
+<tr>
+<td>    17.4 Vector Embeddings for OEM Schematics</td>
+<td>101</td>
+</tr>
+<tr>
+<td>    17.5 Dedicated Mobile Application</td>
+<td>101</td>
+</tr>
+<tr>
+<td>Chapter 18: Conclusion</td>
+<td>102</td>
+</tr>
+<tr>
+<td>    18.1 Summary of Engineering Achievements</td>
+<td>102</td>
+</tr>
+<tr>
+<td>    18.2 Practical Impact & Academic Defense Summary</td>
+<td>103</td>
+</tr>
+<tr>
+<td>References</td>
+<td>104</td>
+</tr>
+<tr>
+<td>Appendices</td>
+<td>106</td>
+</tr>
+<tr>
+<td>    Appendix A: Complete REST API Endpoint Inventory</td>
+<td>106</td>
+</tr>
+<tr>
+<td>    Appendix B: Relational Data Model Specifications</td>
+<td>109</td>
+</tr>
+<tr>
+<td>    Appendix C: Diagnostic Engine Formulas & Matrix Weights</td>
+<td>112</td>
+</tr>
+<tr>
+<td>    Appendix D: Automated Test Suite Inventory (82 Tests)</td>
+<td>114</td>
+</tr>
+<tr>
+<td>    Appendix E: Production Deployment Configuration Summary</td>
+<td>118</td>
+</tr>
+</table>
+<div class='page-break'></div>
+<h1><strong>LIST OF FIGURES</strong></h1>
+<table>
+<tr>
+<th>Figure 1</th>
+<th>RepairGraph Unified Full-Stack Architecture</th>
+<th>18</th>
+</tr>
+<tr>
+<td>Figure 2</td>
+<td>End-to-End Request & Data Processing Pipeline</td>
+<td>25</td>
+</tr>
+<tr>
+<td>Figure 3</td>
+<td>Deterministic Diagnostic & Decision Engine Flow</td>
+<td>56</td>
+</tr>
+<tr>
+<td>Figure 4</td>
+<td>Relational Database Schema & Entity Relationships (11 Models)</td>
+<td>58</td>
+</tr>
+<tr>
+<td>Figure 5</td>
+<td>Competitive Repair Marketplace & Lifecycle Workflow</td>
+<td>76</td>
+</tr>
+<tr>
+<td>Figure 6</td>
+<td>Production Cloud Deployment & Network Security Topology</td>
+<td>87</td>
+</tr>
+</table>
+<h1><strong>LIST OF TABLES</strong></h1>
+<table>
+<tr>
+<th>Table 1</th>
+<th>Comparative Matrix: Traditional Repair vs. RepairGraph</th>
+<th>11</th>
+</tr>
+<tr>
+<td>Table 2</td>
+<td>Hardware & Software Execution Requirements</td>
+<td>15</td>
+</tr>
+<tr>
+<td>Table 3</td>
+<td>User Roles and Permission Boundaries</td>
+<td>16</td>
+</tr>
+<tr>
+<td>Table 4</td>
+<td>Technology Stack and Operational Roles</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Table 5</td>
+<td>7-Factor Design Repairability Weight Distribution</td>
+<td>50</td>
+</tr>
+<tr>
+<td>Table 6</td>
+<td>Incident-Specific Penalty Deduction Rules</td>
+<td>51</td>
+</tr>
+<tr>
+<td>Table 7</td>
+<td>Statutory Lifecycle Action Decision Rules</td>
+<td>55</td>
+</tr>
+<tr>
+<td>Table 8</td>
+<td>11 Normalized Relational Entities in Prisma Schema</td>
+<td>59</td>
+</tr>
+<tr>
+<td>Table 9</td>
+<td>Prisma Database Enums Specification</td>
+<td>61</td>
+</tr>
+<tr>
+<td>Table 10</td>
+<td>CRUD Functionality Across Resource Namespaces</td>
+<td>66</td>
+</tr>
+<tr>
+<td>Table 11</td>
+<td>Representative REST API Route Catalog</td>
+<td>67</td>
+</tr>
+<tr>
+<td>Table 12</td>
+<td>Automated Test Suite Execution Summary (82 Tests)</td>
+<td>85</td>
+</tr>
+<tr>
+<td>Table 13</td>
+<td>Production End-to-End Acceptance Verification Summary</td>
+<td>86</td>
+</tr>
+<tr>
+<td>Table 14</td>
+<td>Environment Variables Specification (Names Only)</td>
+<td>90</td>
+</tr>
+</table>
+<div class='page-break'></div>
+<h1><strong>CHAPTER 1: INTRODUCTION</strong></h1>
+<h2><strong>1.1 Background & Industry Landscape</strong></h2>
+<p>The consumer electronics and computing hardware sectors have witnessed unprecedented expansion over the past two decades, driven by rapid miniaturization, high-density system-on-chip (SoC) integration, and aggressive annual product release cycles. Modern laptops, smartphones, tablets, and wearable devices pack computational capabilities that rival enterprise workstations of earlier eras into ultra-thin enclosures. However, this engineering trajectory has been accompanied by an aggressive shift away from repair-friendly industrial designs toward adhesive-bonded assemblies, soldered unified memory architectures, proprietary tamper-resistant fasteners, and cryptographic component serialization.</p>
+<p>When a consumer hardware unit experiences failure—whether a cracked display digitizer, chemically degraded lithium-ion cell, or thermal cooling fan bearing seizure—the owner encounters an opaque, highly friction-laden repair journey. Authorized Original Equipment Manufacturer (OEM) service centers frequently quote exorbitant repair estimates that approach 70% to 90% of the device's original retail purchase price. This pricing strategy systematically steers consumers toward premature device abandonment and new device acquisition, contributing directly to the worsening global electronic waste crisis.</p>
+<h2><strong>1.2 Problem Context: The Right to Repair & E-Waste Crisis</strong></h2>
+<p>The statutory and environmental backdrop of device servicing has reached a critical turning point globally and within India. Under the auspices of the Department of Consumer Affairs, Government of India, the national Right to Repair Portal was launched to curb planned obsolescence, mandate OEM transparency regarding diagnostic manuals and spare parts, and foster a competitive ecosystem of certified third-party technicians. Concurrently, India's statutory E-Waste (Management) Rules, 2022 impose strict Extended Producer Responsibility (EPR) mandates, requiring transparent lifecycle tracking, safe recovery of hazardous substances (such as lead, cadmium, and brominated flame retardants), and diversion of non-repairable electronic hardware into authorized recycling streams.</p>
+<p>Despite these statutory strides, consumers and enterprise fleet administrators lack a standardized software infrastructure capable of objectively evaluating hardware repairability, calculating real-world economic feasibility, comparing competitive local repair bids, and preserving permanent service provenance.</p>
+<h2><strong>1.3 Motivation</strong></h2>
+<p>The core motivation behind RepairGraph stems from three pervasive structural problems in consumer electronics ownership:</p>
+<ul>
+<li><strong>1. </strong>Asymmetric Information & Quoting Guesswork: Consumers rarely possess the technical diagnostic knowledge to verify whether an OEM's quote of ₹18,000 for a motherboard replacement is legitimate, or whether a ₹3,500 repair at an independent workshop is technically viable and economically sound.</li>
+<li><strong>2. </strong>Unconstrained AI Hallucinations in Consumer Tech: Generic generative AI chatbots frequently fabricate repair procedures, misquote non-existent component prices, or hallucinate dangerous advice regarding swollen lithium-ion cells, creating physical safety hazards.</li>
+<li><strong>3. </strong>Absence of Device Maintenance Provenance: Secondary electronics markets suffer severe value depreciation because prospective buyers cannot verify whether a refurbished or used laptop was professionally serviced with OEM-grade parts or compromised with substandard soldering.</li>
+</ul>
+<h2><strong>1.4 Problem Statement</strong></h2>
+<p>To design, implement, test, and deploy a production-grade, cloud-native software platform that provides deterministic, rule-based hardware diagnostic triage, an objective 7-factor repairability scoring model, fair-market economic repair-vs-replace decision support, a verified two-sided competitive repair marketplace, and an immutable device service passport ledger accessible through an authenticated, secure web application.</p>
+<h2><strong>1.5 Objectives of the Platform</strong></h2>
+<ul>
+<li><strong>• </strong>Develop a deterministic diagnostic parser that extracts failure modes, severity levels, and acute safety hazards (liquid ingress, battery swelling) from user-submitted symptom narratives without relying on probabilistic generative LLMs.</li>
+<li><strong>• </strong>Formulate and calibrate an original 7-Factor Repairability Score Model (Disassembly, Parts Availability, Documentation, Modularity, Software Pairing, Age/Lifecycle, Service Ecosystem) summing to 100 points.</li>
+<li><strong>• </strong>Engineer an economic valuation engine that computes consumer hardware depreciation (22% annual curve), derives Repair Cost Ratios (RCR), and maps outcomes to five statutory lifecycle recommendations: REPAIR, DIY, RESELL, REPLACE, or RECYCLE.</li>
+<li><strong>• </strong>Construct a secure, relational marketplace enabling verified independent repair workshops to submit competitive quotes and execute structured repair jobs through a verified state machine.</li>
+<li><strong>• </strong>Provide a standardized, tamper-evident Repair Passport linked to physical device serial numbers that permanently records completed service history and parts replacements.</li>
+<li><strong>• </strong>Deploy the platform to a modern cloud-computing infrastructure utilizing Vercel Serverless Runtime (Node.js 24.x) and Neon Managed Serverless PostgreSQL with automated connection pooling and end-to-end TLS encryption.</li>
+</ul>
+<h2><strong>1.6 Scope of the Project</strong></h2>
+<p>The scope encompasses five major consumer hardware categories widely prevalent in academic and enterprise environments: Laptops, Smartphones, Tablets, Headphones, and Monitors. The platform provides full lifecycle support from initial user onboarding and device registration, through interactive symptom triage and quote acceptance, to post-service verification and customer reviews. The scope explicitly excludes automated hardware disassembly robots, direct online payment gateway settlement, and speculative blockchain mechanisms, focusing strictly on auditable software engineering and statutory compliance.</p>
+<h2><strong>1.7 Key Engineering Contributions</strong></h2>
+<ul>
+<li><strong>1. </strong>Two-Tier Hybrid Architecture: Separates deterministic heuristic symptom parsing (Tier 1) from mathematical scoring and statutory decision trees (Tier 2), ensuring 100% reproducible diagnostic outputs with sub-millisecond execution latency.</li>
+<li><strong>2. </strong>Statutory Alignment with Indian Environmental Law: Integrates statutory mandates from India's E-Waste (Management) Rules, 2022 and Right to Repair Portal directly into automated decision matrices and explainability narratives.</li>
+<li><strong>3. </strong>Production Cloud-Native Unified Architecture: Eliminates multi-service synchronization overhead by combining Next.js 15 App Router frontend and REST API route handlers into a single Vercel serverless deployment connected to Neon PostgreSQL.</li>
+<li><strong>4. </strong>Defense-in-Depth Security Perimeter: Incorporates HttpOnly/SameSite session cookies, sliding-window rate limiting, Zod schema validation, IDOR authorization barriers, and zero-leak database error sanitization.</li>
+<li><strong>5. </strong>Exhaustive Validation Rigor: 82 automated test cases (35 deterministic engine unit tests + 47 backend and security integration tests, 0 failures) verified in local and live production environments.</li>
+</ul>
+<h1><strong>CHAPTER 2: EXISTING SYSTEM AND PROPOSED SYSTEM</strong></h1>
+<h2><strong>2.1 Existing Repair Approaches</strong></h2>
+<p>The current landscape for consumer electronics repair consists of three fragmented channels:</p>
+<ul>
+<li><strong>1. </strong>Authorized OEM Service Depots: High repair charges, proprietary parts gating, lengthy turnaround times (often 7–14 days), and aggressive commercial steering toward trade-ins or replacement.</li>
+<li><strong>2. </strong>Informal Street Workshops: Dense physical presence and lower prices, but suffering from zero parts provenance transparency, unverified technician credentials, absence of written warranties, and no standardized maintenance records.</li>
+<li><strong>3. </strong>Generic AI & Search Engines: Generalist search results and generative LLMs that provide non-deterministic troubleshooting steps, frequently confusing distinct hardware revisions, failing to flag swollen battery combustion risks, and lacking pricing context.</li>
+</ul>
+<h2><strong>2.2 Limitations of the Current Landscape</strong></h2>
+<ul>
+<li><strong>• </strong>Lack of Objective Economic Feasibility Metrics: Consumers have no mathematical framework to evaluate whether a ₹7,000 repair quote makes sense for a 3.5-year-old laptop worth ₹16,000 on the secondary market.</li>
+<li><strong>• </strong>Absence of Competitive Quote Discovery: Getting comparative estimates requires physically transporting non-functional hardware across multiple disparate workshops across metropolitan hubs.</li>
+<li><strong>• </strong>Fragile Maintenance Records: Paper invoices and thermal receipts fade or are lost within months, destroying secondary resale value and hampering warranty claims.</li>
+<li><strong>• </strong>Environmental Disconnect: No existing consumer tool computes or visualizes the electronic waste diversion or carbon emissions prevented by choosing repair over disposal.</li>
+</ul>
+<h2><strong>2.3 Proposed System: RepairGraph</strong></h2>
+<p>RepairGraph addresses these structural shortcomings by introducing an integrated, cloud-native platform that unifies hardware asset management, deterministic diagnostic intelligence, competitive marketplace bidding, and permanent service passports. Users catalog their hardware assets once, receive instant deterministic repairability scores and fair-market economic analyses, solicit competitive quotes from verified independent technicians, track physical bench repair milestones, and receive a digitally signed Repair Passport upon completion.</p>
+<h2><strong>2.4 Distinct Advantages of RepairGraph</strong></h2>
+<ul>
+<li><strong>• </strong>Deterministic Reliability: 100% reproducible scoring without generative model hallucinations.</li>
+<li><strong>• </strong>Statutory Grounding: Directly cites and adheres to India's Right to Repair framework and E-Waste Rules 2022.</li>
+<li><strong>• </strong>Consumer Protection: In-memory rate limiting, HttpOnly authentication cookies, and strict IDOR prevention.</li>
+<li><strong>• </strong>Two-Sided Utility: Empowers both consumers seeking transparent service and independent technicians expanding their business.</li>
+</ul>
+<h2><strong>2.5 Comparative Analysis Matrix</strong></h2>
+<p>Table 1 compares the traditional electronics repair experience against the capabilities provided by RepairGraph.</p>
+<table>
+<tr>
+<th>Capability / Dimension</th>
+<th>Traditional Repair Ecosystem</th>
+<th>RepairGraph Platform</th>
+</tr>
+<tr>
+<td>Diagnostic Triage</td>
+<td>Subjective technician inspection or search</td>
+<td>Deterministic 2-Tier Rule Engine</td>
+</tr>
+<tr>
+<td>Repairability Evaluation</td>
+<td>Opaque OEM scoring or subjective opinion</td>
+<td>Transparent 7-Factor Model (0–100 Pts)</td>
+</tr>
+<tr>
+<td>Economic Valuation</td>
+<td>None (Arbitrary repair pricing)</td>
+<td>Automated 22%/yr Depreciation & RCR Math</td>
+</tr>
+<tr>
+<td>Quote Discovery</td>
+<td>Manual physical workshop visits</td>
+<td>Digital competitive bidding marketplace</td>
+</tr>
+<tr>
+<td>Service History Tracking</td>
+<td>Fading physical paper slips</td>
+<td>Immutable digital Repair Passport by serial</td>
+</tr>
+<tr>
+<td>E-Waste Regulatory Link</td>
+<td>Completely unaddressed</td>
+<td>Automated E-Waste Rules 2022 compliance</td>
+</tr>
+<tr>
+<td>Security Perimeter</td>
+<td>Unsecured phone/messaging communication</td>
+<td>JWT, HttpOnly cookies, Zod validation, HSTS</td>
+</tr>
+</table>
+<h1><strong>CHAPTER 3: REQUIREMENTS ANALYSIS</strong></h1>
+<h2><strong>3.1 Functional Requirements</strong></h2>
+<ul>
+<li><strong>• </strong>FR-1 User Authentication: Secure user registration and login with bcrypt password hashing (10 rounds) and JWT generation stored in HttpOnly cookies.</li>
+<li><strong>• </strong>FR-2 Hardware Catalog Management: Full CRUD operations for registered devices, tracking serial numbers, purchase price, purchase date, condition, and fair market value.</li>
+<li><strong>• </strong>FR-3 Diagnostic Problem Reporting: Ticket filing interface allowing users to input free-text symptom narratives, urgency levels, and observed failure modes.</li>
+<li><strong>• </strong>FR-4 Automated Diagnostic & Economic Evaluation: Deterministic calculation of 7-factor repairability scores, incident penalties, depreciated market valuation, and statutory lifecycle actions.</li>
+<li><strong>• </strong>FR-5 Technician Directory & Geolocation: Browsable listing of verified independent repair workshops with granular brand and component specializations.</li>
+<li><strong>• </strong>FR-6 Competitive Quote Bidding: Capability for verified repairers to inspect open repair tickets and submit estimated costs, turnaround days, and scope notes.</li>
+<li><strong>• </strong>FR-7 Quote Decision State Machine: Customer workflow to accept or reject quotes; quote acceptance automatically creates an active RepairJob and marks competing quotes rejected.</li>
+<li><strong>• </strong>FR-8 Workbench Job Stepper: Multi-stage bench tracking interface (DIAGNOSING -> WAITING_FOR_PART -> REPAIRING -> TESTING -> COMPLETED) restricted strictly to assigned specialists.</li>
+<li><strong>• </strong>FR-9 Permanent Repair Passport: Automated creation of immutable service records linked to physical hardware serial numbers upon job completion.</li>
+<li><strong>• </strong>FR-10 Verified Reviews: Post-service rating (1–5 stars) and review submission restricted strictly to customers who have completed a repair job.</li>
+</ul>
+<h2><strong>3.2 Non-Functional Requirements</strong></h2>
+<ul>
+<li><strong>• Performance: </strong>Sub-Millisecond Engine Latency: Deterministic diagnostic evaluations must execute in < 1 ms without external network hops or API dependencies.</li>
+<li><strong>• Security: </strong>Comprehensive Perimeter Defense: Strict suppression of raw JWTs from browser JSON bodies, sliding-window rate limiting on auth routes, and automated database error sanitization.</li>
+<li><strong>• Reliability: </strong>Transactional Integrity: Relational foreign key constraints, cascading deletions, and unique invariants enforced by PostgreSQL to eliminate orphaned records.</li>
+<li><strong>• Scalability: </strong>Zero-Downtime Serverless Scaling: Full compatibility with serverless auto-scaling and connection pooling (PgBouncer) on Neon PostgreSQL.</li>
+<li><strong>• Usability: </strong>Responsive Editorial User Interface: Mobile-first responsive layouts styled with Tailwind CSS v4, supporting reduced-motion and high-contrast accessibility standards.</li>
+</ul>
+<h2><strong>3.3 Hardware Requirements</strong></h2>
+<p>Development Environment: Modern multi-core x86_64 or ARM64 processor (e.g., Apple Silicon M-series or Intel Core i5/i7), minimum 8 GB RAM (16 GB recommended), and 2 GB available disk space for Node.js runtimes and local PostgreSQL testing.<br>Production Cloud Server: Managed cloud serverless compute nodes provisioned dynamically by Vercel; zero local server hardware maintenance.</p>
+<h2><strong>3.4 Software Requirements</strong></h2>
+<p>Table 2 details the software tools, runtimes, and platform specifications utilized across development and production.</p>
+<table>
+<tr>
+<th>Layer / Component</th>
+<th>Development Specification</th>
+<th>Production Specification</th>
+</tr>
+<tr>
+<td>Operating System</td>
+<td>macOS Sonoma (Darwin arm64) / Linux</td>
+<td>Vercel Serverless Linux Container</td>
+</tr>
+<tr>
+<td>Runtime Environment</td>
+<td>Node.js 24.x (LTS) & npm 11+</td>
+<td>Node.js 24.x Serverless Execution</td>
+</tr>
+<tr>
+<td>Application Framework</td>
+<td>Next.js 15 (App Router) & React 19</td>
+<td>Next.js 15 Optimized Turbopack Bundle</td>
+</tr>
+<tr>
+<td>Database Engine</td>
+<td>PostgreSQL 16 (Local instance)</td>
+<td>Neon Serverless PostgreSQL 16+</td>
+</tr>
+<tr>
+<td>ORM & Migration Engine</td>
+<td>Prisma ORM 6.4.1 (Prisma Client & CLI)</td>
+<td>Prisma Client (Pooled PgBouncer)</td>
+</tr>
+<tr>
+<td>Version Control</td>
+<td>Git 2.40+ (Local repository)</td>
+<td>GitHub Canonical Source of Truth</td>
+</tr>
+</table>
+<h2><strong>3.5 User Roles & Permissions Matrix</strong></h2>
+<p>Table 3 outlines the role-based access control (RBAC) boundaries enforced across the three primary system roles.</p>
+<table>
+<tr>
+<th>Role Enum</th>
+<th>Operational Definition</th>
+<th>Permitted System Actions</th>
+</tr>
+<tr>
+<td>USER</td>
+<td>Consumer or enterprise device owner seeking hardware servicing</td>
+<td>Register/manage owned devices, file repair tickets, run diagnostics, review bids, accept quotes, view passports, write reviews.</td>
+</tr>
+<tr>
+<td>REPAIRER</td>
+<td>Verified independent technician or commercial repair workshop</td>
+<td>Create business profile, declare component specializations, browse open tickets, submit quotes, manage assigned jobs in workbench.</td>
+</tr>
+<tr>
+<td>ADMIN</td>
+<td>Platform administrator maintaining governance and integrity</td>
+<td>Catalog-wide visibility, technician verification review, ticket inspection, demo seed resets, audit trail inspection.</td>
+</tr>
+</table>
+<h2><strong>3.6 System Constraints & Invariants</strong></h2>
+<ul>
+<li><strong>• Invariant 1: </strong>Email Uniqueness: Every User record enforces a unique index on User.email.</li>
+<li><strong>• Invariant 2: </strong>Quote Exclusivity in Jobs: A Quote can produce at most one RepairJob (enforced via unique Quote.id in RepairJob).</li>
+<li><strong>• Invariant 3: </strong>Single Active Job per Request: A RepairRequest can produce exactly one active RepairJob, preventing multiple accepted bids.</li>
+<li><strong>• Invariant 4: </strong>Review Uniqueness: Exactly one Review per completed RepairJob; reviews cannot be filed for uncompleted or cancelled jobs.</li>
+<li><strong>• Invariant 5: </strong>Cascading Deletions: Deleting a User or Device automatically cascades to delete child tickets and quotes, preventing orphaned records.</li>
+</ul>
+<h1><strong>CHAPTER 4: SYSTEM ARCHITECTURE</strong></h1>
+<h2><strong>4.1 Overall Architectural Topology</strong></h2>
+<p>RepairGraph implements a unified, full-stack cloud architecture where frontend presentation, REST API route handlers, server business services, and deterministic decision algorithms reside within a single cohesive Next.js 15 deployment on Vercel. Persistent relational storage is provided by Neon Managed Serverless PostgreSQL connected over secure pooled TLS.</p>
+<div class='figure-box'><img src='docs/report_assets/figure1_architecture.png' alt='Figure 1: RepairGraph Unified Full-Stack Architecture'><div class='figure-cap'>Figure 1: RepairGraph Unified Full-Stack Architecture</div></div>
+<h2><strong>4.2 Client Layer (React 19 & Tailwind CSS v4)</strong></h2>
+<p>The presentation layer utilizes Next.js 15 App Router architecture with React 19. Pages are structured as Server Components by default for rapid server-side rendering (SSR) and search engine optimization, while interactive stateful interfaces (e.g., the interactive workbench stepper, symptom input modals, and quote acceptance dialogs) leverage React Client Components. Styling follows an industrial editorial design system implemented via Tailwind CSS v4, utilizing monospace tabular figures for financial accuracy, warm stone backgrounds (#fafaf9), deep charcoal typography (#1c1917), and international safety orange accents (#ea580c).</p>
+<h2><strong>4.3 Application & Service Layer</strong></h2>
+<p>The backend follows a domain-driven, layered service architecture located under src/server/services/*. Specific service modules encapsulate all business rules, lifecycle state machines, and relational transformations:</p>
+<ul>
+<li><strong>• </strong>auth.service.ts: Registration, bcrypt salting, credential verification, and profile sanitization.</li>
+<li><strong>• </strong>device.service.ts: Ownership verification, hardware valuation formulas, and catalog querying.</li>
+<li><strong>• </strong>quote.service.ts: Bid creation, technician eligibility checks, and atomic quote acceptance workflows.</li>
+<li><strong>• </strong>repairJob.service.ts: Workbench stage advancements and automated Repair Passport ledger logging.</li>
+<li><strong>• </strong>repairer.service.ts: Directory queries, specialization filtering, and average star-rating recalculations.</li>
+</ul>
+<h2><strong>4.4 API & Routing Layer</strong></h2>
+<p>The REST API is implemented through 21 Next.js Route Handler files (route.ts) under src/app/api/*, serving 36 distinct HTTP method handlers. All endpoints adhere to standard REST conventions, parsing request bodies through Zod validation schemas and returning consistent JSON envelopes ({ data: ... } or RFC 7807 structured error objects).</p>
+<h2><strong>4.5 Authentication & Session Management</strong></h2>
+<p>User sessions are maintained via JSON Web Tokens (JWT) signed with HMAC-SHA256. To eliminate cross-site scripting (XSS) token theft from localStorage, tokens are transmitted exclusively via HttpOnly, SameSite=lax, Secure cookies (rg_token). Raw tokens are suppressed from JSON responses during browser login.</p>
+<h2><strong>4.6 Deterministic Decision Engine</strong></h2>
+<p>The diagnostic core resides in src/server/engine/* and operates entirely without external API calls or non-deterministic ML models. Tier 1 extracts diagnostic tokens via regex word-boundary matching, while Tier 2 evaluates the 7-Factor Repairability Score Model, depreciation math, and statutory lifecycle thresholds in sub-millisecond execution time.</p>
+<h2><strong>4.7 Persistence Layer (Prisma ORM)</strong></h2>
+<p>Database interaction is mediated by Prisma ORM 6.4.1 (@prisma/client). Prisma provides compile-time type safety, parameterized SQL generation that immunizes the application against SQL injection, and automated relational constraint enforcement across 11 normalized models.</p>
+<h2><strong>4.8 Cloud Deployment Architecture</strong></h2>
+<p>The entire web application and backend API execute within Vercel Serverless Functions on the Node.js 24.x runtime. Vercel's global Anycast Edge Network handles global DNS resolution, DDoS defense, static asset caching, and TLS 1.3 termination. Persistent data resides in Neon Serverless PostgreSQL, utilizing PgBouncer connection pooling to support bursty serverless workloads without exhausting database connection limits.</p>
+<h2><strong>4.9 End-to-End Data & Control Flow</strong></h2>
+<p>Figure 2 illustrates the multi-stage validation, security, and processing pipeline traversed by every incoming client request.</p>
+<div class='figure-box'><img src='docs/report_assets/figure2_data_flow.png' alt='Figure 2: End-to-End Request & Data Processing Pipeline'><div class='figure-cap'>Figure 2: End-to-End Request & Data Processing Pipeline</div></div>
+<h1><strong>CHAPTER 5: TECHNOLOGY STACK</strong></h1>
+<h2><strong>5.1 Framework & Runtime Selection</strong></h2>
+<p>Next.js 15 (App Router) was selected as the foundational full-stack framework because it uniquely unifies server-side React rendering, static asset optimization, and robust Node.js serverless route execution within a single codebase. Running on the latest Node.js 24.x LTS runtime ensures access to modern JavaScript engine optimizations (V8 v12+) and native cryptographic primitives.</p>
+<h2><strong>5.2 Frontend & UI Libraries</strong></h2>
+<ul>
+<li><strong>• </strong>React 19: Provides concurrent rendering, transition hooks, and modular component architecture.</li>
+<li><strong>• </strong>Tailwind CSS v4: Delivers an ultra-fast post-CSS engine and utility-first styling without runtime overhead.</li>
+<li><strong>• </strong>Lucide React (v1.45.0): Lightweight, accessible SVG iconography representing hardware components and status states.</li>
+</ul>
+<h2><strong>5.3 Backend & Validation Technologies</strong></h2>
+<ul>
+<li><strong>• </strong>TypeScript 5: Enforces static typing across the entire codebase, eliminating null pointer exceptions and schema mismatch bugs.</li>
+<li><strong>• </strong>Zod (v4.6.2): Type-safe schema validation library used across all route handlers to strictly parse and sanitize incoming HTTP payloads.</li>
+<li><strong>• </strong>bcryptjs (v3.0.3): Implements salted Blowfish hashing (10 rounds) for cryptographically secure user password storage.</li>
+<li><strong>• </strong>jsonwebtoken (v9.0.3): Implements standard RFC 7519 JSON Web Token signing and verification with HMAC-SHA256.</li>
+</ul>
+<h2><strong>5.4 Database & Persistence Stack</strong></h2>
+<ul>
+<li><strong>• </strong>PostgreSQL 16+: Advanced open-source object-relational database providing ACID guarantees, complex join capabilities, and JSONB support.</li>
+<li><strong>• </strong>Prisma ORM (v6.4.1): Modern type-safe database toolkit providing declarative schema modeling, migration automation, and query building.</li>
+</ul>
+<h2><strong>5.5 Cloud Infrastructure Providers</strong></h2>
+<ul>
+<li><strong>• </strong>Vercel Serverless Platform: Cloud hosting platform providing automated Git integration, serverless function scaling, and Anycast CDN caching.</li>
+<li><strong>• </strong>Neon Serverless PostgreSQL: Fully managed cloud PostgreSQL offering automated connection pooling (PgBouncer) and storage auto-scaling.</li>
+</ul>
+<h2><strong>5.6 Technology Stack Inventory Table</strong></h2>
+<p>Table 4 provides a comprehensive inventory of the technologies, versions, and architectural roles across RepairGraph.</p>
+<table>
+<tr>
+<th>Technology / Tool</th>
+<th>Version</th>
+<th>Category</th>
+<th>Architectural Role</th>
+</tr>
+<tr>
+<td>Next.js</td>
+<td>15.5.25</td>
+<td>Full-Stack Framework</td>
+<td>App Router frontend, SSR/SSG rendering & API Route Handlers</td>
+</tr>
+<tr>
+<td>React</td>
+<td>19.1.0</td>
+<td>UI Library</td>
+<td>Component-driven presentation & client-side hydration</td>
+</tr>
+<tr>
+<td>TypeScript</td>
+<td>^5.0.0</td>
+<td>Programming Language</td>
+<td>Static typing across data models, services, and UI components</td>
+</tr>
+<tr>
+<td>Node.js</td>
+<td>24.x (LTS)</td>
+<td>Runtime Environment</td>
+<td>Serverless function execution on Vercel runtime</td>
+</tr>
+<tr>
+<td>Tailwind CSS</td>
+<td>^4.0.0</td>
+<td>CSS Framework</td>
+<td>Industrial editorial design system and responsive layout styling</td>
+</tr>
+<tr>
+<td>Prisma ORM</td>
+<td>^6.4.1</td>
+<td>Data Access & ORM</td>
+<td>Type-safe database client, schema migrations, and SQL generation</td>
+</tr>
+<tr>
+<td>PostgreSQL (Neon)</td>
+<td>16+</td>
+<td>Relational Database</td>
+<td>Cloud-hosted persistent storage with ACID invariants and pooling</td>
+</tr>
+<tr>
+<td>Vercel</td>
+<td>Production</td>
+<td>Cloud Platform</td>
+<td>Continuous deployment, serverless compute, and Anycast CDN</td>
+</tr>
+<tr>
+<td>Zod</td>
+<td>^4.6.2</td>
+<td>Schema Validation</td>
+<td>Input validation and runtime schema boundary enforcement</td>
+</tr>
+<tr>
+<td>bcryptjs & JWT</td>
+<td>^3.0.3 / ^9.0.3</td>
+<td>Security & Auth</td>
+<td>Password salting (10 rounds) & HMAC-SHA256 session tokens</td>
+</tr>
+</table>
+<div class='page-break'></div>
+<h1><strong>CHAPTER 6: FUNCTIONAL MODULES</strong></h1>
+<p>RepairGraph is structured into 15 cohesive functional modules that span user management, diagnostic intelligence, marketplace transactions, service ledgering, and administrative governance. Each module encapsulates clear functional boundaries, inputs, processing logic, outputs, and corresponding API/database interfaces.</p>
+<h2><strong>6.1 User Authentication & Session Control</strong></h2>
+<p><strong>Purpose: </strong>Manages identity creation, password hashing, session issuance, and cookie invalidation.</p>
+<p><strong>Inputs: </strong>Name, email, plaintext password, role (USER/REPAIRER), optional phone.</p>
+<p><strong>Processing: </strong>Validates schema with Zod; hashes password using bcrypt (10 rounds); checks email uniqueness; generates 7-day JWT; injects HttpOnly secure cookie.</p>
+<p><strong>Outputs: </strong>Sanitized User profile (id, name, email, role) and Set-Cookie header with rg_token.</p>
+<p><strong>Relevant Interfaces: </strong>POST /api/auth/register, POST /api/auth/login, POST /api/auth/logout, GET /api/auth/me; Prisma User model.</p>
+<h2><strong>6.2 Hardware Device Catalog & Valuation</strong></h2>
+<p><strong>Purpose: </strong>Maintains user's personal hardware registry, tracking purchase metadata, physical condition, and dynamic market valuation.</p>
+<p><strong>Inputs: </strong>Category, brand, model, serial number, purchase date, purchase price, warranty expiry, condition.</p>
+<p><strong>Processing: </strong>Enforces user ownership; calculates annual 22% depreciation curve if current value is omitted; validates positive price constraints.</p>
+<p><strong>Outputs: </strong>Persisted Device record with unique ID and calculated fair market valuation.</p>
+<p><strong>Relevant Interfaces: </strong>GET/POST /api/devices, GET/PUT/DELETE /api/devices/:id; Prisma Device model.</p>
+<h2><strong>6.3 Problem Reporting & Triage Initiation</strong></h2>
+<p><strong>Purpose: </strong>Allows device owners to file structured repair tickets describing observed failure modes and operational urgency.</p>
+<p><strong>Inputs: </strong>Device ID, symptom narrative description, urgency level (LOW/MEDIUM/HIGH).</p>
+<p><strong>Processing: </strong>Verifies that the target device is owned by the authenticated user; checks for existing active requests; initializes RequestStatus.REQUESTED.</p>
+<p><strong>Outputs: </strong>Created RepairRequest ticket ready for diagnostic triage or technician quoting.</p>
+<p><strong>Relevant Interfaces: </strong>GET/POST /api/repair-requests, GET/PUT/DELETE /api/repair-requests/:id; Prisma RepairRequest model.</p>
+<h2><strong>6.4 Heuristic Symptom Extraction (Tier 1)</strong></h2>
+<p><strong>Purpose: </strong>Parses unstructured symptom text into structured diagnostic failure signals using token-boundary regex matching.</p>
+<p><strong>Inputs: </strong>Free-text description string (e.g., 'cracked glass and screen flickering after drop') and device category.</p>
+<p><strong>Processing: </strong>Executes heuristic word-boundary matching across 8 component dictionaries; detects acute flags (liquid ingress, swollen battery); computes confidence percentage.</p>
+<p><strong>Outputs: </strong>DiagnosticSignals payload: primaryComponent, issueCategory, severity, confidence, flags.</p>
+<p><strong>Relevant Interfaces: </strong>Invoked synchronously inside POST /api/repair-requests/:id/diagnose; purely in-memory engine computation.</p>
+<h2><strong>6.5 Diagnostic Signal Synthesis</strong></h2>
+<p><strong>Purpose: </strong>Synthesizes raw symptom signals into a persistent database Diagnosis record linked to the active ticket.</p>
+<p><strong>Inputs: </strong>DiagnosticSignals object from symptom extractor.</p>
+<p><strong>Processing: </strong>Maps extracted component to possible root-cause issue; bundles structured evidence bullet points into text array.</p>
+<p><strong>Outputs: </strong>Persisted Diagnosis entity with confidence rating and evidence strings.</p>
+<p><strong>Relevant Interfaces: </strong>Prisma Diagnosis model (1:1 relation with RepairRequest).</p>
+<h2><strong>6.6 7-Factor Repairability Evaluation (Tier 2)</strong></h2>
+<p><strong>Purpose: </strong>Evaluates physical design repairability across 7 engineering dimensions, calibrated by brand and device category.</p>
+<p><strong>Inputs: </strong>Device category, brand, model, purchase date (age in years), diagnostic signals.</p>
+<p><strong>Processing: </strong>Computes 7 weighted factors summing to 100; subtracts incident hazard penalties (liquid -20, power -10, logic board -15); bounds score [10, 98].</p>
+<p><strong>Outputs: </strong>Final repairability score (S_repair) and detailed factor score breakdown.</p>
+<p><strong>Relevant Interfaces: </strong>Invoked in scoringEngine.ts; stored in Prisma RepairRecommendation model.</p>
+<h2><strong>6.7 Fair-Market Economic Analysis</strong></h2>
+<p><strong>Purpose: </strong>Evaluates the financial viability of repairing the hardware relative to its depreciated residual value.</p>
+<p><strong>Inputs: </strong>Device purchase price, age in years, current market value, estimated component repair costs.</p>
+<p><strong>Processing: </strong>Computes depreciated fair market value; queries brand-scaled component cost matrix; calculates Repair Cost Ratio (RCR = C_repair / V_current); computes Economic Score (100 - RCR*100).</p>
+<p><strong>Outputs: </strong>RCR value, economic score (0–100), estimated cost range (min/max).</p>
+<p><strong>Relevant Interfaces: </strong>Invoked in scoringEngine.ts; stored in Prisma RepairRecommendation model.</p>
+<h2><strong>6.8 Statutory Decision & Explanation Generation</strong></h2>
+<p><strong>Purpose: </strong>Synthesizes repairability score, economic score, and incident hazards into an actionable statutory lifecycle verdict.</p>
+<p><strong>Inputs: </strong>ScoringResult, DiagnosticSignals, and DeviceContext.</p>
+<p><strong>Processing: </strong>Evaluates threshold rules for REPAIR, DIY, RESELL, REPLACE, or RECYCLE; composes multi-paragraph explainability citing carbon savings and India E-Waste Rules 2022.</p>
+<p><strong>Outputs: </strong>RecommendedAction enum and structured explanation narrative.</p>
+<p><strong>Relevant Interfaces: </strong>POST /api/repair-requests/:id/diagnose; Prisma RepairRecommendation model.</p>
+<h2><strong>6.9 Verified Repairer Directory & Geolocation</strong></h2>
+<p><strong>Purpose: </strong>Provides a searchable directory of verified independent technicians and commercial repair workshops.</p>
+<p><strong>Inputs: </strong>Filter parameters: device category, brand, verification status, search query.</p>
+<p><strong>Processing: </strong>Queries verified Repairer profiles and associated RepairerSpecialization records; computes aggregate rating and completed job counts.</p>
+<p><strong>Outputs: </strong>Paginated array of verified workshops with address, coordinates, and specialization badges.</p>
+<p><strong>Relevant Interfaces: </strong>GET /api/repairers, GET /api/repairers/:id; Prisma Repairer and RepairerSpecialization models.</p>
+<h2><strong>6.10 Competitive Quote Marketplace</strong></h2>
+<p><strong>Purpose: </strong>Enables verified technicians to discover open repair tickets and submit competitive pricing and turnaround bids.</p>
+<p><strong>Inputs: </strong>Repair request ID, technician user ID, estimated cost, estimated turnaround days, technician notes.</p>
+<p><strong>Processing: </strong>Verifies technician's REPAIRER role and active verification status; ensures technician does not quote on own ticket; prevents duplicate bids on same ticket.</p>
+<p><strong>Outputs: </strong>Created Quote record initialized to QuoteStatus.PENDING.</p>
+<p><strong>Relevant Interfaces: </strong>GET/POST /api/repair-requests/:id/quotes; Prisma Quote model.</p>
+<h2><strong>6.11 Quote Lifecycle & Acceptance State Machine</strong></h2>
+<p><strong>Purpose: </strong>Governs the customer's decision to accept or reject competing technician bids.</p>
+<p><strong>Inputs: </strong>Quote ID, decision action (ACCEPTED / REJECTED / WITHDRAWN).</p>
+<p><strong>Processing: </strong>Verifies customer ownership of the ticket; atomic transaction marks selected quote ACCEPTED, creates active RepairJob, and transitions all competing quotes to REJECTED.</p>
+<p><strong>Outputs: </strong>Updated Quote record and newly instantiated RepairJob entity.</p>
+<p><strong>Relevant Interfaces: </strong>PUT /api/quotes/:id; Prisma Quote, RepairRequest, and RepairJob models.</p>
+<h2><strong>6.12 Repair Job Execution Stepper</strong></h2>
+<p><strong>Purpose: </strong>Manages the multi-stage bench execution workflow for accepted repair jobs.</p>
+<p><strong>Inputs: </strong>Job ID, target status (DIAGNOSING -> WAITING_FOR_PART -> REPAIRING -> TESTING -> COMPLETED), actual cost, technician bench notes.</p>
+<p><strong>Processing: </strong>Verifies that only the assigned technician can update status; validates forward progression; upon COMPLETED, automatically commits RepairHistory record and increments technician totalJobs.</p>
+<p><strong>Outputs: </strong>Updated RepairJob entity with timestamp milestones and bench notes.</p>
+<p><strong>Relevant Interfaces: </strong>GET/PUT /api/repair-jobs/:id, GET /api/repair-jobs; Prisma RepairJob model.</p>
+<h2><strong>6.13 Standardized Repair Passport Ledger</strong></h2>
+<p><strong>Purpose: </strong>Maintains an immutable, tamper-evident maintenance ledger linked permanently to the physical device serial number.</p>
+<p><strong>Inputs: </strong>Completed RepairJob entity, parts replaced list, final cost, servicing technician ID.</p>
+<p><strong>Processing: </strong>Instantiates immutable RepairHistory record upon job completion; provides tamper-evident audit trail for warranty and resale valuation.</p>
+<p><strong>Outputs: </strong>Permanent service record displaying parts replaced, date, cost, and technician credentials.</p>
+<p><strong>Relevant Interfaces: </strong>GET /api/repair-history; Prisma RepairHistory model.</p>
+<h2><strong>6.14 Post-Service Reviews & Rating Synthesis</strong></h2>
+<p><strong>Purpose: </strong>Allows customers to rate and review completed repair jobs, driving meritocratic technician reputation.</p>
+<p><strong>Inputs: </strong>Repair job ID, star rating (1–5), review comment.</p>
+<p><strong>Processing: </strong>Verifies job is COMPLETED; verifies customer ownership; prevents duplicate reviews via unique constraint; recalculates technician average rating.</p>
+<p><strong>Outputs: </strong>Created Review record and updated Repairer aggregate rating.</p>
+<p><strong>Relevant Interfaces: </strong>POST /api/reviews, GET /api/repairers/:id/reviews; Prisma Review and Repairer models.</p>
+<h2><strong>6.15 Administrative & Seed Controls</strong></h2>
+<p><strong>Purpose: </strong>Provides platform governance, system health observability, and test persona database provisioning.</p>
+<p><strong>Inputs: </strong>Admin authentication session or seed trigger payload.</p>
+<p><strong>Processing: </strong>Executes active database ping (SELECT 1); seeds default demonstration personas with pre-configured devices and quotes.</p>
+<p><strong>Outputs: </strong>Health telemetry JSON ({ status, database, latencyMs, uptime }) or seed success confirmation.</p>
+<p><strong>Relevant Interfaces: </strong>GET /api/health, POST /api/seed; Prisma Client connection pool.</p>
+<h1><strong>CHAPTER 7: REPAIRGRAPH DECISION ENGINE</strong></h1>
+<h2><strong>7.1 Deterministic Architecture vs. Black-Box AI</strong></h2>
+<p>A foundational engineering decision in RepairGraph is the deliberate rejection of unconstrained generative large language models (LLMs) for diagnostic scoring, repair cost estimation, and statutory lifecycle decisions. Generative AI models suffer from well-documented stochastic variance, hallucination of non-existent hardware specifications, and non-reproducible scoring that cannot withstand legal or academic scrutiny.</p>
+<p>Instead, RepairGraph implements a fully deterministic, two-tier rule-based expert system. Every score point, depreciation curve, cost estimate, and lifecycle verdict is mathematically traceable to explicit formulas, component price matrices, and statutory regulations. Identical symptom inputs and device contexts produce 100% reproducible diagnostic results in sub-millisecond execution time.</p>
+<h2><strong>7.2 Token-Boundary Symptom Parsing</strong></h2>
+<p>Tier 1 triage operates through word-boundary regex token matching (\b) across eight hardware subsystem dictionaries: Display & Digitizer, Power & Battery, I/O & Charging Port, Core Logic & PMIC, Keyboard & Input, Acoustic Subsystem, Optical Camera, and Non-Volatile Storage. Word-boundary constraints prevent false-positive sub-string matches (e.g., distinguishing 'port' from 'important').</p>
+<h2><strong>7.3 Subsystem Classification & Hazard Detection</strong></h2>
+<p>In addition to component classification, the parser executes concurrent pattern scans for acute safety hazards:</p>
+<ul>
+<li><strong>• </strong>Liquid Damage Detection: Keywords ('water', 'liquid', 'spill', 'coffee', 'submerged') trigger liquidDamage = true.</li>
+<li><strong>• </strong>Power Failure Detection: Keywords ('no power', 'won\'t turn on', 'dead', 'short circuit', 'burnt', 'smoke') trigger powerFailure = true.</li>
+<li><strong>• </strong>Lithium Battery Combustion Risk: Keywords ('swollen', 'swelling', 'bulging') trigger immediate escalation to CRITICAL severity with physical safety warnings.</li>
+</ul>
+<h2><strong>7.4 Diagnostic Confidence Formulation</strong></h2>
+<p>Diagnostic confidence (C in [50, 95]) is derived deterministically from the density of matching domain tokens:</p>
+<p><em>Confidence = min(95, max(50, 60 + matchCount * 10))</em></p>
+<p>Single-keyword matches receive a baseline 70% confidence, while multi-symptom descriptions converge toward the 95% ceiling.</p>
+<h2><strong>7.5 7-Factor Baseline Repairability Score Model</strong></h2>
+<p>RepairGraph formulates an original 7-Factor Repairability Score Model (S_baseline in [0, 100]) informed by general international repairability standards (e.g., French Repairability Index and IEEE standards). The model allocates 100 points across seven dimensions:</p>
+<p>Table 5 defines the weight distribution, maximum points, and evaluation criteria for each of the seven factors.</p>
+<table>
+<tr>
+<th>#</th>
+<th>Factor Dimension</th>
+<th>Weight / Max</th>
+<th>Evaluation Criteria & Benchmarks</th>
+</tr>
+<tr>
+<td>1</td>
+<td>Physical Disassembly & Fasteners</td>
+<td>25 Pts (25%)</td>
+<td>Captive Phillips/Torx screws (Framework: 24, Lenovo: 21) vs. adhesive seals and Pentalobe screws (Apple: 14).</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Spare Parts Availability</td>
+<td>20 Pts (20%)</td>
+<td>Open commercial parts supply in domestic market (Framework: 19, Apple/Samsung: 18) vs. restricted depot catalogs (Sony: 12).</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Documentation & Repair Manuals</td>
+<td>15 Pts (15%)</td>
+<td>Open-source schematics (Framework: 15) and public HMM manuals (Lenovo: 14) vs. restricted service manuals (Sony: 8).</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Hardware Modularity</td>
+<td>15 Pts (15%)</td>
+<td>Socketed M.2/SO-DIMM slots (Framework: 15, Dell: 13) vs. soldered unified memory/NAND (Apple: 6).</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Software Locks & Parts Pairing</td>
+<td>10 Pts (10%)</td>
+<td>Plug-and-play operation (10) vs. cryptographic serial pairing barriers (Apple: 5, Samsung: 7).</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Device Age & Lifecycle Support</td>
+<td>10 Pts (10%)</td>
+<td>Evaluated dynamically as max(0, min(10, round(10 - 1.5 * ageYears))). Current gen: 10, legacy (>5 yrs): 0–2.</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Local Service Ecosystem & Tools</td>
+<td>5 Pts (5%)</td>
+<td>Density of certified workshops and standard tool availability across Indian metro hubs (Apple/Lenovo: 5, Framework: 3).</td>
+</tr>
+</table>
+<h2><strong>7.6 Incident-Specific Deduction Penalties</strong></h2>
+<p>When evaluating an active repair incident, acute hazards apply explicit penalty deductions from the baseline score, yielding the final repairability score S_repair:</p>
+<p><em>S_repair = max(10, min(98, S_baseline - Penalties))</em></p>
+<p>Table 6 details the deduction amounts and engineering justifications for incident penalties.</p>
+<table>
+<tr>
+<th>Hazard Incident</th>
+<th>Deduction</th>
+<th>Engineering Rationale</th>
+</tr>
+<tr>
+<td>Liquid Damage</td>
+<td>-20 Points</td>
+<td>High risk of latent electrolytic oxidation, dendritic growth, and PCB substrate delamination.</td>
+</tr>
+<tr>
+<td>Core Logic Board Fault</td>
+<td>-15 Points</td>
+<td>Requires multi-layer board trace inspection, BGA reballing, or micro-soldering.</td>
+</tr>
+<tr>
+<td>Power Failure / Short</td>
+<td>-10 Points</td>
+<td>Main power rail or PMIC breakdown threatening cascading IC overvoltage damage.</td>
+</tr>
+<tr>
+<td>Critical Failure Severity</td>
+<td>-10 Points</td>
+<td>Multi-subsystem compromise or acute physical hazard (e.g., swollen pouch cell).</td>
+</tr>
+</table>
+<h2><strong>7.7 Device Depreciation & Valuation Formulation</strong></h2>
+<p>Consumer electronics experience steep annual depreciation. When a current market valuation is not explicitly supplied, the engine computes the depreciated fair market value V_current from the original purchase price P and age in years t:</p>
+<p><em>V_depreciated = P * (1 - 0.22)^t</em></p>
+<p><em>V_current = max(P * 0.15, round(V_depreciated / 100) * 100)</em></p>
+<p>A statutory residual floor of 15% of the purchase price is enforced, reflecting the salvage value of raw materials and functional sub-assemblies.</p>
+<h2><strong>7.8 Component Replacement Cost Benchmarks</strong></h2>
+<p>Estimated repair costs [C_min, C_max] are computed via a multi-dimensional matrix (src/server/engine/costMatrix.ts) scaled by hardware category, component type, and brand tier. High-end flagship brands (Apple, Framework) incorporate a 1.2x–1.35x premium reflecting specialized OEM parts pricing, while mainstream brands (Lenovo, Dell, Xiaomi) reflect domestic aftermarket benchmarks.</p>
+<h2><strong>7.9 Repair Cost Ratio (RCR) Calculation</strong></h2>
+<p>The Repair Cost Ratio (RCR) evaluates repair economics by comparing average estimated repair cost against current fair market value:</p>
+<p><em>C_avg = (C_min + C_max) / 2</em></p>
+<p><em>RCR = C_avg / V_current</em></p>
+<h2><strong>7.10 Value-Preservation Economic Score</strong></h2>
+<p>The Economic Score (S_econ in [0, 100]) quantifies the degree of residual value preserved by repairing rather than replacing:</p>
+<p><em>S_econ = max(0, min(100, round((1 - RCR) * 100)))</em></p>
+<p>An RCR of 0.25 yields an economic score of 75/100 (highly viable), whereas an RCR of 0.85 yields 15/100 (financially unviable).</p>
+<h2><strong>7.11 Statutory Lifecycle Decision Matrix</strong></h2>
+<p>The decision engine evaluates RCR, S_repair, device age, and hazard flags against statutory rules to output one of five recommendations. Table 7 summarizes the decision rules and corresponding statutory classifications.</p>
+<table>
+<tr>
+<th>Action Verdict</th>
+<th>Mathematical & Incident Conditions</th>
+<th>Statutory Classification & Rationale</th>
+</tr>
+<tr>
+<td>RECYCLE</td>
+<td>Liquid AND Power failure, OR (Logic Board AND RCR > 0.85), OR RCR > 0.92</td>
+<td>India E-Waste Rules 2022: Hardware non-viable; divert to authorized EPR recyclers for precious metal recovery.</td>
+</tr>
+<tr>
+<td>DIY</td>
+<td>diyFeasible == true AND S_repair >= 72 AND RCR <= 0.28</td>
+<td>Right to Repair: Modular component accessible for safe consumer self-replacement using standard hand tools.</td>
+</tr>
+<tr>
+<td>REPAIR</td>
+<td>RCR <= 0.52 AND S_repair >= 42</td>
+<td>Professional Repair: Economically sound; well below 50% replacement threshold; preserves operational life.</td>
+</tr>
+<tr>
+<td>RESELL</td>
+<td>0.50 < RCR <= 0.75 AND powerFailure == false</td>
+<td>Secondary Market Salvage: Repair approaches marginal utility; liquidation or parts salvage yields higher return.</td>
+</tr>
+<tr>
+<td>REPLACE</td>
+<td>RCR > 0.75 OR ageYears >= 6.0 OR S_repair < 35</td>
+<td>Hardware Retirement: Capital better deployed to modern system with active security support.</td>
+</tr>
+</table>
+<h2><strong>7.12 Automated Explainability Audit Trail</strong></h2>
+<p>Every decision compiles three structured explainability bullets: Economic Assessment, Technical Feasibility, and Environmental Impact (calculating CO2e manufacturing emissions averted and electronic waste grams diverted under the E-Waste Rules 2022).</p>
+<div class='figure-box'><img src='docs/report_assets/figure3_engine_flow.png' alt='Figure 3: Deterministic Diagnostic & Decision Engine Flow'><div class='figure-cap'>Figure 3: Deterministic Diagnostic & Decision Engine Flow</div></div>
+<h1><strong>CHAPTER 8: DATABASE DESIGN</strong></h1>
+<h2><strong>8.1 Relational Design Philosophy</strong></h2>
+<p>RepairGraph utilizes a strictly normalized relational database architecture implemented on PostgreSQL 16+. Relational modeling was chosen over document-based NoSQL stores because hardware maintenance requires strong transactional consistency (ACID), strict foreign key enforcement, multi-table quote comparisons, and permanent audit provenance across device transfers.</p>
+<h2><strong>8.2 Entity Relationship Diagram (11 Models)</strong></h2>
+<p>Figure 4 depicts the entity-relationship model comprising 11 core tables and their cardinality relationships.</p>
+<div class='figure-box'><img src='docs/report_assets/figure4_er_diagram.png' alt='Figure 4: Relational Database Schema & Entity Relationships (11 Models)'><div class='figure-cap'>Figure 4: Relational Database Schema & Entity Relationships (11 Models)</div></div>
+<h2><strong>8.3 Relational Entity Specifications</strong></h2>
+<p>Table 8 catalogs the 11 normalized relational models defined in prisma/schema.prisma.</p>
+<table>
+<tr>
+<th>Model Name</th>
+<th>Primary Key & Relations</th>
+<th>Functional Responsibility</th>
+</tr>
+<tr>
+<td>User</td>
+<td>id (PK, cuid), Unique email</td>
+<td>Stores user identities, bcrypt password hashes, and roles (USER/REPAIRER/ADMIN).</td>
+</tr>
+<tr>
+<td>Device</td>
+<td>id (PK), FK -> User</td>
+<td>Physical hardware registry (category, brand, model, serial, purchasePrice, valuation).</td>
+</tr>
+<tr>
+<td>RepairRequest</td>
+<td>id (PK), FK -> Device, FK -> User</td>
+<td>Problem tickets capturing user symptoms, urgency, and lifecycle status.</td>
+</tr>
+<tr>
+<td>Diagnosis</td>
+<td>id (PK), 1:1 FK -> RepairRequest</td>
+<td>Stores failure category, root-cause issue, confidence, and evidence points.</td>
+</tr>
+<tr>
+<td>RepairRecommendation</td>
+<td>id (PK), 1:1 FK -> RepairRequest</td>
+<td>Decision engine outputs: repairability score, economic score, action, and reasoning.</td>
+</tr>
+<tr>
+<td>Repairer</td>
+<td>id (PK), 1:1 FK -> User</td>
+<td>Technician business profile, address, geolocation coordinates, rating, and total jobs.</td>
+</tr>
+<tr>
+<td>RepairerSpecialization</td>
+<td>id (PK), FK -> Repairer</td>
+<td>Granular technician competencies mapped by device category, brand, and service type.</td>
+</tr>
+<tr>
+<td>Quote</td>
+<td>id (PK), FK -> RepairRequest, FK -> Repairer</td>
+<td>Competitive technician bids specifying estimated cost, days, notes, and status.</td>
+</tr>
+<tr>
+<td>RepairJob</td>
+<td>id (PK), 1:1 -> RepairRequest, 1:1 -> Quote</td>
+<td>Active repair execution state machine orchestrating bench stages to completion.</td>
+</tr>
+<tr>
+<td>RepairHistory</td>
+<td>id (PK), FK -> Device, 1:1 -> RepairJob</td>
+<td>Standardized Repair Passport: immutable maintenance ledger tied to serial numbers.</td>
+</tr>
+<tr>
+<td>Review</td>
+<td>id (PK), 1:1 -> RepairJob, FK -> User</td>
+<td>Post-service customer feedback, 1–5 star ratings, and technician review text.</td>
+</tr>
+</table>
+<h2><strong>8.4 Custom Enums (9 Enums)</strong></h2>
+<p>Table 9 defines the 9 database enums enforcing strict domain constraints at the database level.</p>
+<table>
+<tr>
+<th>Enum Identifier</th>
+<th>Allowed Constant Values</th>
+<th>Domain Context</th>
+</tr>
+<tr>
+<td>UserRole</td>
+<td>USER, REPAIRER, ADMIN</td>
+<td>Role-based access control and system authorization boundaries.</td>
+</tr>
+<tr>
+<td>DeviceCategory</td>
+<td>SMARTPHONE, LAPTOP, TABLET, HEADPHONES, MONITOR</td>
+<td>Supported consumer electronic hardware categories.</td>
+</tr>
+<tr>
+<td>DeviceCondition</td>
+<td>EXCELLENT, GOOD, FAIR, DEGRADED, CRITICAL</td>
+<td>Physical condition and cosmetic/functional state of hardware.</td>
+</tr>
+<tr>
+<td>UrgencyLevel</td>
+<td>LOW, MEDIUM, HIGH</td>
+<td>Customer-reported urgency for repair turnaround priority.</td>
+</tr>
+<tr>
+<td>RequestStatus</td>
+<td>REQUESTED, ACCEPTED, DIAGNOSING, WAITING_FOR_PART, REPAIRING, TESTING, COMPLETED, CANCELLED</td>
+<td>End-to-end lifecycle states for repair tickets.</td>
+</tr>
+<tr>
+<td>RecommendedAction</td>
+<td>REPAIR, DIY, REPLACE, RESELL, RECYCLE</td>
+<td>Statutory decision engine verdict outcomes.</td>
+</tr>
+<tr>
+<td>VerificationStatus</td>
+<td>PENDING, VERIFIED, REJECTED</td>
+<td>Technician credential verification and passport entry trust status.</td>
+</tr>
+<tr>
+<td>QuoteStatus</td>
+<td>PENDING, ACCEPTED, REJECTED, WITHDRAWN</td>
+<td>Bidding lifecycle states for technician quotes.</td>
+</tr>
+<tr>
+<td>JobStatus</td>
+<td>ACCEPTED, DIAGNOSING, WAITING_FOR_PART, REPAIRING, TESTING, COMPLETED, CANCELLED</td>
+<td>Active bench execution milestones for repair jobs.</td>
+</tr>
+</table>
+<h2><strong>8.5 Relational Invariants & Integrity Constraints</strong></h2>
+<ul>
+<li><strong>• </strong>Foreign Key Cascades: Child records reference parents via onDelete: Cascade, ensuring zero orphaned entities upon deletion.</li>
+<li><strong>• </strong>Single Job per Quote: Unique constraint on RepairJob.quoteId guarantees that a quote produces at most one active job.</li>
+<li><strong>• </strong>Single Job per Request: Unique constraint on RepairJob.repairRequestId ensures only one quote is accepted per ticket.</li>
+<li><strong>• </strong>Single Review per Job: Unique constraint on Review.repairJobId prevents duplicate review submissions.</li>
+</ul>
+<h2><strong>8.6 Prisma Schema & Migration Baseline</strong></h2>
+<p>The production schema is managed strictly through version-controlled Prisma migrations. The baseline migration (prisma/migrations/0_init/migration.sql) is deployed to production using npx prisma migrate deploy, explicitly prohibiting destructive prisma db push in production.</p>
+<h2><strong>8.7 Cloud Serverless Pooling with Neon</strong></h2>
+<p>Because serverless functions execute ephemerally, direct database connections can rapidly exhaust connection limits. Neon provides an integrated PgBouncer connection pooler accessed via port 6543 (DATABASE_URL), while direct connections (port 5432 via DIRECT_URL) are reserved for executing declarative schema migrations.</p>
+<h1><strong>CHAPTER 9: REST API DESIGN</strong></h1>
+<h2><strong>9.1 RESTful Conventions & Error Payloads</strong></h2>
+<p>All API routes are served under the /api base path and conform strictly to REST principles. Standard HTTP verbs (GET, POST, PUT, DELETE) express semantic intent. Successful responses return standardized envelopes ({ data: ... }), while errors return RFC 7807 structured objects ({ error: { code, message, details } }) with accurate HTTP status codes (200, 201, 400, 401, 403, 404, 409, 429, 500).</p>
+<h2><strong>9.2 API Resource Namespaces</strong></h2>
+<p>The API spans 10 cohesive resource namespaces: /api/auth, /api/devices, /api/repair-requests, /api/quotes, /api/repair-jobs, /api/repair-history, /api/repairers, /api/reviews, /api/health, and /api/seed.</p>
+<h2><strong>9.3 HTTP Method Operations Catalog</strong></h2>
+<p>The backend implements exactly 21 Next.js route handler files (route.ts) comprising 36 distinct HTTP method handlers (13 GET, 11 POST, 7 PUT, 5 DELETE).</p>
+<h2><strong>9.4 CRUD Functionality Across Resource Namespaces</strong></h2>
+<p>Table 10 demonstrates verified CRUD operations across all domain entities.</p>
+<table>
+<tr>
+<th>Resource Namespace</th>
+<th>Create (C)</th>
+<th>Read (R)</th>
+<th>Update (U)</th>
+<th>Delete (D)</th>
+</tr>
+<tr>
+<td>Devices (/api/devices)</td>
+<td>POST /devices</td>
+<td>GET /devices, /:id</td>
+<td>PUT /devices/:id</td>
+<td>DELETE /devices/:id</td>
+</tr>
+<tr>
+<td>Requests (/api/repair-requests)</td>
+<td>POST /repair-requests</td>
+<td>GET /requests, /:id</td>
+<td>PUT /requests/:id</td>
+<td>DELETE /requests/:id</td>
+</tr>
+<tr>
+<td>Quotes (/api/quotes)</td>
+<td>POST /requests/:id/quotes</td>
+<td>GET /quotes, /:id</td>
+<td>PUT /quotes/:id</td>
+<td>DELETE /quotes/:id</td>
+</tr>
+<tr>
+<td>Jobs (/api/repair-jobs)</td>
+<td>POST /repair-jobs</td>
+<td>GET /jobs, /:id</td>
+<td>PUT /repair-jobs/:id</td>
+<td>Cancelled status</td>
+</tr>
+<tr>
+<td>Passport (/api/repair-history)</td>
+<td>Auto on completion</td>
+<td>GET /repair-history</td>
+<td>Immutable by design</td>
+<td>Cascades on device delete</td>
+</tr>
+<tr>
+<td>Reviews (/api/reviews)</td>
+<td>POST /reviews</td>
+<td>GET /reviews, /:id</td>
+<td>PUT /reviews/:id</td>
+<td>DELETE /reviews/:id</td>
+</tr>
+</table>
+<h2><strong>9.5 Representative REST API Route Catalog</strong></h2>
+<p>Table 11 catalogs representative endpoints implemented in src/app/api.</p>
+<table>
+<tr>
+<th>Endpoint Route</th>
+<th>Method</th>
+<th>Auth Requirement</th>
+<th>Functional Description</th>
+</tr>
+<tr>
+<td>/api/auth/register</td>
+<td>POST</td>
+<td>Public</td>
+<td>Creates user account, hashes password with bcrypt, sets session cookie.</td>
+</tr>
+<tr>
+<td>/api/auth/login</td>
+<td>POST</td>
+<td>Public</td>
+<td>Verifies credentials, issues JWT in HttpOnly cookie, suppresses raw token.</td>
+</tr>
+<tr>
+<td>/api/auth/me</td>
+<td>GET</td>
+<td>Authenticated</td>
+<td>Returns authenticated user profile and role.</td>
+</tr>
+<tr>
+<td>/api/devices</td>
+<td>GET/POST</td>
+<td>Authenticated</td>
+<td>Lists user's devices; registers new physical hardware asset.</td>
+</tr>
+<tr>
+<td>/api/devices/:id</td>
+<td>GET/PUT/DEL</td>
+<td>Owner / Admin</td>
+<td>Inspects, modifies valuation, or deletes registered device.</td>
+</tr>
+<tr>
+<td>/api/repair-requests/:id/diagnose</td>
+<td>POST</td>
+<td>Owner / Admin</td>
+<td>Executes deterministic diagnostic & economic decision engine.</td>
+</tr>
+<tr>
+<td>/api/repair-requests/:id/quotes</td>
+<td>GET/POST</td>
+<td>Technician / Owner</td>
+<td>Lists quotes; technician submits competitive bid.</td>
+</tr>
+<tr>
+<td>/api/quotes/:id</td>
+<td>PUT/DEL</td>
+<td>Owner / Technician</td>
+<td>Accepts quote (creates job) or withdraws submitted quote.</td>
+</tr>
+<tr>
+<td>/api/repair-jobs/:id</td>
+<td>GET/PUT</td>
+<td>Assigned Tech / Owner</td>
+<td>Inspects bench progress; technician advances lifecycle stages.</td>
+</tr>
+<tr>
+<td>/api/health</td>
+<td>GET</td>
+<td>Public</td>
+<td>Active PostgreSQL ping (SELECT 1) returning connection latency and uptime.</td>
+</tr>
+</table>
+<h1><strong>CHAPTER 10: AUTHENTICATION AND SECURITY</strong></h1>
+<h2><strong>10.1 Password Cryptography (bcrypt)</strong></h2>
+<p>User passwords are protected using bcrypt with a salt cost factor of 10. Passwords undergo irreversible salting and hashing prior to database insertion, protecting credentials against offline dictionary and rainbow-table attacks.</p>
+<h2><strong>10.2 JWT Session Tokens & Cookie Security</strong></h2>
+<p>Authentication sessions are encapsulated in JSON Web Tokens signed with HMAC-SHA256 using a high-entropy secret key (JWT_SECRET). Tokens are transmitted exclusively in cookies named rg_token configured with:</p>
+<ul>
+<li><strong>• </strong>HttpOnly: true — Prevents client-side JavaScript access, neutralizing Cross-Site Scripting (XSS) session theft.</li>
+<li><strong>• </strong>SameSite: lax — Prevents Cross-Site Request Forgery (CSRF) in standard cross-origin top-level navigation.</li>
+<li><strong>• </strong>Secure: true — Automatically enforced in production environments (NODE_ENV === 'production'), ensuring transmission only over TLS 1.3.</li>
+<li><strong>• </strong>Path: / — Scopes the cookie across all application routes.</li>
+</ul>
+<h2><strong>10.3 Token Suppression Strategy</strong></h2>
+<p>By default, browser authentication responses from /api/auth/login and /api/auth/register return only sanitized user data and completely omit the raw JWT token string from the JSON payload. This architectural control completely eliminates the temptation or capability of client-side scripts to store tokens in insecure localStorage or sessionStorage.</p>
+<h2><strong>10.4 In-Memory Sliding-Window Rate Limiting</strong></h2>
+<p>Authentication routes are protected by an in-memory sliding-window rate limiter (src/server/auth/rateLimit.ts) keyed by client IP:</p>
+<ul>
+<li><strong>• </strong>Login Limiter: Maximum 10 requests / minute per IP.</li>
+<li><strong>• </strong>Registration Limiter: Maximum 5 requests / minute per IP.</li>
+</ul>
+<p>Exceeded limits immediately trigger HTTP 429 RATE_LIMIT_EXCEEDED with a Retry-After header, defeating credential brute-forcing.</p>
+<h2><strong>10.5 HTTP Defense-in-Depth Security Headers</strong></h2>
+<p>next.config.ts enforces strict HTTP security headers across all routes:</p>
+<ul>
+<li><strong>• </strong>Strict-Transport-Security: max-age=31536000; includeSubDomains (Enforces HTTPS for 1 year).</li>
+<li><strong>• </strong>X-Frame-Options: DENY (Prevents clickjacking framing).</li>
+<li><strong>• </strong>X-Content-Type-Options: nosniff (Blocks MIME-type sniffing).</li>
+<li><strong>• </strong>Referrer-Policy: strict-origin-when-cross-origin (Protects path information).</li>
+<li><strong>• </strong>Permissions-Policy: camera=(), microphone=(), geolocation=() (Restricts browser sensor hardware).</li>
+</ul>
+<h2><strong>10.6 Error Sanitization & Leak Suppression</strong></h2>
+<p>Production error handlers intercept raw database exceptions. Prisma table names, internal SQL queries, and server stack traces are stripped, returning safe, generic error messages to clients while logging full traces to serverless logs.</p>
+<h2><strong>10.7 Zero-Secret Version Control Policy</strong></h2>
+<p>All cryptographic keys (JWT_SECRET) and database credentials (DATABASE_URL, DIRECT_URL) are injected at runtime via cloud provider environment consoles. Zero credentials or secret values exist in source control.</p>
+<div class='page-break'></div>
+<h1><strong>CHAPTER 11: USER WORKFLOW</strong></h1>
+<h2><strong>11.1 Primary Consumer Repair Journey</strong></h2>
+<p>The core consumer workflow guides a device owner through an end-to-end evidence-based lifecycle: from hardware onboarding to completed bench servicing and passport stamping. Figure 5 depicts the sequence of operational states.</p>
+<div class='figure-box'><img src='docs/report_assets/figure5_marketplace_workflow.png' alt='Figure 5: Competitive Repair Marketplace & Lifecycle Workflow'><div class='figure-cap'>Figure 5: Competitive Repair Marketplace & Lifecycle Workflow</div></div>
+<ul>
+<li><strong>1. </strong>Stage 1 — Onboarding & Cataloging: User creates an account, logs in securely, and catalogs physical hardware (brand, model, serial, purchase price, date).</li>
+<li><strong>2. </strong>Stage 2 — Symptom Filing & Triage: Owner submits observed issues. The deterministic engine extracts failure modes, assesses safety hazards, and computes the 7-factor repairability score and RCR.</li>
+<li><strong>3. </strong>Stage 3 — Marketplace Discovery: The ticket is published to the marketplace. Verified technicians inspect triage findings and submit competitive pricing and turnaround bids.</li>
+<li><strong>4. </strong>Stage 4 — Quote Acceptance: Owner evaluates competing bids based on cost, turnaround, and technician rating, accepting the optimal bid and transitioning the ticket to an active RepairJob.</li>
+<li><strong>5. </strong>Stage 5 — Bench Execution: Assigned technician advances the hardware through standardized milestones: Diagnosing -> Parts Waiting -> Repairing -> Testing.</li>
+<li><strong>6. </strong>Stage 6 — Completion & Passport Stamping: Upon final bench handover, the system immutably records parts replaced, costs, and technician signatures into the permanent Repair Passport.</li>
+</ul>
+<h2><strong>11.2 Technician Quoting & Workbench Stepper</strong></h2>
+<p>Technicians access a specialized Workbench interface displaying incoming open requests matching their registered competencies. The workbench enforces authorization barriers: unverified technicians cannot quote, technicians cannot quote on their own hardware, and only the assigned specialist can advance bench milestones.</p>
+<h2><strong>11.3 Alternative Lifecycle Paths</strong></h2>
+<ul>
+<li><strong>• </strong>DIY Path: Triggered when components are modular (e.g., Framework battery) and RCR <= 0.28. Directs user to public step-by-step disassembly guides.</li>
+<li><strong>• </strong>Resell / Trade-In Path: Triggered when repair expenses approach marginal utility (0.50 < RCR <= 0.75). Recommends trade-in or parts salvage.</li>
+<li><strong>• </strong>Replace Path: Triggered for aging (>6 years) or uneconomical (RCR > 0.75) hardware. Recommends capital reallocation to modern hardware.</li>
+<li><strong>• </strong>Recycle Path (E-Waste Compliance): Triggered upon catastrophic failure (liquid + power failure or RCR > 0.92). Channels device to EPR-authorized recyclers under India's E-Waste Rules 2022.</li>
+</ul>
+<h1><strong>CHAPTER 12: IMPLEMENTATION ARCHITECTURE</strong></h1>
+<h2><strong>12.1 Project Directory Organization</strong></h2>
+<p>The codebase adheres to Next.js 15 App Router standards, structured into distinct architectural layers:</p>
+<ul>
+<li><strong>• </strong>src/app/*: Next.js App Router presentation layer, layout trees, page views, and API route handlers.</li>
+<li><strong>• </strong>src/app/api/*: 21 Next.js route handler files (route.ts) serving 36 REST operations.</li>
+<li><strong>• </strong>src/server/services/*: Domain business services encapsulating state transitions and transactional operations.</li>
+<li><strong>• </strong>src/server/engine/*: Pure deterministic diagnostic, scoring, and economic decision engine modules.</li>
+<li><strong>• </strong>src/server/auth/*: Cryptographic utilities, JWT signers, cookie extractors, and sliding-window rate limiters.</li>
+<li><strong>• </strong>prisma/*: Declarative Prisma schema (schema.prisma), baseline migration SQL, and seed scripts.</li>
+<li><strong>• </strong>tests/*: Automated test suites covering engine unit tests (engine.test.ts) and API integration tests (api.test.ts).</li>
+</ul>
+<h2><strong>12.2 Layered Backend Architecture</strong></h2>
+<p>Backend execution follows strict separation of concerns: Route Handlers handle HTTP serialization and error wrapping; Zod schemas enforce input types; Services coordinate business invariants; the Engine computes scores; and Prisma Client mediates SQL execution.</p>
+<h2><strong>12.3 Database Singleton Pattern</strong></h2>
+<p>To prevent connection pool exhaustion during development hot-reloading and serverless invocation, Prisma Client is instantiated via a global singleton pattern in src/server/db.ts, attaching the client instance to globalThis in non-production environments.</p>
+<h1><strong>CHAPTER 13: TESTING AND VALIDATION</strong></h1>
+<h2><strong>13.1 Comprehensive Testing Strategy</strong></h2>
+<p>RepairGraph implements a multi-tiered quality assurance strategy spanning unit testing, integration testing, static code analysis, and live cloud acceptance validation.</p>
+<h2><strong>13.2 Unit Testing: Diagnostic & Decision Engine</strong></h2>
+<p>The engine test suite (tests/engine.test.ts) executes 35 automated unit tests across three suites:</p>
+<ul>
+<li><strong>• </strong>Suite 1: Symptom & Feature Extraction (13 tests): Validates component categorization, word-boundary regex parsing, liquid ingress detection, lithium swelling hazard flags, and modular DIY feasibility.</li>
+<li><strong>• </strong>Suite 2: 7-Factor Score Model & Economic Math (13 tests): Validates that factor weights sum to 100, disassembly benchmarks match specs, cost ranges are positive, and RCR math scales accurately.</li>
+<li><strong>• </strong>Suite 3: Statutory Lifecycle Decision Matrix (9 tests): Validates actionable verdicts (DIY, REPAIR, RESELL, REPLACE, RECYCLE), catastrophic liquid/power rules, and E-Waste Rules 2022 citations.</li>
+</ul>
+<h2><strong>13.3 Integration Testing: Backend & Security</strong></h2>
+<p>The API test suite (tests/api.test.ts) executes 47 automated integration tests validating auth flows, bcrypt verification, sliding-window rate limiting, device ownership boundaries, workbench state stepper transitions, review uniqueness, and strict error sanitization suppressing Prisma internals.</p>
+<h2><strong>13.4 Total Automated Test Audit</strong></h2>
+<p>Table 12 presents the audited automated test counts, confirming 100% test passage.</p>
+<table>
+<tr>
+<th>Test Suite Category</th>
+<th>Executable Command</th>
+<th>Tests Executed</th>
+<th>Result</th>
+</tr>
+<tr>
+<td>Diagnostic Decision Engine</td>
+<td>npx tsx tests/engine.test.ts</td>
+<td>35 Tests</td>
+<td>35 Passed, 0 Failed</td>
+</tr>
+<tr>
+<td>Backend & Business Rules</td>
+<td>npx tsx tests/api.test.ts</td>
+<td>47 Tests</td>
+<td>47 Passed, 0 Failed</td>
+</tr>
+<tr>
+<td>Combined Test Suite</td>
+<td>npm test</td>
+<td>82 Tests Total</td>
+<td>82 Passed, 0 Failed</td>
+</tr>
+<tr>
+<td>Static Linting Analysis</td>
+<td>npm run lint</td>
+<td>Full Codebase</td>
+<td>0 Errors, 0 Warnings</td>
+</tr>
+</table>
+<h2><strong>13.5 Production End-to-End Acceptance Validation</strong></h2>
+<p>In Phase 7C.3, a live end-to-end acceptance validation was executed against the production deployment at https://repairgraph.vercel.app. Table 13 summarizes the verified production milestones.</p>
+<table>
+<tr>
+<th>Validation Stage</th>
+<th>Live Endpoint Verified</th>
+<th>Observed Production Outcome</th>
+</tr>
+<tr>
+<td>1. Health Check</td>
+<td>GET /api/health</td>
+<td>HTTP 200, status: ok, database: connected, measured latency.</td>
+</tr>
+<tr>
+<td>2. Security Headers</td>
+<td>HEAD /api/health</td>
+<td>HSTS max-age=31536000, X-Frame-Options: DENY, nosniff present.</td>
+</tr>
+<tr>
+<td>3. Registration</td>
+<td>POST /api/auth/register</td>
+<td>Account created, bcrypt hashed, HttpOnly rg_token cookie set.</td>
+</tr>
+<tr>
+<td>4. Login & Auth</td>
+<td>POST /api/auth/login</td>
+<td>Authenticated session established; raw JWT suppressed from body.</td>
+</tr>
+<tr>
+<td>5. Device & Triage</td>
+<td>POST /api/devices, /diagnose</td>
+<td>Hardware registered; deterministic 7-factor scoring evaluated.</td>
+</tr>
+<tr>
+<td>6. Session Persistence</td>
+<td>POST /api/auth/logout, /login</td>
+<td>Logged out, re-authenticated; device and diagnostic data intact.</td>
+</tr>
+</table>
+<h1><strong>CHAPTER 14: CLOUD DEPLOYMENT</strong></h1>
+<h2><strong>14.1 Production Cloud Architecture</strong></h2>
+<p>RepairGraph is deployed to production using a two-tier cloud architecture: Vercel Serverless Platform for application compute and Edge CDN delivery, paired with Neon Managed Cloud PostgreSQL for relational storage. Figure 6 illustrates the network and deployment topology.</p>
+<div class='figure-box'><img src='docs/report_assets/figure6_deployment_topology.png' alt='Figure 6: Production Cloud Deployment & Network Security Topology'><div class='figure-cap'>Figure 6: Production Cloud Deployment & Network Security Topology</div></div>
+<h2><strong>14.2 Vercel Serverless Runtime (Node.js 24.x)</strong></h2>
+<p>The Next.js application executes within Vercel Serverless Functions on the Node.js 24.x runtime. Static assets and cached routes are served via Vercel's global Anycast Edge Network with automated TLS 1.3 termination. Crucially, the application code executes in full Node.js serverless containers (not restricted V8 Edge isolates), providing complete compatibility with Prisma ORM, bcrypt, and native Node crypto libraries.</p>
+<h2><strong>14.3 Managed Neon Serverless PostgreSQL</strong></h2>
+<p>Persistent relational data is hosted on Neon Serverless PostgreSQL (v16+). Application queries connect via pooled TLS (DATABASE_URL) backed by PgBouncer, preventing connection saturation during concurrent serverless invocations. Database migrations utilize direct connections (DIRECT_URL) via port 5432.</p>
+<h2><strong>14.4 Environment Configuration & Secrets</strong></h2>
+<p>Table 14 catalogs the environment variable names used across runtime environments (values omitted for security).</p>
+<table>
+<tr>
+<th>Variable Name</th>
+<th>Sensitivity Scope</th>
+<th>Functional Purpose</th>
+</tr>
+<tr>
+<td>DATABASE_URL</td>
+<td>Server Secret</td>
+<td>Pooled PostgreSQL connection string for Prisma application queries.</td>
+</tr>
+<tr>
+<td>DIRECT_URL</td>
+<td>Server Secret</td>
+<td>Direct PostgreSQL connection string for deploying Prisma migrations.</td>
+</tr>
+<tr>
+<td>JWT_SECRET</td>
+<td>Server Secret</td>
+<td>256-bit cryptographic key for HMAC-SHA256 session token signing.</td>
+</tr>
+<tr>
+<td>JWT_EXPIRES_IN</td>
+<td>Server Config</td>
+<td>Token validity duration string (default: 7d).</td>
+</tr>
+<tr>
+<td>PORT</td>
+<td>Server Config</td>
+<td>Local execution port (default: 3000).</td>
+</tr>
+<tr>
+<td>NODE_ENV</td>
+<td>Server Config</td>
+<td>Runtime environment (development, test, production).</td>
+</tr>
+<tr>
+<td>NEXT_PUBLIC_APP_URL</td>
+<td>Public Config</td>
+<td>Canonical public URL (https://repairgraph.vercel.app).</td>
+</tr>
+</table>
+<h2><strong>14.5 Production Deployment Runbook</strong></h2>
+<ul>
+<li><strong>1. </strong>Step 1: Provision serverless PostgreSQL on Neon and obtain pooled (6543) and direct (5432) connection strings.</li>
+<li><strong>2. </strong>Step 2: Configure production environment secrets in Vercel project dashboard.</li>
+<li><strong>3. </strong>Step 3: Deploy declarative schema migrations using npx prisma migrate deploy (do not use db push in production).</li>
+<li><strong>4. </strong>Step 4: Compile production bundle via prisma generate && next build --turbopack.</li>
+<li><strong>5. </strong>Step 5: Verify production health via GET https://repairgraph.vercel.app/api/health.</li>
+<li><strong>6. </strong>Step 6: Execute non-destructive smoke and functional acceptance tests.</li>
+</ul>
+<h2><strong>14.6 Health Telemetry Endpoint (/api/health)</strong></h2>
+<p>The health route executes an active database ping query (SELECT 1) and returns real-time operational telemetry:</p>
+<div class='callout'><div class='callout-title'>[PRODUCTION HEALTH RESPONSE]</div>{"success":true,"data":{"status":"ok","service":"RepairGraph API","database":"connected","latencyMs":3269,"uptime":3,"timestamp":"2026-09-12T16:10:04.310Z","environment":"production"}}</div>
+<h2><strong>14.7 Free-Tier Cost Analysis</strong></h2>
+<p>RepairGraph leverages Vercel's personal hobby tier and Neon's free tier (0.5 GiB storage, shared vCPU). While suitable for academic evaluation and portfolio demonstration, the report notes that cloud providers may alter free-tier quotas, and no perpetual ₹0 cost is guaranteed.</p>
+<h1><strong>CHAPTER 15: RESULTS AND DISCUSSION</strong></h1>
+<h2><strong>15.1 Qualitative Diagnostic Evaluation</strong></h2>
+<p>Validation across diverse hardware contexts demonstrated that the 7-Factor Model accurately reflects physical design realities: modular devices (Framework Laptop: 78/100) receive high repairability ratings and DIY feasibility, whereas heavily adhesive-bonded hardware (Apple MacBook: 48/100) incurs disassembly penalties and requires professional intervention. Incident hazard deductions reliably escalate acute risks (liquid ingress and swollen cells) to CRITICAL severity.</p>
+<h2><strong>15.2 Marketplace Efficiency Observations</strong></h2>
+<p>The two-sided quote marketplace eliminates quoting guesswork. Multi-quote comparisons empower consumers to evaluate bids against both turnaround time and technician verification ratings, while the atomic quote acceptance state machine prevents double-booking and guarantees that competing quotes are cleanly transitioned.</p>
+<h2><strong>15.3 Regulatory Alignment & E-Waste Impact</strong></h2>
+<p>By automatically generating CO2e manufacturing offsets and diverting e-waste mass estimates into the decision narrative, RepairGraph transforms abstract environmental regulations (India's E-Waste Rules 2022) into actionable consumer metrics.</p>
+<div class='page-break'></div>
+<h1><strong>CHAPTER 16: LIMITATIONS</strong></h1>
+<h2><strong>16.1 In-Memory Rate Limiting</strong></h2>
+<p>The sliding-window rate limiter (src/server/auth/rateLimit.ts) operates in serverless process memory. While highly effective against burst attacks on a single compute node, serverless cold boots or multi-region routing distribute state across multiple isolated memory spaces. A production enterprise deployment would require a centralized, low-latency Redis cluster.</p>
+<h2><strong>16.2 Academic Demonstration Workload Scope</strong></h2>
+<p>RepairGraph is currently provisioned and calibrated for capstone demonstration, academic evaluation, and small fleet triage, rather than hyperscale enterprise workloads processing millions of concurrent requests.</p>
+<h2><strong>16.3 Synchronous Decision Evaluation</strong></h2>
+<p>Because the deterministic decision engine executes in sub-millisecond time (< 1 ms), evaluations are processed synchronously within the HTTP request-response cycle. While highly responsive for interactive triage, heavy bulk fleet imports would benefit from an asynchronous message queue architecture.</p>
+<h2><strong>16.4 Native Cloud Observability Dependency</strong></h2>
+<p>Telemetry currently relies on native Vercel runtime logs, Neon database metrics, and the active /api/health ping endpoint, rather than an integrated third-party Application Performance Monitoring (APM) platform such as Datadog or New Relic.</p>
+<h2><strong>16.5 Non-Destructive Production Testing Boundary</strong></h2>
+<p>Production smoke tests and live acceptance validation strictly execute non-destructive read and write operations. Destructive testing (e.g., table truncation, schema dropping, or simulated catastrophic database failovers) is restricted to local offline environments.</p>
+<h2><strong>16.6 Informational Specialist Context</strong></h2>
+<p>Selecting a preferred specialist during triage provides workflow context for bidding, but does not create an immutable binding assignment prior to explicit customer quote acceptance.</p>
+<h1><strong>CHAPTER 17: FUTURE ENHANCEMENTS</strong></h1>
+<h2><strong>17.1 Distributed Rate Limiting via Redis</strong></h2>
+<p>Integrating Upstash Serverless Redis to provide global, atomic rate limiting, distributed session blacklisting, and instantaneous token revocation across all serverless edge regions.</p>
+<h2><strong>17.2 Asynchronous Background Queue (BullMQ)</strong></h2>
+<p>Deploying a dedicated Redis-backed task queue (BullMQ or AWS SQS) to process bulk enterprise hardware inventory imports and generate cryptographically signed PDF Repair Passports asynchronously.</p>
+<h2><strong>17.3 Enterprise APM & Distributed Tracing</strong></h2>
+<p>Instrumenting OpenTelemetry traces across route handlers, Prisma queries, and external network pings to monitor database connection pool latency and serverless execution cold starts.</p>
+<h2><strong>17.4 Vector Embeddings for OEM Manuals (pgvector)</strong></h2>
+<p>Augmenting the diagnostic engine with pgvector similarity search over official OEM Hardware Maintenance Manuals (HMM) to retrieve exact screw torque specifications and exploded schematics.</p>
+<h2><strong>17.5 Dedicated Mobile Application (React Native)</strong></h2>
+<p>Developing a companion React Native mobile application supporting optical barcode/serial number camera scanning to streamline device onboarding and workbench check-in.</p>
+<h1><strong>CHAPTER 18: CONCLUSION</strong></h1>
+<h2><strong>18.1 Summary of Engineering Achievements</strong></h2>
+<p>RepairGraph demonstrates that modern full-stack web engineering, rigorous relational database modeling, and deterministic decision logic can effectively solve pervasive market failures in consumer electronics servicing. By unifying Next.js 15 App Router, React 19, and Prisma ORM on Vercel and Neon PostgreSQL, the platform establishes a transparent, cloud-native lifecycle ecosystem.</p>
+<p>The project's key technical milestones include:</p>
+<ul>
+<li><strong>• </strong>Rejection of black-box AI in favor of a 100% reproducible, deterministic 2-Tier Diagnostic and 7-Factor Repairability Score Model.</li>
+<li><strong>• </strong>Integration of statutory mandates from India's Right to Repair Portal and the E-Waste (Management) Rules, 2022.</li>
+<li><strong>• </strong>Implementation of a secure two-sided competitive quote marketplace and permanent serial-linked Repair Passport.</li>
+<li><strong>• </strong>Deployment and live functional acceptance verification on production cloud infrastructure (https://repairgraph.vercel.app).</li>
+<li><strong>• </strong>Exhaustive automated testing across 82 validation test cases (35 engine + 47 API/security tests, 0 failures).</li>
+</ul>
+<h2><strong>18.2 Practical Impact & Academic Defense Summary</strong></h2>
+<p>RepairGraph provides consumers, technicians, and fleet administrators with an objective, evidence-based alternative to quoting guesswork and premature hardware disposal. The platform stands fully verified, documented, and production-ready for academic evaluation and capstone defense.</p>
+<h1><strong>REFERENCES</strong></h1>
+<p><strong>[1] </strong>[1] Vercel Inc. (2025). Next.js 15 App Router Documentation. Available at: https://nextjs.org/docs</p>
+<p><strong>[2] </strong>[2] Meta Platforms Inc. (2025). React 19 Reference Documentation. Available at: https://react.dev/</p>
+<p><strong>[3] </strong>[3] Prisma Data Inc. (2025). Prisma 6.4 Documentation & Relational Client Guide. Available at: https://www.prisma.io/docs</p>
+<p><strong>[4] </strong>[4] The PostgreSQL Global Development Group (2024). PostgreSQL 16 Documentation. Available at: https://www.postgresql.org/docs/16/</p>
+<p><strong>[5] </strong>[5] Neon Inc. (2025). Neon Serverless PostgreSQL Architecture & Connection Pooling. Available at: https://neon.tech/docs</p>
+<p><strong>[6] </strong>[6] Vercel Inc. (2025). Vercel Serverless Functions & Edge Network Runtime Guide. Available at: https://vercel.com/docs</p>
+<p><strong>[7] </strong>[7] Colinhacks (2024). Zod: TypeScript-First Schema Validation. Available at: https://zod.dev/</p>
+<p><strong>[8] </strong>[8] Jones, M., Bradley, J., & Sakimura, N. (2015). JSON Web Token (JWT). IETF RFC 7519. Available at: https://datatracker.ietf.org/doc/html/rfc7519</p>
+<p><strong>[9] </strong>[9] Provos, N., & Mazières, D. (1999). A Future-Adaptable Password Scheme. In Proceedings of the USENIX Annual Technical Conference.</p>
+<p><strong>[10] </strong>[10] Department of Consumer Affairs, Government of India (2023). Right to Repair Portal India. Available at: https://righttorepairindia.gov.in/</p>
+<p><strong>[11] </strong>[11] Ministry of Environment, Forest and Climate Change, Government of India (2022). E-Waste (Management) Rules, 2022. Gazette of India, Notification G.S.R. 801(E).</p>
+<p><strong>[12] </strong>[12] Microsoft Corporation (2024). TypeScript 5.0 Documentation. Available at: https://www.typescriptlang.org/docs/</p>
+<div class='page-break'></div>
+<h1><strong>APPENDICES</strong></h1>
+<h2><strong>Appendix A: Complete REST API Endpoint Inventory (36 Handlers)</strong></h2>
+<table>
+<tr>
+<th>Route Path</th>
+<th>Method</th>
+<th>Auth Scope</th>
+<th>Operation Purpose</th>
+</tr>
+<tr>
+<td>/api/auth/register</td>
+<td>POST</td>
+<td>Public</td>
+<td>User account registration with bcrypt salting and cookie setting.</td>
+</tr>
+<tr>
+<td>/api/auth/login</td>
+<td>POST</td>
+<td>Public</td>
+<td>User authentication; issues JWT in HttpOnly cookie; suppresses raw token.</td>
+</tr>
+<tr>
+<td>/api/auth/logout</td>
+<td>POST</td>
+<td>Public / Auth</td>
+<td>Clears authentication session cookie (rg_token).</td>
+</tr>
+<tr>
+<td>/api/auth/me</td>
+<td>GET</td>
+<td>Authenticated</td>
+<td>Returns authenticated user profile and role.</td>
+</tr>
+<tr>
+<td>/api/devices</td>
+<td>GET</td>
+<td>Authenticated</td>
+<td>Lists devices owned by the authenticated user.</td>
+</tr>
+<tr>
+<td>/api/devices</td>
+<td>POST</td>
+<td>Authenticated</td>
+<td>Registers a new physical hardware device.</td>
+</tr>
+<tr>
+<td>/api/devices/:id</td>
+<td>GET</td>
+<td>Owner / Admin</td>
+<td>Retrieves single device record with tickets and service history.</td>
+</tr>
+<tr>
+<td>/api/devices/:id</td>
+<td>PUT</td>
+<td>Owner / Admin</td>
+<td>Updates device metadata, valuation, or condition.</td>
+</tr>
+<tr>
+<td>/api/devices/:id</td>
+<td>DELETE</td>
+<td>Owner / Admin</td>
+<td>Removes device and cascades to associated tickets.</td>
+</tr>
+<tr>
+<td>/api/repair-requests</td>
+<td>GET</td>
+<td>Authenticated</td>
+<td>Lists repair tickets for user or open tickets for technicians.</td>
+</tr>
+<tr>
+<td>/api/repair-requests</td>
+<td>POST</td>
+<td>Authenticated</td>
+<td>Files a repair request for an owned hardware device.</td>
+</tr>
+<tr>
+<td>/api/repair-requests/:id</td>
+<td>GET</td>
+<td>Owner / Tech</td>
+<td>Retrieves request details, diagnosis, and competing quotes.</td>
+</tr>
+<tr>
+<td>/api/repair-requests/:id</td>
+<td>PUT</td>
+<td>Owner / Admin</td>
+<td>Updates request description or urgency.</td>
+</tr>
+<tr>
+<td>/api/repair-requests/:id</td>
+<td>DELETE</td>
+<td>Owner / Admin</td>
+<td>Withdraws and deletes an open repair ticket.</td>
+</tr>
+<tr>
+<td>/api/repair-requests/:id/diagnose</td>
+<td>POST</td>
+<td>Owner / Admin</td>
+<td>Executes deterministic diagnostic and economic scoring engine.</td>
+</tr>
+<tr>
+<td>/api/repair-requests/:id/quotes</td>
+<td>GET</td>
+<td>Owner / Tech</td>
+<td>Lists quotes submitted for a repair request.</td>
+</tr>
+<tr>
+<td>/api/repair-requests/:id/quotes</td>
+<td>POST</td>
+<td>REPAIRER</td>
+<td>Technician submits competitive repair bid with cost and days.</td>
+</tr>
+<tr>
+<td>/api/quotes/:id</td>
+<td>PUT</td>
+<td>Owner / Tech</td>
+<td>Accepts quote (creates job) or rejects/withdraws quote.</td>
+</tr>
+<tr>
+<td>/api/repair-jobs</td>
+<td>GET</td>
+<td>Authenticated</td>
+<td>Lists active repair jobs for customer or assigned technician.</td>
+</tr>
+<tr>
+<td>/api/repair-jobs/:id</td>
+<td>PUT</td>
+<td>Assigned Tech</td>
+<td>Advances bench status (DIAGNOSING -> COMPLETED).</td>
+</tr>
+<tr>
+<td>/api/repair-history</td>
+<td>GET</td>
+<td>Authenticated</td>
+<td>Retrieves immutable Repair Passport ledger records.</td>
+</tr>
+</table>
+<h2><strong>Appendix B: Database Entity Summary (11 Models & 9 Enums)</strong></h2>
+<p>The Prisma schema defines 11 normalized relational entities: User, Device, RepairRequest, Diagnosis, RepairRecommendation, Repairer, RepairerSpecialization, Quote, RepairJob, RepairHistory, and Review. The 9 custom PostgreSQL enums are: UserRole, DeviceCategory, DeviceCondition, UrgencyLevel, RequestStatus, RecommendedAction, VerificationStatus, QuoteStatus, and JobStatus.</p>
+<h2><strong>Appendix C: Decision Engine Formula Summary</strong></h2>
+<ul>
+<li><strong>1. </strong>Baseline Repairability Score: S_baseline = Disassembly(25) + Parts(20) + Docs(15) + Modularity(15) + Pairing(10) + Age(10) + Ecosystem(5) = 100 points.</li>
+<li><strong>2. </strong>Final Repairability Score: S_repair = max(10, min(98, S_baseline - Deductions)).</li>
+<li><strong>3. </strong>Device Depreciation: V_current = max(0.15 * P, round(P * (1 - 0.22)^t / 100) * 100).</li>
+<li><strong>4. </strong>Repair Cost Ratio: RCR = C_avg / V_current.</li>
+<li><strong>5. </strong>Economic Score: S_econ = max(0, min(100, round((1 - RCR) * 100))).</li>
+</ul>
+<h2><strong>Appendix D: Automated Test Inventory (82 Tests Audited)</strong></h2>
+<p>The repository test suite executes 82 automated test cases with 100% passage:<br>• 35 Engine Tests (tests/engine.test.ts): 13 symptom extraction tests, 13 scoring model tests, 9 lifecycle decision matrix tests.<br>• 47 API & Security Tests (tests/api.test.ts): 24 core business rule tests, 18 Step 6 hardening tests, 4 Step 7C.2 registration validation tests, and 1 demo persona provisioning verification test.</p>
+<h2><strong>Appendix E: Production Deployment Configuration Summary</strong></h2>
+<p>• Production URL: https://repairgraph.vercel.app<br>• Compute Runtime: Vercel Serverless Functions (Node.js 24.x)<br>• Database: Neon Managed Serverless PostgreSQL (v16+)<br>• Connection Pool: PgBouncer over TLS (port 6543)<br>• Migrations Applied: prisma/migrations/0_init deployed via npx prisma migrate deploy<br>• Active Security Headers: HSTS (max-age=31536000), X-Frame-Options (DENY), X-Content-Type-Options (nosniff), Referrer-Policy</p>
+</body></html>

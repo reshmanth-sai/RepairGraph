@@ -1,6 +1,11 @@
 # RepairGraph Database Architecture & Data Dictionary
 
-This document details the relational database architecture, entity-relationship model, constraints, and index strategy for the **RepairGraph** platform implemented using **PostgreSQL** and **Prisma ORM**.
+**Project**: RepairGraph — Intelligent Product Repair & Lifecycle Platform  
+**Author**: Naidu Reshmanth Sai (Registration No: 25BCE1112)  
+**Production URL**: [https://repairgraph.vercel.app](https://repairgraph.vercel.app)  
+**Database Provider**: Managed Neon Serverless PostgreSQL  
+
+This document details the relational database architecture, entity-relationship model, constraints, and index strategy for the **RepairGraph** platform implemented using **PostgreSQL (Neon)** and **Prisma ORM**.
 
 ---
 

@@ -706,7 +706,7 @@ async function runTests() {
   // =========================================================================
   // STEP 6B: NAVIGATION IA & SAFE REDIRECT TESTS
   // =========================================================================
-  const { getSafeRedirect } = await import('../src/app/login/page');
+  const { getSafeRedirect } = await import('../src/lib/safeRedirect');
 
   await test('Step 6B Security: getSafeRedirect preserves safe internal relative paths', async () => {
     assert.strictEqual(getSafeRedirect('/repairer'), '/repairer');

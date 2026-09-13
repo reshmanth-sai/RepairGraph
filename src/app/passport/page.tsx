@@ -423,7 +423,7 @@ function PassportContent() {
         <PageHeader
           title="Device Passport"
           subtitle="Standardized digital maintenance ledger and provenance history for physical hardware."
-          breadcrumbs={[{ label: 'Overview', href: '/' }, { label: 'Device Passport' }]}
+          breadcrumbs={[{ label: 'Overview', href: '/overview' }, { label: 'Device Passport' }]}
         />
 
         <div className="p-12 text-center border border-dashed border-stone-200 rounded-[2px] space-y-4 max-w-md mx-auto">
@@ -453,7 +453,7 @@ function PassportContent() {
       <PageHeader
         title="Device Passport"
         subtitle="Standardized hardware provenance ledger and technical service history. Documenting authentic diagnostics, verified workshop repairs, and provenance to protect owner confidence and second-hand value."
-        breadcrumbs={[{ label: 'Overview', href: '/' }, { label: 'Device Passport' }]}
+        breadcrumbs={[{ label: 'Overview', href: '/overview' }, { label: 'Device Passport' }]}
         actions={
           <div className="flex items-center gap-2">
             {deviceDetail && (

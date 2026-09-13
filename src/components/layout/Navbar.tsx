@@ -23,7 +23,7 @@ export function Navbar() {
   const navLinks = (() => {
     if (user?.role === 'REPAIRER') {
       return [
-        { href: '/', label: 'Overview' },
+        { href: '/overview', label: 'Overview' },
         { href: '/repairer', label: 'Workbench' },
         { href: '/repairers', label: 'Specialists' },
         { href: '/passport', label: 'Passport' },
@@ -33,7 +33,7 @@ export function Navbar() {
     }
     if (user?.role === 'ADMIN') {
       return [
-        { href: '/', label: 'Overview' },
+        { href: '/overview', label: 'Overview' },
         { href: '/devices', label: 'Devices' },
         { href: '/report', label: 'Diagnose' },
         { href: '/repairs', label: 'Repairs' },
@@ -44,7 +44,7 @@ export function Navbar() {
     }
     // Default: Customer (USER) or unauthenticated guest
     return [
-      { href: '/', label: 'Overview' },
+      { href: '/overview', label: 'Overview' },
       { href: '/devices', label: 'Devices' },
       { href: '/report', label: 'Diagnose' },
       { href: '/repairs', label: 'Repairs' },

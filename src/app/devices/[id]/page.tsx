@@ -191,7 +191,7 @@ export default function DeviceDetailPage() {
         title={`${device.brand} ${device.model}`}
         subtitle={`Hardware Unit Record • Serial: ${device.serialNumber} • Category: ${device.category}`}
         breadcrumbs={[
-          { label: 'Overview', href: '/' },
+          { label: 'Overview', href: '/overview' },
           { label: 'Devices', href: '/devices' },
           { label: `${device.brand} ${device.model}` }
         ]}

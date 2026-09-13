@@ -66,6 +66,16 @@ export function Footer() {
             <nav aria-label="Footer Navigation">
               <ul className="space-y-1 text-xs text-stone-500">
                 <li>
+                  <Link href="/" className="py-1 inline-block hover:text-stone-900 transition-colors touch-manipulation focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-stone-400 rounded-[2px]">
+                    Home
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/overview" className="py-1 inline-block hover:text-stone-900 transition-colors touch-manipulation focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-stone-400 rounded-[2px]">
+                    Overview (Dashboard)
+                  </Link>
+                </li>
+                <li>
                   <Link href="/devices" className="py-1 inline-block hover:text-stone-900 transition-colors touch-manipulation focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-stone-400 rounded-[2px]">
                     Devices
                   </Link>

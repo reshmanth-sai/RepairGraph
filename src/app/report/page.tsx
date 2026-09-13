@@ -159,7 +159,7 @@ function ReportProblemContent() {
         title="Report a Problem"
         subtitle="Submit hardware failure symptoms for technical triage, repairability verification, and specialist quotes."
         breadcrumbs={[
-          { label: 'Overview', href: '/' },
+          { label: 'Overview', href: '/overview' },
           { label: 'Report a Problem' }
         ]}
       />

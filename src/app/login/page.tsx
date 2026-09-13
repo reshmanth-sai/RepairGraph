@@ -8,54 +8,7 @@ import { Button } from '@/components/ui/Button';
 import { extractActionableErrors } from '@/lib/sanitizeError';
 import { UserCheck, ArrowRight, AlertCircle } from 'lucide-react';
 
-/**
- * Sanitizes and validates internal redirect URLs to prevent Open Redirect (CWE-601).
- * Rejects external domains, protocol-relative URLs, schemes (javascript:, http:),
- * backslashes, and control characters.
- */
-export function getSafeRedirect(raw: string | null | undefined): string {
-  if (!raw) return '/';
-
-  let decoded = raw;
-  try {
-    decoded = decodeURIComponent(raw);
-  } catch {
-    return '/';
-  }
-
-  // Must begin with a single slash
-  if (!decoded.startsWith('/')) {
-    return '/';
-  }
-
-  // Reject protocol-relative '//evil.com'
-  if (decoded.startsWith('//')) {
-    return '/';
-  }
-
-  // Reject backslash variations '/\evil.com' or '/\\evil.com'
-  if (decoded.startsWith('/\\') || decoded.includes('\\')) {
-    return '/';
-  }
-
-  // Reject colon before query/hash to prevent schema injection (/javascript:...)
-  const pathPart = decoded.split(/[?#]/)[0];
-  if (pathPart.includes(':')) {
-    return '/';
-  }
-
-  // Prevent redirect loops to login/register
-  if (pathPart === '/login' || pathPart === '/register') {
-    return '/';
-  }
-
-  // Reject CRLF or control characters
-  if (/[\r\n\t\0]/.test(decoded)) {
-    return '/';
-  }
-
-  return decoded;
-}
+import { getSafeRedirect } from '@/lib/safeRedirect';
 
 function LoginForm() {
   const router = useRouter();
@@ -107,7 +60,7 @@ function LoginForm() {
           </p>
         </div>
         <div className="pt-2 flex justify-center gap-3">
-          <Link href={safeRedirect !== '/' ? safeRedirect : '/'}>
+          <Link href={safeRedirect !== '/' ? safeRedirect : '/overview'}>
             <Button variant="primary" icon={<ArrowRight className="w-3.5 h-3.5" />}>
               {safeRedirect !== '/' ? 'Continue to Destination' : 'Go to Overview'}
             </Button>
@@ -137,7 +90,8 @@ function LoginForm() {
           phone: phone.trim() || undefined,
         });
       }
-      router.push(safeRedirect);
+      const destination = safeRedirect === '/' ? '/overview' : safeRedirect;
+      router.push(destination);
     } catch (err: unknown) {
       setErrors(extractActionableErrors(err, 'Authentication failed. Check credentials.'));
     } finally {
@@ -150,7 +104,8 @@ function LoginForm() {
     setIsSubmitting(true);
     try {
       await login(demoEmail, 'Password123!');
-      router.push(safeRedirect);
+      const destination = safeRedirect === '/' ? '/overview' : safeRedirect;
+      router.push(destination);
     } catch (err: unknown) {
       setErrors(extractActionableErrors(err, 'Demo login failed.'));
     } finally {

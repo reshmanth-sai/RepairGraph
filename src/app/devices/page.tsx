@@ -282,7 +282,7 @@ export default function DevicesPage() {
         title="Hardware Registry"
         subtitle="Catalog of registered consumer hardware, technical repairability indices, and maintenance status."
         breadcrumbs={[
-          { label: 'Overview', href: '/' },
+          { label: 'Overview', href: '/overview' },
           { label: 'Devices' }
         ]}
         actions={

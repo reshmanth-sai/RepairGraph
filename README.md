@@ -1,7 +1,10 @@
 # RepairGraph
 
 > **Intelligent Product Repair & Lifecycle Platform**  
-> An evidence-based hardware diagnostics, repairability evaluation, fair-market economics, competitive quote orchestration, and standardized device service passport platform.
+> An evidence-based hardware diagnostics, repairability evaluation, fair-market economics, competitive quote orchestration, and standardized device service passport platform.  
+>  
+> **Live Production Deployment**: [https://repairgraph.vercel.app](https://repairgraph.vercel.app)  
+> **Author**: Naidu Reshmanth Sai (Registration No: 25BCE1112)
 
 ![RepairGraph Cloud Architecture](docs/cloud-architecture.svg)
 
@@ -180,41 +183,52 @@ npm run build
 
 ## 5. Production Deployment Runbook
 
+RepairGraph is deployed as a unified full-stack Next.js application on **Vercel** connected over pooled TLS to managed **Neon Serverless PostgreSQL**.
+
 ### Prerequisites
 - **Node.js**: `24+` (LTS)
 - **npm**: `11+`
-- **Database**: Managed PostgreSQL 16+ (e.g. Neon, Supabase, Cloud SQL)
-- **Target Platform**: Vercel Serverless (Recommended) or Google Cloud Run
+- **Database**: Managed PostgreSQL 16+ (Neon Serverless PostgreSQL)
+- **Target Platform**: Vercel Serverless ([https://repairgraph.vercel.app](https://repairgraph.vercel.app))
 
 ### 1. Environment Variables Checklist
 Configure the following in your production environment settings (never commit secret values):
 ```env
 DATABASE_URL="postgresql://[user]:[password]@[host]:[port]/[database]?sslmode=require"
+DIRECT_URL="postgresql://[user]:[password]@[host]:5432/[database]?sslmode=require"
 JWT_SECRET="<generate-high-entropy-string-at-least-32-chars-long>"
+JWT_EXPIRES_IN="7d"
 NODE_ENV="production"
 PORT=3000
-NEXT_PUBLIC_APP_URL="https://your-production-domain.com"
+NEXT_PUBLIC_APP_URL="https://repairgraph.vercel.app"
 ```
+
+> [!WARNING]
+> **Production Migration Safety Rules:**
+> - Do not use `prisma db push` for production.
+> - Do not use `prisma migrate dev` for production.
+> Always apply existing versioned migrations using `npx prisma migrate deploy`.
 
 ### 2. Deployment Execution Sequence
 ```bash
 # 1. Install production dependencies
 npm ci
 
-# 2. Deploy database migrations to production PostgreSQL
+# 2. Deploy database migrations to production Neon PostgreSQL
 npx prisma migrate deploy
 
 # 3. Generate Prisma client & compile Next.js production build
 npm run build
 
-# 4. Start production web server
-npm start
+# 4. Deploy to Vercel
+# Handled via Vercel Git integration on push to main or via Vercel CLI
 ```
 
 ### 3. Post-Deployment Verification
-1. **Health Ping**: Verify `GET https://<production-domain>/api/health` returns HTTP 200 with `"status": "ok"` and `"database": "connected"`.
-2. **Smoke Test Safety**: The integration suite `scripts/smoke-test.ts` includes authenticated tests that require the sample consumer account. For an unseeded production instance, verify health and public routes directly.
-3. **Demo Personas**: Demo accounts (`consumer@repairgraph.internal`, `technician@repairgraph.internal`, `admin@repairgraph.internal`) are only created when `npx prisma db seed` is explicitly executed. Production remains clean by default.
+1. **Health Ping**: Verify `GET https://repairgraph.vercel.app/api/health` returns HTTP 200 with `"status": "ok"` and `"database": "connected"`.
+2. **Protected Route Authorization**: Verify unauthenticated calls to `GET /api/devices` return HTTP 401 `UNAUTHENTICATED`.
+3. **Smoke Test Safety**: The integration suite `scripts/smoke-test.ts` includes authenticated tests that require the sample consumer account. For an unseeded production instance, verify health and public routes directly.
+4. **Demo Personas**: Demo accounts (`consumer@repairgraph.internal`, `technician@repairgraph.internal`, `admin@repairgraph.internal`) are only created when `npx prisma db seed` is explicitly executed. Production remains clean by default.
 
 ---
 

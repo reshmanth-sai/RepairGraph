@@ -1,6 +1,10 @@
 # RepairGraph REST API Specification
 
-This document specifies the REST API endpoints, authorization rules, request bodies, responses, and HTTP status codes for the **RepairGraph** backend foundation.
+**Project**: RepairGraph — Intelligent Product Repair & Lifecycle Platform  
+**Author**: Naidu Reshmanth Sai (Registration No: 25BCE1112)  
+**Production URL**: [https://repairgraph.vercel.app](https://repairgraph.vercel.app)  
+
+This document specifies the REST API endpoints, authorization rules, request bodies, responses, and HTTP status codes for the **RepairGraph** full-stack Next.js backend on Vercel.
 
 ---
 
