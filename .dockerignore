@@ -1,0 +1,14 @@
+node_modules
+.next
+.git
+.github
+.vscode
+.ijfw
+*.log
+npm-debug.log*
+.env.local
+.env
+RepairGraph_Project_Report*
+docs
+scratch
+tests

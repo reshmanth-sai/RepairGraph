@@ -6,6 +6,7 @@ export interface TokenPayload {
   email: string;
   role: UserRole;
   name: string;
+  mfaVerified?: boolean;
 }
 
 function getJwtSecret(): string {

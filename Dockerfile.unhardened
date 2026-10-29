@@ -1,0 +1,24 @@
+# Unhardened Baseline Image for RepairGraph
+# Characteristics: Full Debian base image, runs as root, unpruned attack surface
+FROM node:22
+
+WORKDIR /app
+
+# Copy all source files
+COPY package*.json ./
+COPY prisma ./prisma/
+
+RUN npm install
+RUN npx prisma generate
+
+COPY . .
+
+RUN npm run build
+
+ENV NODE_ENV=production
+ENV PORT=3000
+
+# Default: Runs as root (UID 0)
+EXPOSE 3000
+
+CMD ["npm", "run", "start"]

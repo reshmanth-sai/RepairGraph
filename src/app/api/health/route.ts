@@ -5,6 +5,7 @@ export const dynamic = 'force-dynamic';
 
 export async function GET() {
   const startTime = Date.now();
+  const instanceId = process.env.INSTANCE_ID || process.env.HOSTNAME || 'repairgraph-backend-local';
 
   try {
     // Perform light database ping to verify connection pool health
@@ -17,6 +18,7 @@ export async function GET() {
         data: {
           status: 'ok',
           service: 'RepairGraph API',
+          instance: instanceId,
           database: 'connected',
           latencyMs,
           uptime: Math.floor(process.uptime()),
@@ -28,6 +30,7 @@ export async function GET() {
         status: 200,
         headers: {
           'Cache-Control': 'no-store, max-age=0',
+          'X-Backend-Instance': instanceId,
         },
       }
     );
@@ -41,6 +44,7 @@ export async function GET() {
         error: {
           code: 'SERVICE_UNAVAILABLE',
           message: 'Service health check failed',
+          instance: instanceId,
           status: 'error',
           database: 'disconnected',
           latencyMs,
@@ -52,6 +56,7 @@ export async function GET() {
         status: 503,
         headers: {
           'Cache-Control': 'no-store, max-age=0',
+          'X-Backend-Instance': instanceId,
         },
       }
     );
