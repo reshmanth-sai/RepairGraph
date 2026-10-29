@@ -79,3 +79,4 @@ After Tuning (proxy_next_upstream)| 1,000          | $FAILED_TUNED              
 # Restart backend-2 so cluster remains healthy
 docker start repairgraph-backend-2
 echo -e "${GREEN}✓ All cluster nodes restored to healthy status.${NC}"
+

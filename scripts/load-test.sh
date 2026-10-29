@@ -87,3 +87,4 @@ Failed Requests             | $FAILED_1                     | $FAILED_3         
 "
 
 echo -e "${GREEN}✓ Benchmark metrics successfully captured.${NC}"
+

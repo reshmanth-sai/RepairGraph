@@ -45,3 +45,4 @@ async function demonstratePasswordSecurity() {
 }
 
 demonstratePasswordSecurity().catch(console.error).finally(() => prisma.$disconnect());
+

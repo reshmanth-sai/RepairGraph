@@ -93,3 +93,4 @@ export function getTotpAuthUrl(email: string, secret: string, issuer = 'RepairGr
   const encodedAccount = encodeURIComponent(email);
   return `otpauth://totp/${encodedIssuer}:${encodedAccount}?secret=${secret}&issuer=${encodedIssuer}&algorithm=SHA1&digits=6&period=30`;
 }
+
