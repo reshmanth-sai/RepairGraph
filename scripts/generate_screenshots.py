@@ -328,3 +328,4 @@ Node Package Vulnerabilities: <span class="green">16 (HIGH: 15, CRITICAL: 1)</sp
 
 if __name__ == '__main__':
     make_all_screenshots()
+

@@ -26,7 +26,7 @@ Open the following windows side-by-side on your monitor:
 - **What to Say**:
   > *"Hello everyone and respected faculty. My name is Naidu Reshmanth Sai, registration number 25BCE1112. This is my Digital Assignment 3 for BACSE344 Cloud Infrastructure and Architecture, continuing my project **RepairGraph**—an intelligent hardware diagnostics, repairability, and electronic waste passport platform.*
   >
-  > *In our domain, the peak-demand event is a **Post-Monsoon Disaster Surge or Festive Trade-in Flood**, where thousands of users flood the platform to triage water-damaged laptops and phones. The hardest-hit API is `GET /api/diagnostics/triage`, which computes our deterministic 7-factor repairability score and queries our live Neon serverless PostgreSQL database.*
+  > *In our domain, the peak-demand event is a **National E-Waste Amnesty & Extended Producer Responsibility (EPR) Compliance Reporting Surge**, where hundreds of authorized repair centers and corporate fleet managers flood the platform to triage damaged hardware and generate authenticated e-waste passports. The hardest-hit API is `POST /api/diagnostics/triage`, which computes our deterministic 7-factor repairability score and queries our live Neon serverless PostgreSQL database.*
   >
   > *To handle this without downtime, we deployed three backend container replicas behind an Nginx load balancer."*
 
