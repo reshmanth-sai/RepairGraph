@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
 BACSE344 Digital Assignment 3 - Clean Academic Report Generator
-Generates an authentic, publication-grade academic report for Dr. P. Anandan.
+Generates an authentic, publication-grade academic report for Dr. P. Anandan
+Styled exactly in accordance with RepairGraph_Project_Report.pdf (Times New Roman / Arial headers / callouts / tables).
 Author: Naidu Reshmanth Sai (25BCE1112)
 """
 
@@ -34,7 +35,8 @@ def build_report():
     img_q1c = get_base64_image("docs/da3_screenshots/q1c_chaos_failover_zero_downtime.png")
     img_q1d = get_base64_image("docs/da3-architecture-diagram.svg")
     img_q2a_prisma = get_base64_image("docs/da3_screenshots/q2a_prisma_studio_cropped.png")
-    img_q2b_browser = get_base64_image("docs/da3_screenshots/q2b_mfa_browser_cropped.png")
+    # User-uploaded authentic MFA screenshot
+    img_q2b_browser = get_base64_image("docs/da3_screenshots/q2b_mfa_browser_user.png")
     img_q2b_terminal = get_base64_image("docs/da3_screenshots/q2b_mfa_totp_and_rbac.png")
     img_q2c_trivy = get_base64_image("docs/da3_screenshots/q2c_trivy_scan_before_after.png")
 
@@ -42,23 +44,22 @@ def build_report():
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>RepairGraph — BACSE344 Digital Assignment 3 Academic Report</title>
+<title>RepairGraph — BACSE344 Digital Assignment 3 Project Report</title>
 <style>
   @page {{
     size: A4 portrait;
-    margin: 14mm 16mm 14mm 16mm;
+    margin: 12mm 15mm 12mm 15mm;
     @top-right {{
-      content: "BACSE344 (C1 Slot) • DA3 Report • 25BCE1112";
-      font-family: 'Times New Roman', Times, serif;
+      content: "RepairGraph • BACSE344 (C1 Slot) • Dr. P. Anandan • VIT Chennai";
+      font-family: Arial, sans-serif;
       font-size: 8pt;
-      font-style: italic;
-      color: #4b5563;
+      color: #94a3b8;
     }}
     @bottom-right {{
-      content: "Page " counter(page) " of 9";
-      font-family: 'Times New Roman', Times, serif;
+      content: "https://repairgraph.vercel.app | Page " counter(page) " of 9";
+      font-family: Arial, sans-serif;
       font-size: 8pt;
-      color: #4b5563;
+      color: #94a3b8;
     }}
   }}
 
@@ -69,10 +70,10 @@ def build_report():
   }}
 
   body {{
-    font-family: 'Times New Roman', Times, Georgia, serif;
-    font-size: 9.6pt;
-    line-height: 1.45;
-    color: #111827;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 9.3pt;
+    line-height: 1.42;
+    color: #1e293b;
     background-color: #ffffff;
     margin: 0;
     padding: 0;
@@ -89,250 +90,216 @@ def build_report():
     page-break-after: avoid;
   }}
 
-  /* Specific sizing for Cover & Matrix page to ensure exact 1-page fit */
+  /* Cover Block styling matching RepairGraph_Project_Report */
   .cover-page {{
-    font-size: 9.1pt;
-    line-height: 1.38;
+    font-size: 8.8pt;
+    line-height: 1.35;
   }}
-  .cover-page .masthead {{
+  .cover-block {{
+    text-align: center;
     margin-bottom: 5px;
     padding-bottom: 3px;
   }}
-  .cover-page .doc-header {{
-    margin-bottom: 5px;
-    padding-bottom: 4px;
-  }}
-  .cover-page table.meta-table {{
-    margin-bottom: 5px;
-    font-size: 7.9pt;
-  }}
-  .cover-page table.meta-table td {{
-    padding: 2.2px 5px;
-  }}
-  .cover-page h2 {{
-    margin: 5px 0 2px 0;
-    font-size: 10pt;
-  }}
-  .cover-page p {{
-    margin: 0 0 3px 0;
-  }}
-  .cover-page ul {{
-    margin: 0 0 4px 0;
-    padding-left: 18px;
-  }}
-  .cover-page li {{
-    margin-bottom: 1px;
-  }}
-  .cover-page table.booktabs {{
-    margin: 4px 0 5px 0;
-    font-size: 7.5pt;
-  }}
-  .cover-page table.booktabs th {{
-    padding: 2.5px 4px;
-  }}
-  .cover-page table.booktabs td {{
-    padding: 2px 4px;
-  }}
-  .cover-page .academic-note {{
-    padding: 4px 8px;
-    margin: 4px 0 0 0;
-    font-size: 7.8pt;
-  }}
-
-  /* Institutional Masthead */
-  .masthead {{
-    text-align: center;
-    border-bottom: 2px solid #111827;
-    padding-bottom: 4px;
-    margin-bottom: 8px;
-  }}
-  .masthead-univ {{
-    font-size: 12pt;
+  .cover-inst {{
+    font-family: Arial, sans-serif;
+    font-size: 9.5pt;
     font-weight: bold;
+    color: #475569;
     letter-spacing: 0.6px;
-    text-transform: uppercase;
-    color: #111827;
-    margin-bottom: 1px;
-  }}
-  .masthead-school {{
-    font-size: 9pt;
-    font-weight: 600;
-    color: #374151;
     margin-bottom: 2px;
+    line-height: 1.25;
+    text-align: center;
   }}
-  .masthead-course {{
+  .cover-course {{
+    font-family: Arial, sans-serif;
     font-size: 10pt;
     font-weight: bold;
-    color: #1e3a8a;
-  }}
-
-  /* Document Header Box */
-  .doc-header {{
+    color: #0284c7;
+    margin-bottom: 4px;
+    letter-spacing: 0.4px;
     text-align: center;
-    margin-bottom: 8px;
-    padding-bottom: 6px;
-    border-bottom: 1px solid #d1d5db;
   }}
-  .doc-title {{
-    font-size: 13.5pt;
+  .cover-title {{
+    font-family: Arial, sans-serif;
+    font-size: 19pt;
     font-weight: bold;
-    color: #111827;
+    color: #0f172a;
+    letter-spacing: 1.5px;
     margin-bottom: 2px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    text-align: center;
   }}
-  .doc-subtitle {{
-    font-size: 9pt;
-    font-style: italic;
-    color: #4b5563;
-  }}
-
-  /* Meta Details Table */
-  table.meta-table {{
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 8px;
-    font-size: 8.2pt;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  }}
-  table.meta-table td {{
-    padding: 3px 6px;
-    border: 1px solid #d1d5db;
-    background: #f9fafb;
-  }}
-  table.meta-table td strong {{
-    color: #111827;
+  .cover-sub {{
+    font-family: Arial, sans-serif;
+    font-size: 9.6pt;
+    font-weight: bold;
+    color: #ea580c;
+    margin-bottom: 5px;
+    line-height: 1.25;
+    text-align: center;
   }}
 
-  /* Academic Section Headings */
+  /* Headings matching RepairGraph_Project_Report */
   h1 {{
-    font-family: 'Times New Roman', Times, serif;
+    font-family: Arial, sans-serif;
     font-size: 12.5pt;
     font-weight: bold;
-    color: #111827;
-    border-bottom: 1.5px solid #111827;
-    padding-bottom: 3px;
-    margin: 0 0 8px 0;
+    color: #0f172a;
+    border-bottom: 1.5px solid #cbd5e1;
+    padding-bottom: 2px;
+    margin-top: 0;
+    margin-bottom: 5px;
+    page-break-after: avoid;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: baseline;
   }}
   h1 .marks-tag {{
-    font-size: 8pt;
+    font-family: Arial, sans-serif;
+    font-size: 8.2pt;
     font-weight: bold;
-    color: #1e3a8a;
+    color: #ea580c;
   }}
 
   h2 {{
-    font-family: 'Times New Roman', Times, serif;
-    font-size: 10.8pt;
+    font-family: Arial, sans-serif;
+    font-size: 10.5pt;
     font-weight: bold;
-    color: #1e3a8a;
-    margin: 8px 0 4px 0;
+    color: #1e293b;
+    margin-top: 6px;
+    margin-bottom: 3px;
+    page-break-after: avoid;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: baseline;
   }}
   h2 .sub-tag {{
+    font-family: Arial, sans-serif;
     font-size: 8pt;
     font-weight: normal;
     font-style: italic;
-    color: #4b5563;
+    color: #64748b;
+  }}
+
+  h3 {{
+    font-family: Arial, sans-serif;
+    font-size: 9.5pt;
+    font-weight: bold;
+    color: #334155;
+    margin-top: 5px;
+    margin-bottom: 2px;
+    page-break-after: avoid;
   }}
 
   p {{
-    margin: 0 0 6px 0;
+    margin-top: 0;
+    margin-bottom: 4px;
     text-align: justify;
-    text-justify: inter-word;
   }}
 
   ul, ol {{
-    margin: 0 0 6px 0;
-    padding-left: 20px;
+    margin-top: 2px;
+    margin-bottom: 4px;
+    padding-left: 18px;
   }}
   li {{
-    margin-bottom: 2px;
+    margin-bottom: 1.5px;
+    text-align: justify;
   }}
 
-  /* Booktabs Academic Tables */
-  table.booktabs {{
+  /* Tables matching RepairGraph_Project_Report */
+  table {{
     width: 100%;
     border-collapse: collapse;
-    margin: 6px 0 8px 0;
-    font-size: 8.1pt;
+    margin: 4px 0 5px 0;
+    font-size: 7.8pt;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    page-break-inside: avoid;
   }}
-  table.booktabs th {{
-    border-top: 2px solid #111827;
-    border-bottom: 1.5px solid #111827;
+  th {{
+    background-color: #f1f5f9;
+    color: #0f172a;
     font-weight: bold;
     text-align: left;
-    padding: 3.5px 5px;
-    background-color: #f3f4f6;
-    color: #111827;
-  }}
-  table.booktabs td {{
     padding: 3px 5px;
-    border-bottom: 0.5px solid #e5e7eb;
+    border: 1px solid #cbd5e1;
+  }}
+  td {{
+    padding: 2.2px 5px;
+    border: 1px solid #cbd5e1;
     vertical-align: top;
   }}
-  table.booktabs tr:last-child td {{
-    border-bottom: 2px solid #111827;
+  tr:nth-child(even) td {{
+    background-color: #f8fafc;
   }}
 
-  /* Technical Summary Note */
-  .academic-note {{
-    background-color: #f9fafb;
-    border-left: 3px solid #1e3a8a;
-    padding: 6px 10px;
-    margin: 6px 0 8px 0;
-    font-size: 8.5pt;
+  /* Callout box matching RepairGraph_Project_Report */
+  .callout {{
+    background-color: #fff7ed;
+    border-left: 3.5px solid #ea580c;
+    border-top: 1px solid #fed7aa;
+    border-right: 1px solid #fed7aa;
+    border-bottom: 1px solid #fed7aa;
+    padding: 4px 8px;
+    margin: 4px 0 5px 0;
+    font-size: 8.1pt;
+    color: #431407;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    border-radius: 0 3px 3px 0;
   }}
-  .academic-note strong {{
-    color: #1e3a8a;
+  .callout-title {{
+    font-weight: bold;
+    color: #ea580c;
+    margin-bottom: 1px;
+    font-family: Arial, sans-serif;
+    font-size: 8.2pt;
   }}
 
-  /* Figure Box */
-  .figure-container {{
+  /* Figure box matching RepairGraph_Project_Report */
+  .figure-box {{
     text-align: center;
-    margin: 8px 0 10px 0;
+    margin: 5px 0;
+    page-break-inside: avoid;
   }}
-  .figure-container img {{
-    max-width: 100%;
+  .figure-box img {{
+    max-width: 98%;
     height: auto;
-    border: 1px solid #d1d5db;
+    border: 1px solid #cbd5e1;
     border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
     display: block;
     margin: 0 auto;
   }}
-  .figure-caption {{
+  .figure-cap {{
+    font-family: Arial, sans-serif;
     font-size: 8pt;
+    font-weight: bold;
     font-style: italic;
-    color: #374151;
-    margin-top: 4px;
+    color: #475569;
+    margin-top: 2.5px;
     text-align: center;
   }}
 
-  /* Monospace snippet */
+  /* Code block styling */
   code {{
     font-family: "SF Mono", Menlo, Monaco, "Courier New", monospace;
-    font-size: 8pt;
-    background: #f3f4f6;
-    padding: 1px 4px;
+    font-size: 7.8pt;
+    background: #f1f5f9;
+    padding: 1px 3px;
     border-radius: 3px;
-    border: 1px solid #e5e7eb;
+    border: 1px solid #e2e8f0;
+    color: #0f172a;
   }}
   pre.code-block {{
     font-family: "SF Mono", Menlo, Monaco, "Courier New", monospace;
-    font-size: 7.5pt;
-    background: #111827;
-    color: #f9fafb;
-    padding: 6px 8px;
+    font-size: 7.2pt;
+    background: #0f172a;
+    color: #f8fafc;
+    padding: 5px 7px;
     border-radius: 4px;
-    line-height: 1.35;
+    line-height: 1.3;
     white-space: pre-wrap;
-    margin: 5px 0 7px 0;
+    margin: 3px 0;
+    border: 1px solid #334155;
   }}
 </style>
 </head>
@@ -342,32 +309,40 @@ def build_report():
 <!-- PAGE 1: COVER & EXECUTIVE COMPLIANCE MATRIX                               -->
 <!-- ========================================================================= -->
 <div class="page cover-page">
-  <div class="masthead">
-    <div class="masthead-univ">Vellore Institute of Technology, Chennai</div>
-    <div class="masthead-school">School of Computer Science and Engineering</div>
-    <div class="masthead-course">BACSE344 — Cloud Infrastructure and Architecture • C1 Slot</div>
+  <div class="cover-block">
+    <div class="cover-inst">
+      <strong>VELLORE INSTITUTE OF TECHNOLOGY (VIT), CHENNAI<br>
+      School of Computer Science and Engineering<br>
+      CLOUD DIGITAL ASSIGNMENT (DA) EVALUATION REPORT</strong>
+    </div>
+    <div class="cover-course">
+      <strong>BACSE344: CLOUD INFRASTRUCTURE AND ARCHITECTURE (C1 SLOT)</strong>
+    </div>
+    <div class="cover-title">
+      <strong>REPAIRGRAPH</strong>
+    </div>
+    <div class="cover-sub">
+      <strong>Digital Assignment 3: Scaled Cloud Infrastructure &amp; Application Security<br>
+      High-Availability Container Load Balancing, Upstream Chaos Failover Tuning, and Container Hardening</strong>
+    </div>
   </div>
 
-  <div class="doc-header">
-    <div class="doc-title">Digital Assignment 3: Scaled Cloud Infrastructure &amp; Application Security</div>
-    <div class="doc-subtitle">High-Availability Container Load Balancing, Upstream Chaos Failover Tuning, and Cloud Security Hardening</div>
-  </div>
-
-  <table class="meta-table">
+  <table>
     <tr>
-      <td><strong>Student Name:</strong> Naidu Reshmanth Sai</td>
-      <td><strong>Registration Number:</strong> 25BCE1112</td>
+      <th style="width: 50%;">Submitted By:</th>
+      <th style="width: 50%;">Course &amp; Faculty Details:</th>
+    </tr>
+    <tr>
+      <td><strong>NAIDU RESHMANTH SAI</strong> (25BCE1112)</td>
       <td><strong>Faculty:</strong> Dr. P. Anandan</td>
     </tr>
     <tr>
-      <td><strong>Application:</strong> RepairGraph</td>
-      <td><strong>Production Deployment:</strong> <a href="https://repairgraph.vercel.app">https://repairgraph.vercel.app</a></td>
-      <td><strong>Submission Deadline:</strong> 30/10/2026</td>
+      <td><strong>Slot:</strong> C1 Slot | B.Tech Computer Science and Engineering</td>
+      <td><strong>Course:</strong> BACSE344 — Cloud Infrastructure and Architecture</td>
     </tr>
     <tr>
-      <td><strong>Git Branch:</strong> <code>assignment-3</code></td>
-      <td><strong>Cloud Database:</strong> Neon Serverless PostgreSQL (Singapore, TLS 1.3)</td>
-      <td><strong>Reverse Proxy:</strong> Nginx 1.31 Alpine</td>
+      <td><strong>Institution:</strong> VIT Chennai</td>
+      <td><strong>Submission Date:</strong> 30-10-2026 | <strong>Production:</strong> <a href="https://repairgraph.vercel.app">https://repairgraph.vercel.app</a></td>
     </tr>
   </table>
 
@@ -380,8 +355,8 @@ def build_report():
     <li><strong>Application Security (Q2)</strong>: Classified sensitive domain data, enforced salted bcrypt hashing (2<sup>10</sup> rounds), integrated RFC 6238 TOTP MFA with QR setup, enforced RBAC on mutation APIs with 401/403 rejection proofs, hardened container images with Aqua Security Trivy (96.8% CVE reduction), and modeled threats under DPDPA 2023, GDPR, and E-Waste Rules 2022.</li>
   </ul>
 
-  <h2>Evaluation Rubric Compliance Matrix</h2>
-  <table class="booktabs">
+  <h2>Evaluation Rubric Compliance Matrix (10.0 Marks Total)</h2>
+  <table>
     <thead>
       <tr>
         <th style="width: 10%;">Question</th>
@@ -451,8 +426,9 @@ def build_report():
     </tbody>
   </table>
 
-  <div class="academic-note">
-    <strong>Submission Deliverables Verification:</strong> All code changes, Dockerfiles, Nginx configurations, test automation scripts, and reproducible benchmarks are committed to the <code>assignment-3</code> branch of the repository: <a href="https://github.com/reshmanth-sai/RepairGraph/tree/assignment-3">https://github.com/reshmanth-sai/RepairGraph/tree/assignment-3</a>. The accompanying 3-minute video presentation follows <code>DEMO_VIDEO_SCRIPT.md</code>.
+  <div class="callout">
+    <div class="callout-title">SUBMISSION DELIVERABLES VERIFICATION</div>
+    All code changes, Dockerfiles, Nginx configurations, test automation scripts, and reproducible benchmarks are committed to the <code>assignment-3</code> branch of the repository: <a href="https://github.com/reshmanth-sai/RepairGraph/tree/assignment-3">https://github.com/reshmanth-sai/RepairGraph/tree/assignment-3</a>. The accompanying 3-minute video presentation follows <code>DEMO_VIDEO_SCRIPT.md</code>.
   </div>
 </div>
 
@@ -483,13 +459,14 @@ def build_report():
     To handle this surge without downtime, three identical backend container replicas (<code>repairgraph-backend-1</code> on host port 3001, <code>repairgraph-backend-2</code> on 3002, and <code>repairgraph-backend-3</code> on 3003) were deployed behind an <strong>Nginx 1.31 Alpine Reverse Proxy / Load Balancer</strong> listening on port 8080. All instances connect over secure TLS 1.3 to Neon Cloud PostgreSQL.
   </p>
 
-  <div class="figure-container">
-    <img src="{img_q1a}" alt="Docker Compose PS & Round Robin Load Balancing" style="max-height: 250px;">
-    <div class="figure-caption">Figure 1.1: Docker Compose Service Status (3 Backends + Nginx) and Live Sequential Round-Robin Curl Distribution across Containers.</div>
+  <div class="figure-box">
+    <img src="{img_q1a}" alt="Docker Compose PS & Round Robin Load Balancing" style="max-height: 235px;">
+    <div class="figure-cap">Figure 1.1: Docker Compose Service Status (3 Backends + Nginx) and Live Sequential Round-Robin Curl Distribution across Containers.</div>
   </div>
 
-  <div class="academic-note">
-    <strong>Load Distribution Verification:</strong> As captured in <strong>Figure 1.1</strong>, sequential curl requests to <code>http://localhost:8080/api/health</code> are balanced across <code>backend-1</code>, <code>backend-2</code>, and <code>backend-3</code> in an alternating round-robin pattern. Each backend confirms active database connectivity to Neon Serverless PostgreSQL with round-trip latencies between 211ms and 272ms across continents.
+  <div class="callout">
+    <div class="callout-title">LOAD DISTRIBUTION VERIFICATION</div>
+    As captured in <strong>Figure 1.1</strong>, sequential curl requests to <code>http://localhost:8080/api/health</code> are balanced across <code>backend-1</code>, <code>backend-2</code>, and <code>backend-3</code> in an alternating round-robin pattern. Each backend confirms active database connectivity to Neon Serverless PostgreSQL with round-trip latencies between 211ms and 272ms across continents.
   </div>
 </div>
 
@@ -509,12 +486,12 @@ def build_report():
     <li><strong>Run 2 (Scaled Cluster)</strong>: 3 Backend Instances balanced behind Nginx (port 8080).</li>
   </ul>
 
-  <div class="figure-container">
-    <img src="{img_q1b}" alt="Apache Bench Load Testing Comparison Screenshot" style="max-height: 255px;">
-    <div class="figure-caption">Figure 1.2: Apache Bench Performance Benchmark: 1 Instance Baseline (24.6s, 40.64 RPS) vs 3-Instance Nginx Cluster (11.9s, 83.82 RPS).</div>
+  <div class="figure-box">
+    <img src="{img_q1b}" alt="Apache Bench Load Testing Comparison Screenshot" style="max-height: 235px;">
+    <div class="figure-cap">Figure 1.2: Apache Bench Performance Benchmark: 1 Instance Baseline (24.6s, 40.64 RPS) vs 3-Instance Nginx Cluster (11.9s, 83.82 RPS).</div>
   </div>
 
-  <table class="booktabs">
+  <table>
     <thead>
       <tr>
         <th style="width: 28%;">Performance Benchmark Metric</th>
@@ -575,8 +552,9 @@ def build_report():
     </tbody>
   </table>
 
-  <div class="academic-note">
-    <strong>Scalability Findings:</strong> Distributing the diagnostic triage workload across 3 container replicas behind Nginx achieved an outstanding <strong>+106.25% increase in throughput (from 40.64 to 83.82 RPS)</strong> and cut mean response latency by <strong>51.52% (from 492.15 ms down to 238.61 ms)</strong>. This confirms near-linear horizontal scaling. Furthermore, the 0-failure record demonstrates that the connection pool on <strong>Neon Serverless PostgreSQL (Singapore)</strong> via PgBouncer can comfortably sustain high-concurrency connection spikes without connection pool exhaustion.
+  <div class="callout">
+    <div class="callout-title">SCALABILITY FINDINGS</div>
+    Distributing the diagnostic triage workload across 3 container replicas behind Nginx achieved an outstanding <strong>+106.25% increase in throughput (from 40.64 to 83.82 RPS)</strong> and cut mean response latency by <strong>51.52% (from 492.15 ms down to 238.61 ms)</strong>. This confirms near-linear horizontal scaling. Furthermore, the 0-failure record demonstrates that the connection pool on <strong>Neon Serverless PostgreSQL (Singapore)</strong> via PgBouncer can comfortably sustain high-concurrency connection spikes without connection pool exhaustion.
   </div>
 </div>
 
@@ -616,12 +594,12 @@ server {{
     }}
 }}</pre>
 
-  <div class="figure-container">
-    <img src="{img_q1c}" alt="Chaos Testing & Zero-Downtime Failover Screenshot" style="max-height: 235px;">
-    <div class="figure-caption">Figure 1.3: Chaos Resilience Audit: Execution of scripts/chaos-failover-test.sh showing 0 Failed Requests during container termination.</div>
+  <div class="figure-box">
+    <img src="{img_q1c}" alt="Chaos Testing & Zero-Downtime Failover Screenshot" style="max-height: 220px;">
+    <div class="figure-cap">Figure 1.3: Chaos Resilience Audit: Execution of scripts/chaos-failover-test.sh showing 0 Failed Requests during container termination.</div>
   </div>
 
-  <table class="booktabs">
+  <table>
     <thead>
       <tr>
         <th style="width: 25%;">Configuration Scenario</th>
@@ -652,8 +630,9 @@ server {{
     </tbody>
   </table>
 
-  <div class="academic-note">
-    <strong>Fault-Tolerance Finding:</strong> When <code>repairgraph-backend-2</code> is killed mid-test, Nginx detects the broken TCP socket in under 1 millisecond. Configured with <code>proxy_next_upstream_tries 3</code>, Nginx transparently and seamlessly replays the HTTP request to <code>backend-1</code> or <code>backend-3</code>. All <strong>1,000 out of 1,000 requests succeeded</strong> with zero user-visible errors.
+  <div class="callout">
+    <div class="callout-title">FAULT-TOLERANCE TAKEAWAY</div>
+    When <code>repairgraph-backend-2</code> is killed mid-test, Nginx detects the broken TCP socket in under 1 millisecond. Configured with <code>proxy_next_upstream_tries 3</code>, Nginx transparently and seamlessly replays the HTTP request to <code>backend-1</code> or <code>backend-3</code>. All <strong>1,000 out of 1,000 requests succeeded</strong> with zero user-visible errors.
   </div>
 </div>
 
@@ -668,12 +647,12 @@ server {{
     The complete system architecture diagram below illustrates all components of RepairGraph: the Next.js 15 client frontend, the Nginx reverse proxy load balancer (host port 8080), three Docker backend containers (host ports 3001, 3002, 3003), the managed <strong>Neon Serverless PostgreSQL</strong> database (AWS Singapore, PgBouncer pooled TLS), and the Assignment 1 <strong>Vercel hosting platform</strong> (<code>https://repairgraph.vercel.app</code>).
   </p>
 
-  <div class="figure-container">
-    <img src="{img_q1d}" alt="RepairGraph Scaled Architecture Diagram" style="max-height: 310px; width: 100%;">
-    <div class="figure-caption">Figure 1.4: Complete System Architecture Diagram Highlighting Cloud Bursting (Violet) &amp; Edge/Fog Computing (Amber) Nodes.</div>
+  <div class="figure-box">
+    <img src="{img_q1d}" alt="RepairGraph Scaled Architecture Diagram" style="max-height: 290px; width: 100%;">
+    <div class="figure-cap">Figure 1.4: Complete System Architecture Diagram Highlighting Cloud Bursting (Violet) &amp; Edge/Fog Computing (Amber) Nodes.</div>
   </div>
 
-  <table class="booktabs">
+  <table>
     <thead>
       <tr>
         <th style="width: 25%;">Architecture Component</th>
@@ -731,12 +710,12 @@ server {{
     To guarantee that user passwords can never be exposed in plaintext or reversed via rainbow tables, RepairGraph implements <strong>salted bcrypt hashing with a work factor of 10 rounds</strong> ($2^{{10}} = 1,024$ key expansion iterations). Each password hash incorporates a unique, cryptographically random 22-character salt that neutralizes precomputed rainbow table attacks.
   </p>
 
-  <div class="figure-container">
-    <img src="{img_q2a_prisma}" alt="Live Neon PostgreSQL Database via Prisma Studio GUI" style="max-height: 250px;">
-    <div class="figure-caption">Figure 2.1: Live Neon Cloud PostgreSQL Database GUI (via Prisma Studio) showing User records with salted bcrypt hashes ($2b$10$...).</div>
+  <div class="figure-box">
+    <img src="{img_q2a_prisma}" alt="Live Neon PostgreSQL Database via Prisma Studio GUI" style="max-height: 235px;">
+    <div class="figure-cap">Figure 2.1: Live Neon Cloud PostgreSQL Database GUI (via Prisma Studio) showing User records with salted bcrypt hashes ($2b$10$...).</div>
   </div>
 
-  <table class="booktabs">
+  <table>
     <thead>
       <tr>
         <th style="width: 25%;">Hash Segment</th>
@@ -768,8 +747,9 @@ server {{
     </tbody>
   </table>
 
-  <div class="academic-note">
-    <strong>Rainbow Table Immunity Proof:</strong> When the identical password string <code>RepairSecurePass@2026</code> is hashed twice, Hash A produces <code>$2b$10$H9wddSR1SfcHuPdGLgdSHOSr...</code> while Hash B produces <code>$2b$10$LqBj/q52yrGHipHLH6UhH.ul...</code>. Because unique cryptographic salts are generated per record, <strong>precomputed rainbow tables cannot match hashes</strong>, providing robust defense against credential dumps.
+  <div class="callout">
+    <div class="callout-title">RAINBOW TABLE IMMUNITY PROOF</div>
+    When the identical password string <code>RepairSecurePass@2026</code> is hashed twice, Hash A produces <code>$2b$10$H9wddSR1SfcHuPdGLgdSHOSr...</code> while Hash B produces <code>$2b$10$LqBj/q52yrGHipHLH6UhH.ul...</code>. Because unique cryptographic salts are generated per record, <strong>precomputed rainbow tables cannot match hashes</strong>, providing robust defense against credential dumps.
   </div>
 </div>
 
@@ -797,17 +777,17 @@ server {{
   </p>
 
   <div style="display: flex; gap: 8px;">
-    <div class="figure-container" style="flex: 1;">
-      <img src="{img_q2b_browser}" alt="Live RepairGraph MFA Setup Web Portal" style="max-height: 195px;">
-      <div class="figure-caption">Figure 2.2: Live RepairGraph MFA Web Portal (/mfa) with Authenticator QR Code Setup.</div>
+    <div class="figure-box" style="flex: 1; margin: 0;">
+      <img src="{img_q2b_browser}" alt="Live RepairGraph MFA Setup Web Portal" style="max-height: 185px;">
+      <div class="figure-cap">Figure 2.2: Live RepairGraph MFA Web Portal (/mfa) with Authenticator QR Code Setup.</div>
     </div>
-    <div class="figure-container" style="flex: 1;">
-      <img src="{img_q2b_terminal}" alt="RBAC Rejection Evidence" style="max-height: 195px;">
-      <div class="figure-caption">Figure 2.3: Terminal RBAC Rejection: 401 Unauthorized (No Token) &amp; 403 Forbidden (USER role).</div>
+    <div class="figure-box" style="flex: 1; margin: 0;">
+      <img src="{img_q2b_terminal}" alt="RBAC Rejection Evidence" style="max-height: 185px;">
+      <div class="figure-cap">Figure 2.3: Terminal RBAC Rejection: 401 Unauthorized (No Token) &amp; 403 Forbidden (USER role).</div>
     </div>
   </div>
 
-  <table class="booktabs">
+  <table>
     <thead>
       <tr>
         <th style="width: 25%;">API Endpoint &amp; Method</th>
@@ -844,8 +824,9 @@ server {{
     </tbody>
   </table>
 
-  <div class="academic-note">
-    <strong>Access Control &amp; Authentication Assurance:</strong> As proven in <strong>Figure 2.3</strong>, attempts to delete or tamper with device lifecycle passports without credentials immediately trigger <code>401 Unauthorized</code>, and attempts by standard users fail with <code>403 Forbidden</code>. Only verified administrators possessing an active TOTP MFA session can execute destructive actions.
+  <div class="callout">
+    <div class="callout-title">ACCESS CONTROL &amp; AUTHENTICATION ASSURANCE</div>
+    As proven in <strong>Figure 2.3</strong>, attempts to delete or tamper with device lifecycle passports without credentials immediately trigger <code>401 Unauthorized</code>, and attempts by standard users fail with <code>403 Forbidden</code>. Only verified administrators possessing an active TOTP MFA session can execute destructive actions.
   </div>
 </div>
 
@@ -869,12 +850,12 @@ server {{
     <li><strong>Non-Root User Execution</strong>: Configured an unprivileged POSIX user and group <code>nextjs:nodejs</code> (UID 10001, GID 10001) in the Dockerfile. Container processes cannot execute as root, neutralizing container breakout threats.</li>
   </ol>
 
-  <div class="figure-container">
-    <img src="{img_q2c_trivy}" alt="Trivy Vulnerability Scan Before and After Screenshot" style="max-height: 220px;">
-    <div class="figure-caption">Figure 2.4: Aqua Security Trivy Scan of repairgraph:hardened showing 0 OS CVEs and 16 total CVEs (96.8% Reduction).</div>
+  <div class="figure-box">
+    <img src="{img_q2c_trivy}" alt="Trivy Vulnerability Scan Before and After Screenshot" style="max-height: 210px;">
+    <div class="figure-cap">Figure 2.4: Aqua Security Trivy Scan of repairgraph:hardened showing 0 OS CVEs and 16 total CVEs (96.8% Reduction).</div>
   </div>
 
-  <table class="booktabs">
+  <table>
     <thead>
       <tr>
         <th style="width: 28%;">Container Audit Metric</th>
@@ -935,8 +916,9 @@ server {{
     </tbody>
   </table>
 
-  <div class="academic-note">
-    <strong>Container Hardening Takeaway:</strong> Migrating to multi-stage Alpine construction and revoking root execution collapsed the image attack surface by <strong>96.8% (506 down to 16 CVEs)</strong> and reduced container footprint by <strong>87.6% (2.94 GB down to 364 MB)</strong>, enabling rapid autoscaling and preventing root privilege breakouts.
+  <div class="callout">
+    <div class="callout-title">CONTAINER HARDENING TAKEAWAY</div>
+    Migrating to multi-stage Alpine construction and revoking root execution collapsed the image attack surface by <strong>96.8% (506 down to 16 CVEs)</strong> and reduced container footprint by <strong>87.6% (2.94 GB down to 364 MB)</strong>, enabling rapid autoscaling and preventing root privilege breakouts.
   </div>
 </div>
 
@@ -951,7 +933,7 @@ server {{
     RepairGraph manages consumer hardware identities, diagnostic fault logs, repair histories, and customer contact data. Below are two domain-specific threat agents, technical security controls implemented, and the statutory legal mandates governing them:
   </p>
 
-  <table class="booktabs">
+  <table>
     <thead>
       <tr>
         <th style="width: 25%;">Domain Threat Agent</th>
@@ -1011,11 +993,11 @@ server {{
 # 7. Trivy Scan Audit: $ docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy:latest image repairgraph:hardened</pre>
 
   <!-- FORMAL SUBMISSION SIGN-OFF -->
-  <table class="meta-table" style="margin-top: 4px; margin-bottom: 0;">
+  <table style="margin-top: 4px; margin-bottom: 0;">
     <tr>
       <td><strong>GitHub Repository:</strong> <a href="https://github.com/reshmanth-sai/RepairGraph">reshmanth-sai/RepairGraph</a></td>
       <td><strong>Branch:</strong> <code>assignment-3</code></td>
-      <td><strong>Verified Commit:</strong> <code>5dcbd92</code></td>
+      <td><strong>Verified Commit:</strong> <code>5d6e514</code></td>
     </tr>
     <tr>
       <td><strong>Production Deployment:</strong> <a href="https://repairgraph.vercel.app">https://repairgraph.vercel.app</a></td>

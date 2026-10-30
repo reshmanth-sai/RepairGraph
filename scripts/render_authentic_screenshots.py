@@ -252,3 +252,4 @@ Total: 16 (HIGH: 15, CRITICAL: 1)
 
 if __name__ == '__main__':
     generate_all_screenshots()
+
