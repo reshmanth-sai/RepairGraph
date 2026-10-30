@@ -1,104 +1,160 @@
-# RepairGraph — DA3 3-Minute Demo Video Script
+# RepairGraph — BACSE344 DA3 3-Minute Demo Video Script & Walkthrough Guide
 
 **Course**: BACSE344 — Cloud Infrastructure and Architecture (C1 Slot)  
 **Student Name**: Naidu Reshmanth Sai  
 **Registration Number**: 25BCE1112  
-**Target Duration**: Exactly 3 Minutes (180 Seconds)
+**Faculty Evaluator**: Dr. P. Anandan (VIT Chennai)  
+**Evaluation Target**: 10.0 / 10.0 Marks  
+**Target Video Duration**: Exactly 2:50 – 2:58 (Under 3:00 Minutes Maximum)  
+**Production URL**: https://repairgraph.vercel.app  
+**Git Branch**: `assignment-3` (Commit: `cb525b7`)  
 
 ---
 
-## Pre-Recording Screen Setup
+## 1. Pre-Recording Setup: Exactly What to Open & Arrange
 
-Open the following windows side-by-side on your monitor:
-1. **Left Half**: Terminal running in `/Users/sai/RepairGraph` on branch `assignment-3`.
-2. **Right Half**: Browser showing:
-   - Tab 1: Architecture Diagram (`docs/da3-architecture-diagram.svg`) or `RepairGraph_DA3_Report.html`
-   - Tab 2: `http://localhost:8080/api/diagnostics/triage?category=LAPTOP&brand=Apple&model=MacBook+Pro+M3&symptoms=Battery+draining+rapidly+and+overheating`
-   - Tab 3: Live production deployment: `https://repairgraph.vercel.app`
+Before hitting record, split your monitor into two clean halves (or use two monitors):
+
+### Left Half: Terminal Window
+- **Directory**: `/Users/sai/RepairGraph` on branch `assignment-3`
+- **Font Size**: 16pt or 18pt (high contrast, easy to read on 1080p video)
+- **Pre-run check**: Ensure containers are active (`docker compose ps`)
+- **Commands Pre-typed in Terminal History** (press Up-Arrow during video):
+  1. `docker compose ps`
+  2. `for i in {1..6}; do curl -s http://localhost:8080/api/health | jq .data.instance; done`
+  3. `bash scripts/load-test.sh`
+  4. `bash scripts/chaos-failover-test.sh`
+  5. `npx tsx scripts/verify-password-security.ts`
+  6. `npx tsx scripts/verify-rbac-totp.ts`
+  7. `docker images | grep repairgraph`
+
+### Right Half: Web Browser (Chrome)
+Keep the following tabs open and ordered from left to right:
+- **Tab 1: Live Production App**: `https://repairgraph.vercel.app` (Showing homepage)
+- **Tab 2: System Architecture Diagram**: Open `docs/da3-architecture-diagram.svg` (or Page 9 of `RepairGraph_DA3_Report.pdf`)
+- **Tab 3: Live Dedicated MFA Portal**: `http://localhost:8080/mfa` (Showing the QR Code & 6-digit TOTP form)
+- **Tab 4: Generated PDF Report**: `RepairGraph_DA3_Report.pdf` (Page 2 Rubric Matrix or Page 13 Trivy Table)
 
 ---
 
-## 3-Minute Timeline & Narration Script
+## 2. Second-by-Second Presentation Script & On-Screen Actions
 
-### [0:00 – 0:30] Introduction & Peak-Demand Domain Scenario (Q1.a)
+### [0:00 – 0:30] Introduction, Student Identity & Peak-Demand Situation (Q1.a)
 - **What to Show on Screen**: 
-  - Show the live website (`https://repairgraph.vercel.app`) and switch to Terminal showing `docker compose ps`.
-- **What to Say**:
-  > *"Hello everyone and respected faculty. My name is Naidu Reshmanth Sai, registration number 25BCE1112. This is my Digital Assignment 3 for BACSE344 Cloud Infrastructure and Architecture, continuing my project **RepairGraph**—an intelligent hardware diagnostics, repairability, and electronic waste passport platform.*
+  - Start with Browser on Tab 1 (`https://repairgraph.vercel.app`), then switch mouse to Left Terminal showing `docker compose ps`.
+- **Action**: Run `docker compose ps` in terminal.
+- **Word-for-Word Speech**:
+  > *"Hello everyone and respected faculty Dr. P. Anandan. My name is **Naidu Reshmanth Sai**, registration number **25BCE1112**, C1 Slot. This is my Digital Assignment 3 demonstration for **BACSE344: Cloud Infrastructure and Architecture**.*
   >
-  > *In our domain, the peak-demand event is a **National E-Waste Amnesty & Extended Producer Responsibility (EPR) Compliance Reporting Surge**, where hundreds of authorized repair centers and corporate fleet managers flood the platform to triage damaged hardware and generate authenticated e-waste passports. The hardest-hit API is `POST /api/diagnostics/triage`, which computes our deterministic 7-factor repairability score and queries our live Neon serverless PostgreSQL database.*
+  > *Continuing directly from Assignment 1, this project scales **RepairGraph**—our cloud-native circular electronics repairability and e-waste passport platform.*
   >
-  > *To handle this without downtime, we deployed three backend container replicas behind an Nginx load balancer."*
+  > *In our domain, the peak-demand scenario is the **Quarterly National E-Waste Amnesty and Extended Producer Responsibility (EPR) Filing Surge**, where hundreds of refurbishment centers concurrently triage hardware. The heaviest route is `POST /api/diagnostics/triage`, which executes deterministic symptom parsing and database queries against Neon Serverless PostgreSQL.*
+  >
+  > *To handle this surge with zero bottlenecks, we provisioned three Docker container replicas balanced behind an Nginx reverse proxy on port 8080."*
 
 ---
 
-### [0:30 – 1:00] Round-Robin Distribution & Apache Bench Load Testing (Q1.a & Q1.b)
+### [0:30 – 1:00] Round-Robin Load Distribution & Apache Bench Benchmark (Q1.a & Q1.b)
 - **What to Show on Screen**: 
-  - Run `bash scripts/load-test.sh` in the terminal.
-  - Watch the round-robin requests alternate: `backend-1` -> `backend-2` -> `backend-3`.
-  - Let the Apache Bench tests execute.
-- **What to Say**:
-  > *"Here, you can see Nginx actively balancing incoming traffic in round-robin fashion across `backend-1`, `backend-2`, and `backend-3`, with each instance querying our live Neon PostgreSQL database.*
+  - Focus on Terminal window.
+- **Action**: 
+  - Run: `for i in {1..6}; do curl -s http://localhost:8080/api/health | jq .data.instance; done`
+  - Show the output alternating `backend-1` ➔ `backend-2` ➔ `backend-3`.
+  - Point to the Apache Bench results table on Page 8 of report or run `bash scripts/load-test.sh`.
+- **Word-for-Word Speech**:
+  > *"Here in the terminal, you can see sequential requests alternating across `backend-1`, `backend-2`, and `backend-3` in pure Layer-7 round-robin fashion, with each container connected via pooled TLS to Neon PostgreSQL.*
   >
-  > *Next, we ran Apache Bench sending 1,000 requests at concurrency 20. Comparing a single backend instance versus our 3-instance cluster:*
-  > *Our throughput surged from **40.64 requests per second to 83.82 requests per second—an improvement of +106.2%**!*
-  > *Simultaneously, average latency dropped by **51.5%, from 492 milliseconds down to 238 milliseconds** with zero failed requests."*
+  > *Next, we evaluated performance under stress using Apache Bench, firing 1,000 requests at 20 concurrent connections against our triage route.*
+  >
+  > *Comparing single instance against our 3-instance cluster:*
+  > *- Throughput skyrocketed by **+106.25%**, leaping from **40.64 requests per second up to 83.82 RPS**.*
+  > *- Mean latency was cut in half, dropping **51.52% from 492 milliseconds down to 238 milliseconds**.*
+  > *- Most importantly, all 1,000 requests completed with **zero dropped connections and 100% success**."*
 
 ---
 
-### [1:00 – 1:30] Chaos Engineering: Zero-Downtime Nginx Failover (Q1.c)
+### [1:00 – 1:30] Chaos Engineering: Zero-Downtime Failover Tuning (Q1.c)
 - **What to Show on Screen**: 
-  - Run `bash scripts/chaos-failover-test.sh` or run `ab` while stopping `repairgraph-backend-2` (`docker stop repairgraph-backend-2`).
-  - Highlight the terminal output showing `Failed requests: 0`.
-- **What to Say**:
-  > *"Now for high availability. In our chaos test, we abruptly killed `repairgraph-backend-2` mid-flight during an active 1,000-request benchmark.*
+  - Stay in Terminal.
+- **Action**: 
+  - Run `bash scripts/chaos-failover-test.sh` (or highlight the chaos test output showing `Failed requests: 0`).
+- **Word-for-Word Speech**:
+  > *"Next, to prove high availability, we conducted a Chaos Engineering experiment: abruptly killing container `backend-2` mid-flight during an active 1,000-request benchmark.*
   >
-  > *Under default Nginx configuration, this resulted in dropped connections and HTTP 502 errors. However, by tuning Nginx with `proxy_next_upstream error timeout invalid_header http_500 http_502 http_503` and setting `proxy_next_upstream_tries 3`, Nginx instantly detects the broken TCP socket in under 1 millisecond and transparently replays the request to the remaining healthy containers.*
+  > *Under default Nginx configuration, this dropped TCP sockets and produced **68 failed requests with HTTP 502 Bad Gateway**.*
   >
-  > *As shown in the output, **all 1,000 requests completed with 0 failed requests**, achieving true 100% zero downtime."*
+  > *However, by reconfiguring Nginx with proactive health monitoring and `proxy_next_upstream error timeout invalid_header http_500 http_502 http_503` with 3 retries, Nginx instantly catches the severed socket in under one millisecond and re-routes the request to healthy replicas.*
+  >
+  > *As verified here, all **1,000 requests succeeded with exactly 0 failed requests**, achieving true zero downtime."*
 
 ---
 
-### [1:30 – 2:00] Architecture Diagram, Cloud Bursting & Fog Computing (Q1.d)
+### [1:30 – 2:00] System Architecture, Cloud Bursting & Fog Computing (Q1.d)
 - **What to Show on Screen**: 
-  - Switch to the architecture diagram (`docs/da3-architecture-diagram.svg`).
-  - Point your mouse cursor to the violet **Cloud Bursting** box and amber **Edge/Fog** box.
-- **What to Say**:
-  > *"Here is our complete system architecture: our Next.js frontend, Nginx load balancer on port 8080, three Docker containers on ports 3001, 3002, and 3003, our Neon cloud database with PgBouncer, and our Vercel hosting platform from Assignment 1.*
+  - Switch to Browser Tab 2 showing `docs/da3-architecture-diagram.svg` (or Page 9 of the PDF report).
+- **Action**: 
+  - Move mouse cursor to circle the **Violet Cloud Bursting box** (top right) and the **Amber Fog Computing box** (bottom left).
+- **Word-for-Word Speech**:
+  > *"Here is our end-to-end architecture diagram: showing our Next.js frontend, Nginx reverse proxy on port 8080, three Docker replicas on ports 3001, 3002, and 3003, and our managed Neon PostgreSQL database in AWS Singapore.*
   >
-  > *Highlighted in violet is our **Cloud Bursting component**: when request queue depth exceeds 80%, traffic automatically bursts into ephemeral Vercel Serverless Functions to absorb the disaster surge without 24/7 server costs.*
+  > *Highlighted in violet is our **Cloud Bursting component**: if request queue depth crosses 80%, traffic automatically bursts into ephemeral Vercel Serverless Edge Functions or AWS ECS Fargate, scaling for transient amnesty surges without paying for continuous over-provisioning.*
   >
-  > *Highlighted in amber is our **Edge/Fog Computing component**: these are offline Rapid Triage Kiosks at physical repair centers that parse hardware symptoms and issue local QR passports even during power or internet outages, syncing to Neon DB once connection restores."*
+  > *Highlighted in amber is our **Edge and Fog Computing component**: these are offline rapid triage kiosks deployed at physical repair shops and recycling yards that inspect hardware and issue local QR passports with zero latency, synchronizing batch records to Neon DB once internet connectivity restores."*
 
 ---
 
-### [2:00 – 2:30] Password Security (Bcrypt) & TOTP MFA + RBAC (Q2.a & Q2.b)
+### [2:00 – 2:30] Bcrypt Password Cryptography, TOTP MFA Portal & RBAC (Q2.a & Q2.b)
 - **What to Show on Screen**: 
-  - In terminal, run: `npx tsx scripts/verify-password-security.ts` followed by `npx tsx scripts/verify-rbac-totp.ts`.
-- **What to Say**:
-  > *"Turning to security: RepairGraph stores sensitive customer PII, device serial numbers, and repair invoices. In our Neon PostgreSQL database, all passwords are encrypted as salted bcrypt hashes with 10 rounds. Even with identical passwords, unique 22-character salts ensure completely different digests, eliminating rainbow table attacks.*
+  - Split view: Run verification script in Terminal, then switch to Browser Tab 3 (`http://localhost:8080/mfa`).
+- **Action**: 
+  - In Terminal, run: `npx tsx scripts/verify-password-security.ts` followed by `npx tsx scripts/verify-rbac-totp.ts`.
+  - In Browser, show the live `/mfa` screen with the scannable QR code and 6-digit input form.
+- **Word-for-Word Speech**:
+  > *"Turning to security: RepairGraph protects sensitive customer PII, device serial numbers, and diagnostic invoices. In our database, user passwords are encrypted using **10-round salted bcrypt cryptography** ($2^{10} = 1,024$ work factor). As shown in terminal, identical passwords produce completely unique 22-character salts, mathematically neutralizing rainbow table attacks.*
   >
-  > *In Question 2.b, we implemented **TOTP multi-factor authentication** generating RFC 6238-compliant 6-digit rotating tokens for Google and Microsoft Authenticator.*
+  > *In Question 2.b, we implemented **RFC 6238 TOTP multi-factor authentication**. Here on screen is our live onboarding portal at `/mfa`, generating rotating 6-digit codes compatible with Google and Microsoft Authenticator.*
   >
-  > *We also enforced Role-Based Access Control on Update and Delete APIs. As demonstrated in terminal:*
+  > *We also enforced Role-Based Access Control on mutation endpoints. As proven in the CLI output:*
   > *- Unauthenticated requests are rejected with **HTTP 401 Unauthorized**.*
-  > *- A standard consumer (`role: USER`) attempting deletion is rejected with **HTTP 403 Forbidden**.*
-  > *- Only an elevated Fleet Supervisor (`role: ADMIN` with verified MFA) is granted access."*
+  > *- A standard user attempting device deletion is rejected with **HTTP 403 Forbidden**.*
+  > *- Only an elevated Administrator with an active MFA session is authorized."*
 
 ---
 
-### [2:30 – 3:00] Trivy Hardening, Threat Agents & Regulation (Q2.c & Q2.d)
+### [2:30 – 2:55] Aqua Security Trivy Scan, Image Hardening & Threat Regulations (Q2.c & Q2.d)
 - **What to Show on Screen**: 
-  - Show the Trivy before-and-after table in `RepairGraph_DA3_Report.html` or run `docker images`.
-- **What to Say**:
-  > *"In Question 2.c, we scanned our container with **Aqua Security Trivy**.*
-  > *Our baseline unhardened Debian image contained **506 vulnerabilities (24 CRITICAL and 482 HIGH)** and ran as root.*
-  > *We hardened the container using a multi-stage Alpine 3.20 build, standalone Next.js pruning, and enforced an unprivileged non-root user (`nextjs`, UID 10001).*
-  > *Rescanning with Trivy showed **zero OS vulnerabilities and dropped total vulnerabilities by 96.8% down to just 16**, while shrinking image size by **87.6% (from 2.94 GB to 364 MB)**.*
+  - Switch to Terminal showing `docker images | grep repairgraph` or the Trivy comparison table on Page 13 of the report.
+- **Action**: 
+  - Run `docker images | grep repairgraph` in terminal (shows 364 MB vs 2.94 GB).
+- **Word-for-Word Speech**:
+  > *"In Question 2.c, we audited container vulnerabilities using **Aqua Security Trivy**.*
+  > *Our baseline Debian image contained **506 CVEs (24 CRITICAL)** and ran as root.*
+  > *We hardened the container using a multi-stage Alpine build, standalone Next.js artifact pruning, and enforced an unprivileged non-root user (`nextjs`, UID 10001).*
+  > *This collapsed vulnerabilities by **96.8% down to just 16 CVEs with 0 OS-level vulnerabilities**, while shrinking image footprint by **87.6%, from 2.94 GB down to 364 MB**.*
   >
-  > *Finally, we addressed two domain threat agents: Rogue Technicians harvesting customer data—controlled via RBAC and TOTP MFA under **India's DPDPA 2023 Section 8(5) and GDPR Article 32**; and External Credential Stuffers—controlled via 10-round salted bcrypt hashes and hardened containers under the **E-Waste (Management) Rules, 2022**.*
+  > *Finally, we modeled domain threats: Rogue Technicians stealing customer data are mitigated by RBAC and TOTP under **India's DPDPA 2023 Section 8(5) and GDPR Article 32**; while External Credential Stuffers are neutralized under the **E-Waste Rules 2022**.*
   >
-  > *All code, test scripts, and reports are committed to the `assignment-3` branch. Thank you!"*
+  > *All code, test suites, and documentation are committed to branch `assignment-3`. Thank you!"*
 
 ---
 
+## 3. Quick Command Copy-Paste Reference
+
+Keep this terminal snippet handy for testing or executing during rehearsal:
+
+```bash
+# Check Docker cluster
+docker compose ps
+
+# Demonstrate Round Robin (6 requests)
+for i in {1..6}; do curl -s http://localhost:8080/api/health | jq .data.instance; done
+
+# Demonstrate Bcrypt Salted Hashes & Rainbow Immunity
+npx tsx scripts/verify-password-security.ts
+
+# Demonstrate RBAC 401/403 Rejections & TOTP MFA
+npx tsx scripts/verify-rbac-totp.ts
+
+# Demonstrate Hardened Container Footprint
+docker images | grep repairgraph
+```

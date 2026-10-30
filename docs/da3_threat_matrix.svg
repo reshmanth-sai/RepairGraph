@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1150 720" width="1150" height="720" style="background:#ffffff; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <!-- Header Banner -->
+  <rect x="25" y="25" width="1100" height="65" rx="8" fill="#0f172a"/>
+  <text x="575" y="65" text-anchor="middle" fill="#f8fafc" font-size="20" font-weight="bold" letter-spacing="0.5">REPAIRGRAPH: DOMAIN THREAT MODEL &amp; STATUTORY COMPLIANCE MATRIX</text>
+  
+  <!-- Left Column: Threat Agent 1 (Internal Insider) -->
+  <rect x="25" y="110" width="535" height="585" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <rect x="25" y="110" width="535" height="48" rx="8" fill="#fff1f2" stroke="#f43f5e" stroke-width="1.5"/>
+  <text x="45" y="141" fill="#be123c" font-size="16" font-weight="bold">THREAT AGENT 1: Rogue / Compromised Repair Technician</text>
+  
+  <!-- Agent 1 Profile -->
+  <rect x="45" y="175" width="495" height="110" rx="6" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="60" y="198" fill="#475569" font-size="12" font-weight="bold">THREAT PROFILE &amp; MOTIVATION</text>
+  <text x="60" y="222" fill="#1e293b" font-size="13">• Authorized workshop technician or rogue third-party subcontractor</text>
+  <text x="60" y="244" fill="#1e293b" font-size="13">• Motivation: Deleting device fault records, tampering with warranty status,</text>
+  <text x="60" y="266" fill="#1e293b" font-size="13">  or exfiltrating customer personal data (PII) from laptops/phones in repair</text>
+
+  <!-- Agent 1 Controls -->
+  <rect x="45" y="300" width="495" height="160" rx="6" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="60" y="323" fill="#0284c7" font-size="12" font-weight="bold">IMPLEMENTED TECHNICAL SAFEGUARDS</text>
+  <text x="60" y="347" fill="#0f172a" font-size="13" font-weight="bold">1. Role-Based Access Control (RBAC):</text>
+  <text x="75" y="367" fill="#334155" font-size="12.5">Mutation endpoint DELETE /api/devices/{id} restricted strictly to role: ADMIN;</text>
+  <text x="75" y="387" fill="#334155" font-size="12.5">Technicians (role: REPAIRER) blocked with HTTP 403 Forbidden.</text>
+  <text x="60" y="411" fill="#0f172a" font-size="13" font-weight="bold">2. Dynamic TOTP MFA Session Elevation:</text>
+  <text x="75" y="431" fill="#334155" font-size="12.5">Destructive actions require active 6-digit TOTP authenticated session.</text>
+  <text x="60" y="452" fill="#0f172a" font-size="13" font-weight="bold">3. Immutable Hardware Lifecycle Ledger:</text>
+  <text x="75" y="472" fill="#334155" font-size="12.5">Every diagnostic fault and repair state signed with technician ID timestamp.</text>
+
+  <!-- Agent 1 Legal Alignment -->
+  <rect x="45" y="480" width="495" height="195" rx="6" fill="#f0fdf4" stroke="#86efac" stroke-width="1"/>
+  <text x="60" y="503" fill="#15803d" font-size="12" font-weight="bold">STATUTORY REGULATORY ALIGNMENT</text>
+  <text x="60" y="527" fill="#166534" font-size="13" font-weight="bold">• Digital Personal Data Protection Act (DPDPA), 2023 — Section 8(5):</text>
+  <text x="75" y="547" fill="#1e293b" font-size="12.5">Mandates Data Fiduciaries implement reasonable security safeguards</text>
+  <text x="75" y="567" fill="#1e293b" font-size="12.5">to prevent personal data breach and unauthorized insider tampering.</text>
+  <text x="60" y="593" fill="#166534" font-size="13" font-weight="bold">• EU GDPR Article 32(1)(b) &amp; Article 5(1)(f):</text>
+  <text x="75" y="613" fill="#1e293b" font-size="12.5">Enforces confidentiality, integrity, and resilience of processing systems;</text>
+  <text x="75" y="633" fill="#1e293b" font-size="12.5">prevents unauthorized processing or accidental loss/destruction of PII.</text>
+  <text x="60" y="658" fill="#475569" font-size="11.5" font-style="italic">Compliance Impact: Protects customer trust and prevents statutory penalty notices.</text>
+
+  <!-- Right Column: Threat Agent 2 (External Attacker) -->
+  <rect x="590" y="110" width="535" height="585" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <rect x="590" y="110" width="535" height="48" rx="8" fill="#fff7ed" stroke="#f97316" stroke-width="1.5"/>
+  <text x="610" y="141" fill="#c2410c" font-size="16" font-weight="bold">THREAT AGENT 2: Opportunistic External Cybercriminal / Scrapper</text>
+
+  <!-- Agent 2 Profile -->
+  <rect x="610" y="175" width="495" height="110" rx="6" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="625" y="198" fill="#475569" font-size="12" font-weight="bold">THREAT PROFILE &amp; MOTIVATION</text>
+  <text x="625" y="222" fill="#1e293b" font-size="13">• Automated external botnets, credential stuffers, and unauthorized scrappers</text>
+  <text x="625" y="244" fill="#1e293b" font-size="13">• Motivation: Brute-forcing passwords via rainbow tables, scraping customer</text>
+  <text x="625" y="266" fill="#1e293b" font-size="13">  repair tickets, or forging fraudulent Extended Producer Responsibility credits</text>
+
+  <!-- Agent 2 Controls -->
+  <rect x="610" y="300" width="495" height="160" rx="6" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="625" y="323" fill="#0284c7" font-size="12" font-weight="bold">IMPLEMENTED TECHNICAL SAFEGUARDS</text>
+  <text x="625" y="347" fill="#0f172a" font-size="13" font-weight="bold">1. 10-Round Salted Bcrypt Password Hashing ($2b$10$...):</text>
+  <text x="640" y="367" fill="#334155" font-size="12.5">High memory-hard work factor ($2^{10} = 1,024$ rounds) + unique 22-char salt;</text>
+  <text x="640" y="387" fill="#334155" font-size="12.5">neutralizes precomputed rainbow table dictionaries mathematically.</text>
+  <text x="625" y="411" fill="#0f172a" font-size="13" font-weight="bold">2. Container Hardening (96.8% CVE Drop) &amp; Non-Root Runtime:</text>
+  <text x="640" y="431" fill="#334155" font-size="12.5">Zero OS-level vulnerabilities; process runs as unprivileged nextjs (UID 10001).</text>
+  <text x="625" y="452" fill="#0f172a" font-size="13" font-weight="bold">3. Layer-7 Reverse Proxy Protection &amp; Rate Limiting:</text>
+  <text x="640" y="472" fill="#334155" font-size="12.5">Nginx absorbs distributed request bursts and sanitizes malformed HTTP traffic.</text>
+
+  <!-- Agent 2 Legal Alignment -->
+  <rect x="610" y="480" width="495" height="195" rx="6" fill="#f0fdf4" stroke="#86efac" stroke-width="1"/>
+  <text x="625" y="503" fill="#15803d" font-size="12" font-weight="bold">STATUTORY REGULATORY ALIGNMENT</text>
+  <text x="625" y="527" fill="#166534" font-size="13" font-weight="bold">• E-Waste (Management) Rules, 2022 — Rules 14 &amp; 16:</text>
+  <text x="640" y="547" fill="#1e293b" font-size="12.5">Mandates tamper-evident digital record keeping and verification</text>
+  <text x="640" y="567" fill="#1e293b" font-size="12.5">for all electrical and electronic equipment (EEE) refurbishment credits.</text>
+  <text x="625" y="593" fill="#166534" font-size="13" font-weight="bold">• EU GDPR Article 32(1)(a) &amp; India Right to Repair Framework:</text>
+  <text x="640" y="613" fill="#1e293b" font-size="12.5">Requires pseudonymisation and cryptographic encryption of stored data;</text>
+  <text x="640" y="633" fill="#1e293b" font-size="12.5">guarantees consumers transparent, tamper-proof repair cost assessments.</text>
+  <text x="625" y="658" fill="#475569" font-size="11.5" font-style="italic">Compliance Impact: Guarantees statutory audit readiness under Environment Act.</text>
+</svg>
